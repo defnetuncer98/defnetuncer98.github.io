@@ -2,135 +2,27 @@
 <html>
 	<head>
 		<meta charset="utf-8">
-		<title>Smelly Cat</title>
+		<title>Defne Tunçer</title>
                 <link rel="shortcut icon" href="#">                
 		<style>
                         @font-face {
                             font-family: 'Gillattoz';
-                            src: URL('src/three/examples/fonts/Gillattoz.ttf') format('truetype'),
-                            URL('src/three/examples/fonts/Gillattoz.woff') format('woff'),
-                            URL('src/three/examples/fonts/Gillattoz.woff2') format('woff2');
+                            src: URL('./src/fonts/Gillattoz.ttf') format('truetype'),
+                            URL('./src/fonts/Gillattoz.woff') format('woff'),
+                            URL('./src/fonts/Gillattoz.woff2') format('woff2');
                           }                    
                         @font-face {
                             font-family: 'Letter Gothic';
-                            src: URL('src/three/examples/fonts/lettergothic.otf') format('truetype');
+                            src: URL('./src/fonts/lettergothic.otf') format('truetype');
                           }                               
 
 			body { margin: 0; overflow:hidden; height:100%;}
-			canvas { width: 100%; height: 100% }
-                        .guitext {
-                                float:left;
-                                font-size: 200%;
-                                color:white;
-                                z-index: 100;
-                                display:none;
-                                font-family: 'Gillattoz';
-                        }                        
-                        .info {
-                                padding-left: 10px;
-                                float:left;                                
-                                font-size: 150%;
-                                color:white;
-                                z-index: 100;
-                                display:none;
-                                font-family: 'Letter Gothic';
-                        }
-                        #catpaw {
-                                text-align:center;
-                                border: 1px solid #ffffff;
-                                font-size: 120%;
-                                color:white;
-                                z-index: 100;
-                                font-family: 'Letter Gothic';
-                                text-decoration:none;
-                        }  
-                        #catpaw:hover {
-                          background-color: #e7ff5a;
-                          color: white;
-                        }                           
-                        #playbutton {
-                                position:absolute;
-                                top:70%;
-                                text-align:center;
-                                border: 1px solid #ffffff;
-                                width: 240px;
-                                font-size: 400%;
-                                color:white;
-                                z-index: 100;
-                                display:none;
-                                font-family: 'Gillattoz';
-                                text-decoration:none;
-                        }  
-                        #playbutton:hover {
-                          background-color: #e7ff5a;
-                          color: white;
-                        }                        
-                        #loading {
-                                position: absolute;
-                                width: 100%;
-                                height: 100%;
-                                z-index: 100;
-                        }                          
-                        #loading2 {
-                                position: absolute;
-                                width: 100%;
-                                height: 100%;                                
-                                z-index: 100;
-                        }                          
-                        #hitsound {
-                                display:none;
-                        }  
-                        #breaksound {
-                                display:none;
-                        }
-                        .inst {
-                            text-align:center;
-                            font-family: 'Letter Gothic';
-                            opacity:0.5;
-                            z-index: 100;
-                            color:white;
-                            font-size:100%;
-                            position:relative;
-                        }
-                        
+			canvas { width: 100%; height: 100% }                       
 		</style>
 	</head>
 	<body>
-            <img id="loading" src="SmellyCatOpening.gif" style="display:block;"/>
-            <img id="loading2" src="SmellyCat.gif" style="display:none;"/>
-            <div id="container">
-            </div>
-            <div style="position:absolute;top:10%;left:10%;">
-                <div><div class="guitext" id="scoretext">s c o r e :</div><div class="info" id="info"></div></div>
-                <div><div class="guitext" id="timetext">t i m e  l e f t :</div><div class="info" id="timeinfo"></div></div>                  
-            </div>
+            <div id="container"></div>
             
-            <div class="info" id="painting" style="position:absolute;opacity:0.5;font-size:100%"></div>
-            <audio id="hitsound" controls> <source src="src/three/examples/sounds/zapsplat_impact_wood_post_drop_concrete_ground_003_14044.mp3"></audio>
-            <audio id="breaksound" controls> <source src="src/three/examples/sounds/impact_tile_debris_breaking.mp3"></audio>
-            <audio id="music" controls> <source src="src/three/examples/sounds/sneaky.mp3"></audio>
-            
-            <div style="position:absolute;top:30%;  top: 80%; left: 50%; transform: translate(-50%, -50%);">
-                <div style="align-items:center;display:flex;justify-content: center;flex-direction:column;">
-                    <div id="instructions">
-                        <div class="inst">Try to drop as much stuff possible before time runs out!</div><br>
-                        <div class="inst">Use mouse to move the camera</div><br>
-                        <div class="inst">Settings ESC</div><br>
-                        <div class="inst">Move W, A, S, D</div> <br>               
-                        <div class="inst">Press SHIFT to move fast</div> <br>               
-                        <div class="inst">Press ESC to exit the instructions</div>
-                    </div>
-                </div>
-            </div>
-            <div style="align-items:center;display:flex;justify-content: center;">           
-                <a href=# id="playbutton">p l a y</a>                
-            </div> 
-            
-            <div style="position:absolute;right:5%;bottom:5%;">           
-                <a href=# id="catpaw"> HOW TO PLAY? </a>                
-            </div> 
-
-            <script type="module" src="smellycat.js"></script>
-            <script src="src/three/examples/js/libs/ammo.js"></script>
+            <script type="module" src="./app.js"></script>
 	</body>
 </html>
