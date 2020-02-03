@@ -22,6 +22,13 @@ var MODELS = [
         rotation: { x: 0, y: 0, z: 0 },
         scale: 0.01,
     },
+    {
+        name: "Fighter",
+        path: "./src/models/fighter.glb",
+        position: { x: -1.2, y: 0.3, z: 1 },
+        rotation: { x: 0, y: 0, z: 0 },
+        scale: 0.1,
+    },    
 ]
 
 var mouse = new THREE.Vector2();
@@ -35,12 +42,39 @@ function onDocumentMouseClick( event ) {
        var intersects = raycaster.intersectObjects( scene.children );
        if ( intersects.length > 0 ) {
                var object = intersects[ 0 ].object;
-               console.log(object);
                if(object.name=="screen"){
-                   clicked=true;
                    object.material.color = new THREE.Color(1,1,1);
                }
        }
+       var intersects = raycaster.intersectObjects( playergroup.children );
+       if ( intersects.length > 0 ) {
+               var object = intersects[ 0 ].object;
+               if(object.name=="play"){
+                   isplaying=!isplaying;
+                   if(isplaying) player.play();
+                   else player.pause();
+               }
+               else if(object.name=="next"){
+                   current+=1;
+                   if(current==playlist.length) current=0;
+                   scene.remove(playertext);
+                   player.src='./src/sounds/'+playlist[current]+'.mp3';
+                   player.load();
+                   player.play();
+                   loadAudioText();
+                   playertext.visible=true;
+               }
+               else if(object.name=="prev"){
+                   current-=1;
+                   scene.remove(playertext);
+                   if(current==-1) current=playlist.length-1;
+                   player.src='./src/sounds/'+playlist[current]+'.mp3';
+                   player.load();
+                   player.play();
+                   loadAudioText();
+                   playertext.visible=true;
+               }            
+       }       
 }
 
 Ammo().then(function (AmmoLib) {
@@ -53,6 +87,80 @@ function init() {
     initScene();
     initRenderer();
     loadModels();
+    loadTexts();
+    loadAudioText();
+}
+
+function loadAudioText(){
+    var loader = new THREE.FontLoader();
+    loader.load( './src/fonts/Roboto_Regular.json', function ( font ) {
+        var xMid, text;
+        var message = playlist[current];
+        var shapes = font.generateShapes( message, 0.03 );
+        var geometry = new THREE.ShapeBufferGeometry( shapes );
+        geometry.computeBoundingBox();
+        xMid = - 0.5 * ( geometry.boundingBox.max.x - geometry.boundingBox.min.x );
+        geometry.translate( xMid, 0, 0 );
+        playertext = new THREE.Mesh( geometry, matLite );
+        playertext.position.copy(new THREE.Vector3(-1.6, 0.35, 1.0));
+        scene.add( playertext );
+        playertext.visible=false;
+    });    
+}
+
+var matDark = new THREE.LineBasicMaterial( {
+    color: 0xffffff,
+    side: THREE.DoubleSide
+} );
+
+var matLite = new THREE.MeshBasicMaterial( {
+    color: 0xffffff,
+    transparent: true,
+    opacity: 0.4,
+    side: THREE.DoubleSide
+} );
+var playertext;
+var playergroup = new THREE.Group();
+
+function loadTexts(){
+    var loader = new THREE.FontLoader();
+    loader.load( './src/fonts/player.json', function ( font ) {
+        var xMid, text;
+        var message = "B";
+        var shapes = font.generateShapes( message, 0.1 );
+        var geometry = new THREE.ShapeBufferGeometry( shapes );
+        geometry.computeBoundingBox();
+        xMid = - 0.5 * ( geometry.boundingBox.max.x - geometry.boundingBox.min.x );
+        geometry.translate( xMid, 0, 0 );
+        text = new THREE.Mesh( geometry, matLite );
+        text.position.copy(new THREE.Vector3(-1.6, 0.2, 1.0));
+        text.name="next";
+        playergroup.add( text );
+
+        var message = "C";
+        var shapes = font.generateShapes( message, 0.1 );
+        var geometry = new THREE.ShapeBufferGeometry( shapes );
+        geometry.computeBoundingBox();
+        xMid = - 0.5 * ( geometry.boundingBox.max.x - geometry.boundingBox.min.x );
+        geometry.translate( xMid, 0, 0 );
+        text = new THREE.Mesh( geometry, matLite );
+        text.position.copy(new THREE.Vector3(-1.7, 0.2, 1.0));
+        text.name="play";
+        playergroup.add( text );
+
+        var message = "A";
+        var shapes = font.generateShapes( message, 0.1 );
+        var geometry = new THREE.ShapeBufferGeometry( shapes );
+        geometry.computeBoundingBox();
+        xMid = - 0.5 * ( geometry.boundingBox.max.x - geometry.boundingBox.min.x );
+        geometry.translate( xMid, 0, 0 );
+        text = new THREE.Mesh( geometry, matLite );
+        text.position.copy(new THREE.Vector3(-1.8, 0.2, 1.0));
+        text.name="prev";
+        playergroup.add( text );
+        scene.add(playergroup);
+        playergroup.visible=false;
+    });
 }
 
 var camera;
@@ -82,6 +190,23 @@ function initScene() {
     scene.background = new THREE.Color( 0x000000 );
  
     //scene.fog = new THREE.Fog( scene.background, 1, 5000 );
+
+    RectAreaLightUniformsLib.init();
+    rectLight = new THREE.RectAreaLight( 0xffffff, 0.1, 0.4, 0.18);
+    rectLight.position.set( -1.55, 0.035, 1.26 );
+    rectLight.rotation.x = -Math.PI/2;
+    rectLight.rotation.z = -Math.PI/3 + 0.08;
+    rectLight.lookAt(-1.4, 4, 1.4);
+
+    var phonescreen = new THREE.Mesh( new THREE.PlaneBufferGeometry(),
+                                 new THREE.MeshBasicMaterial( { color: new THREE.Color(1,1,1) } ) );
+    phonescreen.name = "phonescreen";
+    phonescreen.scale.x = rectLight.width;
+    phonescreen.scale.y = rectLight.height;
+    phonescreen.position.copy(rectLight.position);
+    phonescreen.rotation.x = -Math.PI/2;
+    phonescreen.rotation.z = -Math.PI/3 + 0.08;    
+    scene.add(phonescreen);
 
     RectAreaLightUniformsLib.init();
     rectLight = new THREE.RectAreaLight( 0xffffff, 0.1, 2.3, 1.2);
@@ -227,9 +352,28 @@ function animate() {
     else composer.render( scene, camera );
 }
 
-function onDocumentMouseMove( event ) {
+var isplaying=true;
+var player = document.getElementById('player');
+var playlist = ['St Francis - Josh Lippi & The Overtimers',
+                'Fresno Alley - Josh Lippi & The Overtimers']
+var current = 0;
 
+function onDocumentMouseMove( event ) {
     mouseX = ( event.clientX - windowHalfX ) * 10;
     mouseY = ( event.clientY - windowHalfY ) * 10;
-
+    mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+    mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+    raycaster.setFromCamera( mouse, camera );
+    var intersects = raycaster.intersectObjects( scene.children );
+    if ( intersects.length > 0 ) {
+            var object = intersects[ 0 ].object;
+            if(object.name=="phonescreen"){
+                playergroup.visible=true;
+                playertext.visible=true;
+            }
+            else{
+                playergroup.visible=false;
+                playertext.visible=false;
+            }
+    }
 }
