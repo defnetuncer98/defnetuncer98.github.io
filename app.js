@@ -35,7 +35,14 @@ var MODELS = [
         position: { x: 1.55, y: 0.18, z: 0.6},
         rotation: { x: 0, y: 0, z: 0 },
         scale: 0.016,
-    },       
+    },      
+    {
+        name: "Hologram",
+        path: "./src/models/hologram/scene.gltf",
+        position: { x: 0.0, y: 1.3, z: 0.2},
+        rotation: { x: 0, y: 0, z: 0 },
+        scale: 0.001,
+    },          
 ]
 
 var mouse = new THREE.Vector2();
@@ -50,7 +57,8 @@ function onDocumentMouseClick( event ) {
        if ( intersects.length > 0 ) {
                var object = intersects[ 0 ].object;
                if(object.name=="screen"){
-                   object.material.color = new THREE.Color(1,1,1);
+                   //object.material.color = new THREE.Color(1,1,1);
+                   clicked=true;
                }
        }
        var intersects = raycaster.intersectObjects( playergroup.children );
@@ -248,7 +256,7 @@ function onWindowResize() {
     composer.setSize( window.innerWidth, window.innerHeight );        
 }
 
-
+var envMap;
 function initRenderer() {
     //var canvas = document.createElement( 'canvas' );
     //var context = canvas.getContext( 'webgl2', { alp;ha: false } );
@@ -260,20 +268,19 @@ function initRenderer() {
     //renderer.gammaOutput = true;
     //renderer.gammaFactor = 2.2;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    //renderer.toneMapping = THREE.LinearToneMapping;
     renderer.toneMappingExposure = 0.8;    
     renderer.outputEncoding = THREE.sRGBEncoding;
     //renderer.shadowMap.enabled = true;
     //renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     container.appendChild(renderer.domElement);
+
     var pmremGenerator = new THREE.PMREMGenerator( renderer );
     pmremGenerator.compileEquirectangularShader();
-
     new RGBELoader()
     .setDataType( THREE.UnsignedByteType )
     .setPath( './src/images/' )
     .load( 'glass_passage_2k.hdr', function ( texture ) {
-        var envMap = pmremGenerator.fromEquirectangular( texture ).texture;
+        envMap = pmremGenerator.fromEquirectangular( texture ).texture;
         scene.background = envMap;
         scene.environment = envMap;
         texture.dispose();
@@ -309,6 +316,8 @@ function loadModels() {
     }
 }
 
+var hologrammixer;
+
 function loadGLTFModel(model) {
     var loader = new GLTFLoader();
     loader.load(model.path, function (gltf) {
@@ -319,6 +328,8 @@ function loadGLTFModel(model) {
                 if(model.name=="Table") {
                     var material = new THREE.MeshStandardMaterial( {
                         map:object.material.map,
+                        roughness:0.0,
+                        metalness:0.0,
                     } );
                     object.material = material;
                 }
@@ -342,6 +353,13 @@ function loadGLTFModel(model) {
         if (model.rotation) {
             gltf.scene.rotation.copy(new THREE.Euler(model.rotation.x, model.rotation.y, model.rotation.z));
         }
+        if(model.name=="Hologram") {
+            var mixer = new THREE.AnimationMixer( gltf.scene );
+            console.log(gltf);
+            var action = mixer.clipAction(gltf.animations[0]);
+            action.play();
+            hologrammixer = mixer;
+        }
         gltf.scene.name = model.name;
         scene.add(gltf.scene);
     });
@@ -357,8 +375,11 @@ function animate() {
 
     camera.position.x = ( mouseX ) * .0001;
     camera.position.y = 1 + ( - mouseY ) * .0001;
+    camera.lookAt(0,0.5,0);
 
-    renderer.render( scene, camera );
+    if(clicked) hologrammixer.update(delta);
+
+    composer.render( scene, camera );
 }
 
 var isplaying=true;
