@@ -5,20 +5,20 @@ import { RenderPass } from './src/jsm/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from './src/jsm/postprocessing/UnrealBloomPass.js';
 import { RectAreaLightUniformsLib } from './src/jsm/lights/RectAreaLightUniformsLib.js';
 import { AnaglyphEffect } from './src/jsm/effects/AnaglyphEffect.js';
-
+import { RGBELoader } from './src/jsm/loaders/RGBELoader.js';
 
 var MODELS = [
     {
         name: "Table",
         path: "./src/models/table/scene.gltf",
-        position: { x: 50, y: -2.48, z: 2 },
+        position: { x: 0, y: -2.6, z:  0},
         rotation: { x: 0, y: 0, z: 0 },
-        scale: 0.0033,
+        scale: 3,
     },
     {
         name: "Workspace",
         path: "./src/models/workspace.glb",
-        position: { x: 0.2, y: 0, z: 1.3 },
+        position: { x: 0.2, y: 0, z: 1 },
         rotation: { x: 0, y: 0, z: 0 },
         scale: 0.01,
     },
@@ -29,6 +29,13 @@ var MODELS = [
         rotation: { x: 0, y: 0, z: 0 },
         scale: 0.1,
     },    
+    {
+        name: "Coffee",
+        path: "./src/models/coffee/scene.gltf",
+        position: { x: 1.55, y: 0.18, z: 0.6},
+        rotation: { x: 0, y: 0, z: 0 },
+        scale: 0.016,
+    },       
 ]
 
 var mouse = new THREE.Vector2();
@@ -187,13 +194,9 @@ function initScene() {
     clock = new THREE.Clock();
     scene = new THREE.Scene();
   
-    scene.background = new THREE.Color( 0x000000 );
- 
-    //scene.fog = new THREE.Fog( scene.background, 1, 5000 );
-
     RectAreaLightUniformsLib.init();
     rectLight = new THREE.RectAreaLight( 0xffffff, 0.1, 0.4, 0.18);
-    rectLight.position.set( -1.55, 0.035, 1.26 );
+    rectLight.position.set( -1.55, 0.035, 1.26-0.3 );
     rectLight.rotation.x = -Math.PI/2;
     rectLight.rotation.z = -Math.PI/3 + 0.08;
     rectLight.lookAt(-1.4, 4, 1.4);
@@ -210,7 +213,7 @@ function initScene() {
 
     RectAreaLightUniformsLib.init();
     rectLight = new THREE.RectAreaLight( 0xffffff, 0.1, 2.3, 1.2);
-    rectLight.position.set( 0, 1.37, 0.5 );
+    rectLight.position.set( 0, 1.37, 0.2 );
     rectLight.lookAt(0, 1.37, 4);
 
     var screen = new THREE.Mesh( new THREE.PlaneBufferGeometry(),
@@ -227,27 +230,10 @@ function initScene() {
     rectLight2.lookAt(0, 1.37, 0);
     rectLight.add(rectLight2);
 
-    var pointLight1 = new THREE.PointLight(0x00ffff, 0.5);
-    pointLight1.castShadow=true;
-    pointLight1.position.set(-10,0,0);
-    scene.add(pointLight1);
-
-    var pointLight1 = new THREE.PointLight(0xff00ff, 0.5);
-    pointLight1.position.set(10,0,0);
-    pointLight1.castShadow=true;
-    scene.add(pointLight1);
-
     window.addEventListener( 'resize', onWindowResize, false );
     window.addEventListener( 'click', onDocumentMouseClick, false );
     window.addEventListener( 'mousemove', onDocumentMouseMove, false );
 
-    // var axesHelper = new THREE.AxesHelper( 5 );
-    // scene.add( axesHelper );
-    // var size = 10;
-    // var divisions = 10;
-    
-    // var gridHelper = new THREE.GridHelper( size, divisions );
-    // scene.add( gridHelper );
 }
 
 /**
@@ -264,17 +250,37 @@ function onWindowResize() {
 
 
 function initRenderer() {
-    var canvas = document.createElement( 'canvas' );
-    var context = canvas.getContext( 'webgl2', { alpha: false } );
-    
-    renderer = new THREE.WebGLRenderer( { canvas: canvas, context: context, antialias:true } );
+    //var canvas = document.createElement( 'canvas' );
+    //var context = canvas.getContext( 'webgl2', { alp;ha: false } );
+    var container = document.getElementById('container');
+    //renderer = new THREE.WebGLRenderer( { canvas: canvas, context: context, antialias:true } );
+    renderer = new THREE.WebGLRenderer( { antialias:true } );
     renderer.setPixelRatio( window.devicePixelRatio );
     renderer.setSize( window.innerWidth, window.innerHeight );
-    renderer.gammaOutput = true;
-    renderer.gammaFactor = 2.2;
-    renderer.shadowMap.enabled = true;
-    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-    
+    //renderer.gammaOutput = true;
+    //renderer.gammaFactor = 2.2;
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    //renderer.toneMapping = THREE.LinearToneMapping;
+    renderer.toneMappingExposure = 0.8;    
+    renderer.outputEncoding = THREE.sRGBEncoding;
+    //renderer.shadowMap.enabled = true;
+    //renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    container.appendChild(renderer.domElement);
+    var pmremGenerator = new THREE.PMREMGenerator( renderer );
+    pmremGenerator.compileEquirectangularShader();
+
+    new RGBELoader()
+    .setDataType( THREE.UnsignedByteType )
+    .setPath( './src/images/' )
+    .load( 'glass_passage_2k.hdr', function ( texture ) {
+        var envMap = pmremGenerator.fromEquirectangular( texture ).texture;
+        scene.background = envMap;
+        scene.environment = envMap;
+        texture.dispose();
+        pmremGenerator.dispose();
+    } );
+
+
     var renderScene = new RenderPass( scene, camera );
     var bloomPass = new UnrealBloomPass( new THREE.Vector2( window.innerWidth, window.innerHeight ), 1.5, 0.4, 0.85 );    
     bloomPass.radius = 0;
@@ -311,16 +317,20 @@ function loadGLTFModel(model) {
                 object.castShadow = true;
                 object.receiveShadow = true;
                 if(model.name=="Table") {
-                    var loader = new THREE.TextureLoader();
-                    var scratches = loader.load('./src/textures/scratches.jpg');
                     var material = new THREE.MeshStandardMaterial( {
-                        color:new THREE.Color(0.1,0.1,0.1),
-                        roughness:0.4,
-                        metalness:1.0,
+                        map:object.material.map,
                     } );
                     object.material = material;
                 }
-                //object.material.emissiveIntensity = 5;
+                else if(model.name=="Fighter") {
+                    var material = new THREE.MeshStandardMaterial( {
+                        color: 0x000000,
+                    } );
+                    object.material = material;
+                }
+                else if(object.name=="Workspace") {
+                    object.material.flatShading=false;
+                }
             }
         });
         if (model.position) {
@@ -348,8 +358,7 @@ function animate() {
     camera.position.x = ( mouseX ) * .0001;
     camera.position.y = 1 + ( - mouseY ) * .0001;
 
-    if(clicked) composer.render();
-    else composer.render( scene, camera );
+    renderer.render( scene, camera );
 }
 
 var isplaying=true;
