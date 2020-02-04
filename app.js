@@ -42,14 +42,15 @@ var MODELS = [
         path: "./src/models/hologram/scene.gltf",
         position: { x: 0.0, y: 1.3, z: 0.2},
         rotation: { x: 0, y: 0, z: 0 },
-        scale: 0.001,
+        scale: 0.002,
     },          
 ]
 
 var mouse = new THREE.Vector2();
 var raycaster = new THREE.Raycaster();
+var meshes = [];
 
-var ENTIRE_SCENE = 0, BLOOM_SCENE = 1;
+var BLOOM_SCENE = 1;
 var bloomLayer = new THREE.Layers();
 bloomLayer.set(BLOOM_SCENE);
 
@@ -64,8 +65,8 @@ function onDocumentMouseClick( event ) {
                if(object.name=="screen"){
                    //object.material.color = new THREE.Color(1,1,1);
                    if(!clicked){
-                        scene.traverse(function (obj){
-                            if(obj.isMesh) materials[obj.uuid] = obj.material;
+                        meshes.forEach(function (obj){
+                            materials[obj.uuid] = obj.material;
                         });      
                    }
                    clicked=true;
@@ -129,9 +130,11 @@ function loadAudioText(){
         xMid = - 0.5 * ( geometry.boundingBox.max.x - geometry.boundingBox.min.x );
         geometry.translate( xMid, 0, 0 );
         playertext = new THREE.Mesh( geometry, matLite );
+        playertext.layers.enable(BLOOM_SCENE);
         playertext.position.copy(new THREE.Vector3(-1.6, 0.35, 1.0));
-        scene.add( playertext );
         playertext.visible=false;
+        scene.add( playertext );
+        meshes.push(playertext);
     });    
 }
 
@@ -160,8 +163,10 @@ function loadTexts(){
         xMid = - 0.5 * ( geometry.boundingBox.max.x - geometry.boundingBox.min.x );
         geometry.translate( xMid, 0, 0 );
         text = new THREE.Mesh( geometry, matLite );
-        text.position.copy(new THREE.Vector3(-1.6, 0.2, 1.0));
+        text.position.copy(new THREE.Vector3(-1.5, 0.2, 1.0));
         text.name="next";
+        text.layers.enable(BLOOM_SCENE);
+        meshes.push(text);
         playergroup.add( text );
 
         var message = "C";
@@ -171,8 +176,10 @@ function loadTexts(){
         xMid = - 0.5 * ( geometry.boundingBox.max.x - geometry.boundingBox.min.x );
         geometry.translate( xMid, 0, 0 );
         text = new THREE.Mesh( geometry, matLite );
-        text.position.copy(new THREE.Vector3(-1.7, 0.2, 1.0));
+        text.position.copy(new THREE.Vector3(-1.6, 0.2, 1.0));
         text.name="play";
+        text.layers.enable(BLOOM_SCENE);
+        meshes.push(text);
         playergroup.add( text );
 
         var message = "A";
@@ -182,11 +189,13 @@ function loadTexts(){
         xMid = - 0.5 * ( geometry.boundingBox.max.x - geometry.boundingBox.min.x );
         geometry.translate( xMid, 0, 0 );
         text = new THREE.Mesh( geometry, matLite );
-        text.position.copy(new THREE.Vector3(-1.8, 0.2, 1.0));
+        text.position.copy(new THREE.Vector3(-1.7, 0.2, 1.0));
         text.name="prev";
+        text.layers.enable(BLOOM_SCENE);
         playergroup.add( text );
-        scene.add(playergroup);
         playergroup.visible=false;
+        meshes.push(text);
+        scene.add(playergroup);
     });
 }
 
@@ -218,43 +227,25 @@ function initScene() {
     clock = new THREE.Clock();
     scene = new THREE.Scene();
   
-    RectAreaLightUniformsLib.init();
-    rectLight = new THREE.RectAreaLight( 0xffffff, 0.1, 0.4, 0.18);
-    rectLight.position.set( -1.55, 0.035, 1.26-0.3 );
-    rectLight.rotation.x = -Math.PI/2;
-    rectLight.rotation.z = -Math.PI/3 + 0.08;
-    rectLight.lookAt(-1.4, 4, 1.4);
-
-    phonescreen = new THREE.Mesh( new THREE.PlaneBufferGeometry(),
-                                 new THREE.MeshBasicMaterial( { color: new THREE.Color(0,0,0) } ) );
+    phonescreen = new THREE.Mesh( new THREE.PlaneBufferGeometry(), new THREE.MeshBasicMaterial( { color: new THREE.Color(0,0,0) } ) );
     phonescreen.name = "phonescreen";
-    phonescreen.scale.x = rectLight.width;
-    phonescreen.scale.y = rectLight.height;
-    phonescreen.position.copy(rectLight.position);
+    phonescreen.scale.x = 0.4;
+    phonescreen.scale.y = 0.18;
+    phonescreen.position.set(-1.55, 0.035, 1.26-0.3);
     phonescreen.rotation.x = -Math.PI/2;
     phonescreen.rotation.z = -Math.PI/3 + 0.08;
     phonescreen.layers.enable(BLOOM_SCENE);
     scene.add(phonescreen);
+    meshes.push(phonescreen);
 
-    RectAreaLightUniformsLib.init();
-    rectLight = new THREE.RectAreaLight( 0xffffff, 0.1, 2.3, 1.2);
-    rectLight.position.set( 0, 1.37, 0.2 );
-    rectLight.lookAt(0, 1.37, 4);
-
-    screen = new THREE.Mesh( new THREE.PlaneBufferGeometry(),
-                                 new THREE.MeshBasicMaterial( { color: new THREE.Color(0,0,0) } ) );
+    screen = new THREE.Mesh( new THREE.PlaneBufferGeometry(), new THREE.MeshBasicMaterial( { color: new THREE.Color(0,0,0) } ) );
     screen.layers.enable(BLOOM_SCENE);                                 
     screen.name = "screen";
-    screen.scale.x = rectLight.width;
-    screen.scale.y = rectLight.height;
-    screen.position.copy(rectLight.position);
+    screen.scale.x = 2.3;
+    screen.scale.y = 1.2;
+    screen.position.set( 0, 1.37, 0.2 );
     scene.add(screen);
-
-    RectAreaLightUniformsLib.init();
-    var rectLight2 = new THREE.RectAreaLight( 0xffffff, 0.1, 2.3, 1.2);
-    rectLight2.position.copy(rectLight.position);
-    rectLight2.lookAt(0, 1.37, 0);
-    rectLight.add(rectLight2);
+    meshes.push(screen);
 
     window.addEventListener( 'resize', onWindowResize, false );
     window.addEventListener( 'click', onDocumentMouseClick, false );
@@ -284,11 +275,11 @@ function onWindowResize() {
 
 var envMap;
 function initRenderer() {
-    //var canvas = document.createElement( 'canvas' );
-    //var context = canvas.getContext( 'webgl2', { alp;ha: false } );
+    var canvas = document.createElement( 'canvas' );
+    var context = canvas.getContext( 'webgl2', { alpha: false } );
     var container = document.getElementById('container');
-    //renderer = new THREE.WebGLRenderer( { canvas: canvas, context: context, antialias:true } );
-    renderer = new THREE.WebGLRenderer( { antialias:true } );
+    renderer = new THREE.WebGLRenderer( { canvas: canvas, context: context, antialias:true } );
+    //renderer = new THREE.WebGLRenderer( { antialias:true } );
     renderer.setPixelRatio( window.devicePixelRatio );
     renderer.setSize( window.innerWidth, window.innerHeight );
     //renderer.gammaOutput = true;
@@ -394,6 +385,10 @@ function loadGLTFModel(model) {
                 else if(object.name=="Workspace") {
                     object.material.flatShading=false;
                 }
+                else if(object.name=="Hologram") {
+                    object.layers.enable('BLOOM_SCENE');
+                }
+                meshes.push(object);
             }
         });
         if (model.position) {
@@ -411,13 +406,16 @@ function loadGLTFModel(model) {
             var action = mixer.clipAction(gltf.animations[0]);
             action.play();
             hologrammixer = mixer;
+            hologram=gltf;
+            hologram.scene.visible=false;
         }
         gltf.scene.name = model.name;
         scene.add(gltf.scene);
     });
 }
 
-var count = 100;
+var hologram;
+var count = 300;
 /**
  * Render loop. Renders the next frame of all animations
  */
@@ -431,6 +429,7 @@ function animate() {
     camera.lookAt(0,0.5,0);
 
     if(clicked && count) {
+        hologram.scene.visible=true;
         hologrammixer.update(delta);
         count-=1;
         if(count==0){
@@ -447,9 +446,9 @@ function animate() {
 }
 
 function renderBloom() {
-    scene.traverse(darkenNonBloomed);
+    meshes.forEach(darkenNonBloomed);
     bloomComposer.render();
-    scene.traverse(restoreMaterial);
+    meshes.forEach(restoreMaterial);
 }
 
 var darkMaterial = new THREE.MeshBasicMaterial( { color: "black" } );
@@ -485,8 +484,8 @@ function onDocumentMouseMove( event ) {
             var object = intersects[ 0 ].object;
             if(object.name=="phonescreen"){
                 if(!clicked){
-                    scene.traverse(function (obj){
-                        if(obj.isMesh) materials[obj.uuid] = obj.material;
+                    meshes.forEach(function (obj){
+                        materials[obj.uuid] = obj.material;
                     });  
                     clicked=true;
                 }
