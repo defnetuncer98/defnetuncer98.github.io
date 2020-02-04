@@ -27,5 +27,40 @@
             <audio id="player" controls loop src='./src/sounds/St Francis - Josh Lippi & The Overtimers.mp3' style="display:none;" ></audio>
             <script type="module" src="./app.js"></script>
             <script src="./src/js/libs/ammo.js"></script>
+            <script type="x-shader/x-vertex" id="vertexshader">
+
+              varying vec2 vUv;
+        
+              void main() {
+        
+                vUv = uv;
+        
+                gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+        
+              }
+        
+            </script>
+        
+            <script type="x-shader/x-fragment" id="fragmentshader">
+        
+              uniform sampler2D baseTexture;
+              uniform sampler2D bloomTexture;
+        
+              varying vec2 vUv;
+        
+              vec4 getTexture( sampler2D texelToLinearTexture ) {
+        
+                return mapTexelToLinear( texture2D( texelToLinearTexture , vUv ) );
+        
+              }
+        
+              void main() {
+        
+                gl_FragColor = ( getTexture( baseTexture ) + vec4( 1.0 ) * getTexture( bloomTexture ) );
+        
+              }
+        
+            </script>
+        
 	</body>
 </html>

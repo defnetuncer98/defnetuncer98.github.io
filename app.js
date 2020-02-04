@@ -6,6 +6,7 @@ import { UnrealBloomPass } from './src/jsm/postprocessing/UnrealBloomPass.js';
 import { RectAreaLightUniformsLib } from './src/jsm/lights/RectAreaLightUniformsLib.js';
 import { AnaglyphEffect } from './src/jsm/effects/AnaglyphEffect.js';
 import { RGBELoader } from './src/jsm/loaders/RGBELoader.js';
+import { ShaderPass } from './src/jsm/postprocessing/ShaderPass.js';
 
 var MODELS = [
     {
@@ -48,6 +49,10 @@ var MODELS = [
 var mouse = new THREE.Vector2();
 var raycaster = new THREE.Raycaster();
 
+var ENTIRE_SCENE = 0, BLOOM_SCENE = 1;
+var bloomLayer = new THREE.Layers();
+bloomLayer.set(BLOOM_SCENE);
+
 function onDocumentMouseClick( event ) {
        event.preventDefault();
        mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
@@ -58,6 +63,11 @@ function onDocumentMouseClick( event ) {
                var object = intersects[ 0 ].object;
                if(object.name=="screen"){
                    //object.material.color = new THREE.Color(1,1,1);
+                   if(!clicked){
+                        scene.traverse(function (obj){
+                            if(obj.isMesh) materials[obj.uuid] = obj.material;
+                        });      
+                   }
                    clicked=true;
                }
        }
@@ -105,6 +115,8 @@ function init() {
     loadTexts();
     loadAudioText();
 }
+
+var materials = {};
 
 function loadAudioText(){
     var loader = new THREE.FontLoader();
@@ -182,7 +194,8 @@ var camera;
 var renderer;
 var scene;
 var clock;
-var composer;
+var bloomComposer;
+var finalComposer;
 var mouseX;
 var mouseY;
 var windowHalfX = window.innerWidth / 2;
@@ -192,6 +205,9 @@ var clicked = false;
 var rectLight;
 
 var effect;
+var screen;
+var phonescreen;
+
 /**
  * Initialize ThreeJS THREE.Scene
  */
@@ -209,14 +225,15 @@ function initScene() {
     rectLight.rotation.z = -Math.PI/3 + 0.08;
     rectLight.lookAt(-1.4, 4, 1.4);
 
-    var phonescreen = new THREE.Mesh( new THREE.PlaneBufferGeometry(),
-                                 new THREE.MeshBasicMaterial( { color: new THREE.Color(1,1,1) } ) );
+    phonescreen = new THREE.Mesh( new THREE.PlaneBufferGeometry(),
+                                 new THREE.MeshBasicMaterial( { color: new THREE.Color(0,0,0) } ) );
     phonescreen.name = "phonescreen";
     phonescreen.scale.x = rectLight.width;
     phonescreen.scale.y = rectLight.height;
     phonescreen.position.copy(rectLight.position);
     phonescreen.rotation.x = -Math.PI/2;
-    phonescreen.rotation.z = -Math.PI/3 + 0.08;    
+    phonescreen.rotation.z = -Math.PI/3 + 0.08;
+    phonescreen.layers.enable(BLOOM_SCENE);
     scene.add(phonescreen);
 
     RectAreaLightUniformsLib.init();
@@ -224,8 +241,9 @@ function initScene() {
     rectLight.position.set( 0, 1.37, 0.2 );
     rectLight.lookAt(0, 1.37, 4);
 
-    var screen = new THREE.Mesh( new THREE.PlaneBufferGeometry(),
+    screen = new THREE.Mesh( new THREE.PlaneBufferGeometry(),
                                  new THREE.MeshBasicMaterial( { color: new THREE.Color(0,0,0) } ) );
+    screen.layers.enable(BLOOM_SCENE);                                 
     screen.name = "screen";
     screen.scale.x = rectLight.width;
     screen.scale.y = rectLight.height;
@@ -250,10 +268,18 @@ function initScene() {
 function onWindowResize() {
     windowHalfX = window.innerWidth / 2;
     windowHalfY = window.innerHeight / 2;
+    
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
     renderer.setSize( window.innerWidth, window.innerHeight );
-    composer.setSize( window.innerWidth, window.innerHeight );        
+    bloomComposer.setSize(
+        window.innerWidth * window.devicePixelRatio,
+        window.innerHeight * window.devicePixelRatio
+      );
+    finalComposer.setSize(
+        window.innerWidth * window.devicePixelRatio,
+        window.innerHeight * window.devicePixelRatio
+      );           
 }
 
 var envMap;
@@ -293,9 +319,35 @@ function initRenderer() {
     bloomPass.radius = 0;
     bloomPass.threshold = 0.3;
     bloomPass.strength = 1;
-    composer = new EffectComposer( renderer );
-    composer.addPass( renderScene );
-    composer.addPass( bloomPass );
+    bloomComposer = new EffectComposer( renderer );
+    bloomComposer.renderToScreen = false;
+    bloomComposer.setSize(
+        window.innerWidth * window.devicePixelRatio,
+        window.innerHeight * window.devicePixelRatio
+      );
+    bloomComposer.addPass( renderScene );
+    bloomComposer.addPass( bloomPass );
+    var finalPass = new ShaderPass(
+        new THREE.ShaderMaterial({
+          uniforms: {
+            baseTexture: { value: null },
+            bloomTexture: { value: bloomComposer.renderTarget2.texture }
+          },
+          vertexShader: document.getElementById("vertexshader").textContent,
+          fragmentShader: document.getElementById("fragmentshader").textContent,
+          defines: {}
+        }),
+        "baseTexture"
+    );
+    finalPass.needsSwap = true;
+    finalComposer = new EffectComposer(renderer);
+    finalComposer.setSize(
+    window.innerWidth * window.devicePixelRatio,
+    window.innerHeight * window.devicePixelRatio
+    );
+    finalComposer.addPass(renderScene);
+    finalComposer.addPass(finalPass);
+
 
     effect = new AnaglyphEffect( renderer );
     effect.setSize( window.innerWidth, window.innerHeight );
@@ -335,7 +387,7 @@ function loadGLTFModel(model) {
                 }
                 else if(model.name=="Fighter") {
                     var material = new THREE.MeshStandardMaterial( {
-                        color: 0x000000,
+                        color: new THREE.Color(0,0,0),
                     } );
                     object.material = material;
                 }
@@ -365,6 +417,7 @@ function loadGLTFModel(model) {
     });
 }
 
+var count = 100;
 /**
  * Render loop. Renders the next frame of all animations
  */
@@ -377,9 +430,42 @@ function animate() {
     camera.position.y = 1 + ( - mouseY ) * .0001;
     camera.lookAt(0,0.5,0);
 
-    if(clicked) hologrammixer.update(delta);
+    if(clicked && count) {
+        hologrammixer.update(delta);
+        count-=1;
+        if(count==0){
+            screen.material.color = new THREE.Color(1,1,1);
+        }
+    }
+    if(clicked){
+        renderBloom();
+        finalComposer.render();
+    }
+    else {
+        renderer.render(scene,camera);
+    }
+}
 
-    composer.render( scene, camera );
+function renderBloom() {
+    scene.traverse(darkenNonBloomed);
+    bloomComposer.render();
+    scene.traverse(restoreMaterial);
+}
+
+var darkMaterial = new THREE.MeshBasicMaterial( { color: "black" } );
+
+function darkenNonBloomed(obj) { // non-bloomed stuff must be black, including scene background
+    if (obj.isMesh && bloomLayer.test(obj.layers) === false) {
+        obj.material = darkMaterial;
+        scene.background=new THREE.Color(0,0,0);
+    }
+}
+
+function restoreMaterial(obj) {
+    if (materials[obj.uuid]) {
+        obj.material = materials[obj.uuid];
+        scene.background=envMap;
+    }
 }
 
 var isplaying=true;
@@ -398,10 +484,18 @@ function onDocumentMouseMove( event ) {
     if ( intersects.length > 0 ) {
             var object = intersects[ 0 ].object;
             if(object.name=="phonescreen"){
+                if(!clicked){
+                    scene.traverse(function (obj){
+                        if(obj.isMesh) materials[obj.uuid] = obj.material;
+                    });  
+                    clicked=true;
+                }
+                object.material.color=new THREE.Color(1,1,1),
                 playergroup.visible=true;
                 playertext.visible=true;
             }
             else{
+                phonescreen.material.color=new THREE.Color(0,0,0);
                 playergroup.visible=false;
                 playertext.visible=false;
             }
