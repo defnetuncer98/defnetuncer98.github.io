@@ -3,7 +3,6 @@ import { GLTFLoader } from './src/jsm/loaders/GLTFLoader.js';
 import { EffectComposer } from './src/jsm/postprocessing/EffectComposer.js';
 import { RenderPass } from './src/jsm/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from './src/jsm/postprocessing/UnrealBloomPass.js';
-import { RectAreaLightUniformsLib } from './src/jsm/lights/RectAreaLightUniformsLib.js';
 import { AnaglyphEffect } from './src/jsm/effects/AnaglyphEffect.js';
 import { RGBELoader } from './src/jsm/loaders/RGBELoader.js';
 import { ShaderPass } from './src/jsm/postprocessing/ShaderPass.js';
@@ -12,38 +11,38 @@ var MODELS = [
     {
         name: "Table",
         path: "./src/models/table/scene.gltf",
-        position: { x: 0, y: -2.6, z:  0},
+        position: { x: 0, y: -2.4, z:  0},
         rotation: { x: 0, y: 0, z: 0 },
         scale: 3,
     },
     {
         name: "Workspace",
         path: "./src/models/workspace.glb",
-        position: { x: 0.2, y: 0, z: 1 },
+        position: { x: 0.2, y: 0, z: 0.4 },
         rotation: { x: 0, y: 0, z: 0 },
         scale: 0.01,
     },
     {
         name: "Fighter",
         path: "./src/models/fighter.glb",
-        position: { x: -1.2, y: 0.3, z: 1 },
+        position: { x: -1.2, y: 0.3, z: 0.5 },
         rotation: { x: 0, y: 0, z: 0 },
         scale: 0.1,
     },    
     {
         name: "Coffee",
         path: "./src/models/coffee/scene.gltf",
-        position: { x: 1.55, y: 0.18, z: 0.6},
+        position: { x: 1.55, y: 0.25, z: 0.2},
         rotation: { x: 0, y: 0, z: 0 },
         scale: 0.016,
     },      
-    {
-        name: "Hologram",
-        path: "./src/models/hologram/scene.gltf",
-        position: { x: 0.0, y: 1.3, z: 0.2},
-        rotation: { x: 0, y: 0, z: 0 },
-        scale: 0.002,
-    },          
+    // {
+    //     name: "Hologram",
+    //     path: "./src/models/hologram/scene.gltf",
+    //     position: { x: 0.0, y: 1.3, z: 0.2},
+    //     rotation: { x: 0, y: 0, z: 0 },
+    //     scale: 0.002,
+    // },          
 ]
 
 var mouse = new THREE.Vector2();
@@ -59,19 +58,6 @@ function onDocumentMouseClick( event ) {
        mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
        mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
        raycaster.setFromCamera( mouse, camera );
-       var intersects = raycaster.intersectObjects( scene.children );
-       if ( intersects.length > 0 ) {
-               var object = intersects[ 0 ].object;
-               if(object.name=="screen"){
-                   //object.material.color = new THREE.Color(1,1,1);
-                   if(!clicked){
-                        meshes.forEach(function (obj){
-                            materials[obj.uuid] = obj.material;
-                        });      
-                   }
-                   clicked=true;
-               }
-       }
        var intersects = raycaster.intersectObjects( playergroup.children );
        if ( intersects.length > 0 ) {
                var object = intersects[ 0 ].object;
@@ -103,41 +89,8 @@ function onDocumentMouseClick( event ) {
        }       
 }
 
-Ammo().then(function (AmmoLib) {
-    Ammo = AmmoLib;
-    init();
-    animate();
-});
-
-function init() {
-    initScene();
-    initRenderer();
-    loadModels();
-    loadTexts();
-    loadAudioText();
-}
 
 var materials = {};
-
-function loadAudioText(){
-    var loader = new THREE.FontLoader();
-    loader.load( './src/fonts/Roboto_Regular.json', function ( font ) {
-        var xMid, text;
-        var message = playlist[current];
-        var shapes = font.generateShapes( message, 0.03 );
-        var geometry = new THREE.ShapeBufferGeometry( shapes );
-        geometry.computeBoundingBox();
-        xMid = - 0.5 * ( geometry.boundingBox.max.x - geometry.boundingBox.min.x );
-        geometry.translate( xMid, 0, 0 );
-        playertext = new THREE.Mesh( geometry, matLite );
-        playertext.layers.enable(BLOOM_SCENE);
-        playertext.position.copy(new THREE.Vector3(-1.6, 0.35, 1.0));
-        playertext.visible=false;
-        scene.add( playertext );
-        meshes.push(playertext);
-    });    
-}
-
 var matDark = new THREE.LineBasicMaterial( {
     color: 0xffffff,
     side: THREE.DoubleSide
@@ -151,52 +104,203 @@ var matLite = new THREE.MeshBasicMaterial( {
 } );
 var playertext;
 var playergroup = new THREE.Group();
+var navgroup = new THREE.Group();
+var rectangle;
+
+
+Ammo().then(function (AmmoLib) {
+    Ammo = AmmoLib;
+    init();
+    animate();
+});
+
+function init() {
+    initScene();
+    initRenderer();
+    loadModels();
+    loadAudioText();
+    loadMeshes();
+    loadTexts();
+}
+
+function loadAudioText(){
+    var loader = new THREE.FontLoader();
+    loader.load( './src/fonts/Roboto_Regular.json', function ( font ) {
+        var xMid, text;
+        var message = playlist[current];
+        var shapes = font.generateShapes( message, 0.03 );
+        var geometry = new THREE.ShapeBufferGeometry( shapes );
+        geometry.computeBoundingBox();
+        xMid = - 0.5 * ( geometry.boundingBox.max.x - geometry.boundingBox.min.x );
+        geometry.translate( xMid, 0, 0 );
+        playertext = new THREE.Mesh( geometry, matLite );
+        //playertext.layers.enable(BLOOM_SCENE);
+        playertext.position.copy(new THREE.Vector3(-1.5, 0.5, 0.5));
+        playertext.visible=false;
+        scene.add( playertext );
+        meshes.push(playertext);
+    });    
+}
+
+var home, pen, mail;
 
 function loadTexts(){
+    var xMid, text, message, shapes, geometry;
     var loader = new THREE.FontLoader();
     loader.load( './src/fonts/player.json', function ( font ) {
-        var xMid, text;
-        var message = "B";
-        var shapes = font.generateShapes( message, 0.1 );
-        var geometry = new THREE.ShapeBufferGeometry( shapes );
+        var y = 0.35;
+        var z = 0.5;
+        message = "B";
+        shapes = font.generateShapes( message, 0.1 );
+        geometry = new THREE.ShapeBufferGeometry( shapes );
         geometry.computeBoundingBox();
         xMid = - 0.5 * ( geometry.boundingBox.max.x - geometry.boundingBox.min.x );
         geometry.translate( xMid, 0, 0 );
         text = new THREE.Mesh( geometry, matLite );
-        text.position.copy(new THREE.Vector3(-1.5, 0.2, 1.0));
+        text.position.copy(new THREE.Vector3(-1.4, y, z));
         text.name="next";
-        text.layers.enable(BLOOM_SCENE);
+        //text.layers.enable(BLOOM_SCENE);
         meshes.push(text);
         playergroup.add( text );
 
-        var message = "C";
-        var shapes = font.generateShapes( message, 0.1 );
-        var geometry = new THREE.ShapeBufferGeometry( shapes );
+        message = "C";
+        shapes = font.generateShapes( message, 0.1 );
+        geometry = new THREE.ShapeBufferGeometry( shapes );
         geometry.computeBoundingBox();
         xMid = - 0.5 * ( geometry.boundingBox.max.x - geometry.boundingBox.min.x );
         geometry.translate( xMid, 0, 0 );
         text = new THREE.Mesh( geometry, matLite );
-        text.position.copy(new THREE.Vector3(-1.6, 0.2, 1.0));
+        text.position.copy(new THREE.Vector3(-1.5, y, z));
         text.name="play";
-        text.layers.enable(BLOOM_SCENE);
+        //text.layers.enable(BLOOM_SCENE);
         meshes.push(text);
         playergroup.add( text );
 
-        var message = "A";
-        var shapes = font.generateShapes( message, 0.1 );
-        var geometry = new THREE.ShapeBufferGeometry( shapes );
+        message = "A";
+        shapes = font.generateShapes( message, 0.1 );
+        geometry = new THREE.ShapeBufferGeometry( shapes );
         geometry.computeBoundingBox();
         xMid = - 0.5 * ( geometry.boundingBox.max.x - geometry.boundingBox.min.x );
         geometry.translate( xMid, 0, 0 );
         text = new THREE.Mesh( geometry, matLite );
-        text.position.copy(new THREE.Vector3(-1.7, 0.2, 1.0));
+        text.position.copy(new THREE.Vector3(-1.6, y, z));
         text.name="prev";
-        text.layers.enable(BLOOM_SCENE);
+        //text.layers.enable(BLOOM_SCENE);
         playergroup.add( text );
         playergroup.visible=false;
         meshes.push(text);
         scene.add(playergroup);
+
+
+        message = "I";
+        shapes = font.generateShapes( message, 0.25 );
+        geometry = new THREE.ShapeBufferGeometry( shapes );
+        geometry.computeBoundingBox();
+        xMid = - 0.5 * ( geometry.boundingBox.max.x - geometry.boundingBox.min.x );
+        geometry.translate( xMid, 0, 0 );
+        rectangle = new THREE.Mesh( geometry, matLite );
+        rectangle.material.opacity = 1.0;
+        rectangle.position.copy(new THREE.Vector3(navigator.position.x, navigator.position.y + 0.1, navigator.position.z+0.4));
+        meshes.push(rectangle);
+        scene.add(rectangle);
     });
+
+    loader.load( './src/fonts/icons.json', function ( font ) {
+        message = "h"
+        shapes = font.generateShapes( message, 0.1 );
+        geometry = new THREE.ShapeBufferGeometry( shapes );
+        geometry.computeBoundingBox();
+        xMid = - 0.5 * ( geometry.boundingBox.max.x - geometry.boundingBox.min.x );
+        geometry.translate( xMid, 0, 0 );
+        home = new THREE.Mesh( geometry, matLite );
+        home.name="home";
+        home.material.opacity = 1.0;
+        home.position.copy(new THREE.Vector3(navigator.position.x, navigator.position.y + 0.15, navigator.position.z+0.20));
+        meshes.push(home);
+        navgroup.add(home);
+
+        message = "e"
+        shapes = font.generateShapes( message, 0.1 );
+        geometry = new THREE.ShapeBufferGeometry( shapes );
+        geometry.computeBoundingBox();
+        xMid = - 0.5 * ( geometry.boundingBox.max.x - geometry.boundingBox.min.x );
+        geometry.translate( xMid, 0, 0 );
+        pen = new THREE.Mesh( geometry, matLite );
+        pen.name="pen";
+        pen.material.opacity = 1.0;
+        pen.position.copy(new THREE.Vector3(navigator.position.x, navigator.position.y - 0.05, navigator.position.z+0.04));
+        meshes.push(pen);
+        navgroup.add(pen);
+
+        message = "m"
+        shapes = font.generateShapes( message, 0.1 );
+        geometry = new THREE.ShapeBufferGeometry( shapes );
+        geometry.computeBoundingBox();
+        xMid = - 0.5 * ( geometry.boundingBox.max.x - geometry.boundingBox.min.x );
+        geometry.translate( xMid, 0, 0 );
+        mail = new THREE.Mesh( geometry, matLite );
+        mail.name="mail";
+        mail.material.opacity = 1.0;
+        mail.position.copy(new THREE.Vector3(navigator.position.x, navigator.position.y - 0.25, navigator.position.z+0.04));
+        meshes.push(mail);
+        navgroup.add(mail);
+
+        scene.add(navgroup);
+        
+        // everything is loaded
+        meshes.forEach(function (obj){
+            materials[obj.uuid] = obj.material;
+        });  
+    });
+}
+var navigator, active;
+
+function loadMeshes(){
+    phonescreen = new THREE.Mesh( new THREE.PlaneBufferGeometry(), new THREE.MeshBasicMaterial( { color: new THREE.Color(0,0,0) } ) );
+    phonescreen.name = "phonescreen";
+    phonescreen.scale.x = 0.4;
+    phonescreen.scale.y = 0.18;
+    phonescreen.position.set(-1.55, 0.035, 0.36);
+    phonescreen.rotation.x = -Math.PI/2;
+    phonescreen.rotation.z = -Math.PI/3 + 0.08;
+    phonescreen.layers.enable(BLOOM_SCENE);
+    meshes.push(phonescreen);
+    navgroup.add(phonescreen);
+
+    screen = new THREE.Mesh( new THREE.PlaneBufferGeometry(), new THREE.MeshBasicMaterial( { color: new THREE.Color(1,1,1) } ) );
+    //screen.layers.enable(BLOOM_SCENE);                                 
+    screen.name = "screen";
+    screen.scale.x = 2.3;
+    screen.scale.y = 1.2;
+    screen.position.set( 0, 1.37, -0.45 );
+    scene.add(screen);
+    meshes.push(screen);
+
+    var posx = -1.4;
+    var posy = 1.5;
+    var posz = -0.5;
+    var scx = 0.2;
+    var scy = 0.6;
+    var scz = 0.02;
+    navigator = new THREE.Mesh( new THREE.BoxBufferGeometry(),
+        new THREE.MeshStandardMaterial( {
+                color: new THREE.Color(0.02,0.02,0.02), 
+                roughness:1.0,
+                metalness:0.0,
+    } ) );
+
+    navigator.scale.set(scx, scy, scz);
+    navigator.position.set(posx, posy, posz);
+    scene.add(navigator);
+    meshes.push(navigator);
+
+    active = new THREE.Mesh( new THREE.BoxBufferGeometry(),
+        new THREE.MeshNormalMaterial( {    } ) );
+
+    active.scale.set(scx, scx, scz);
+    active.position.set(posx, posy + scy/2 - scx/2, posz+scz+0.15 );
+    scene.add(active);
+    meshes.push(active);
 }
 
 var camera;
@@ -211,7 +315,6 @@ var windowHalfX = window.innerWidth / 2;
 var windowHalfY = window.innerHeight / 2;
 var clicked = false;
 //document.getElementById('container').style.cursor = 'none';
-var rectLight;
 
 var effect;
 var screen;
@@ -226,26 +329,6 @@ function initScene() {
     camera.lookAt(0,0.5,0);
     clock = new THREE.Clock();
     scene = new THREE.Scene();
-  
-    phonescreen = new THREE.Mesh( new THREE.PlaneBufferGeometry(), new THREE.MeshBasicMaterial( { color: new THREE.Color(0,0,0) } ) );
-    phonescreen.name = "phonescreen";
-    phonescreen.scale.x = 0.4;
-    phonescreen.scale.y = 0.18;
-    phonescreen.position.set(-1.55, 0.035, 1.26-0.3);
-    phonescreen.rotation.x = -Math.PI/2;
-    phonescreen.rotation.z = -Math.PI/3 + 0.08;
-    phonescreen.layers.enable(BLOOM_SCENE);
-    scene.add(phonescreen);
-    meshes.push(phonescreen);
-
-    screen = new THREE.Mesh( new THREE.PlaneBufferGeometry(), new THREE.MeshBasicMaterial( { color: new THREE.Color(0,0,0) } ) );
-    screen.layers.enable(BLOOM_SCENE);                                 
-    screen.name = "screen";
-    screen.scale.x = 2.3;
-    screen.scale.y = 1.2;
-    screen.position.set( 0, 1.37, 0.2 );
-    scene.add(screen);
-    meshes.push(screen);
 
     window.addEventListener( 'resize', onWindowResize, false );
     window.addEventListener( 'click', onDocumentMouseClick, false );
@@ -382,8 +465,15 @@ function loadGLTFModel(model) {
                     } );
                     object.material = material;
                 }
-                else if(object.name=="Workspace") {
-                    object.material.flatShading=false;
+                else if(model.name=="Workspace") {
+                    var material = new THREE.MeshStandardMaterial( {
+                        map:object.material.map,
+                        envMap:envMap,
+                        roughness:0.0,
+                        metalness:0.0,
+                        flatShading: true,
+                    } );
+                    object.material = material;
                 }
                 else if(object.name=="Hologram") {
                     object.layers.enable('BLOOM_SCENE');
@@ -427,15 +517,15 @@ function animate() {
     camera.position.x = ( mouseX ) * .0001;
     camera.position.y = 1 + ( - mouseY ) * .0001;
     camera.lookAt(0,0.5,0);
+    // if(count) {
+    //     hologrammixer.update(delta);
+    //     count-=1;
+    //     if(count==0){
+    //         screen.material.color = new THREE.Color(1,1,1);
+    //         clicked=true;
+    //     }
+    // }
 
-    if(clicked && count) {
-        hologram.scene.visible=true;
-        hologrammixer.update(delta);
-        count-=1;
-        if(count==0){
-            screen.material.color = new THREE.Color(1,1,1);
-        }
-    }
     if(clicked){
         renderBloom();
         finalComposer.render();
@@ -464,6 +554,7 @@ function restoreMaterial(obj) {
     if (materials[obj.uuid]) {
         obj.material = materials[obj.uuid];
         scene.background=envMap;
+        scene.environment=envMap;
     }
 }
 
@@ -479,7 +570,7 @@ function onDocumentMouseMove( event ) {
     mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
     mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
     raycaster.setFromCamera( mouse, camera );
-    var intersects = raycaster.intersectObjects( scene.children );
+    var intersects = raycaster.intersectObjects( navgroup.children );
     if ( intersects.length > 0 ) {
             var object = intersects[ 0 ].object;
             if(object.name=="phonescreen"){
@@ -497,6 +588,28 @@ function onDocumentMouseMove( event ) {
                 phonescreen.material.color=new THREE.Color(0,0,0);
                 playergroup.visible=false;
                 playertext.visible=false;
+                if(object.name=="home"){
+                    active.position.y = navigator.position.y + 0.2 ;
+                    home.position.z = navigator.position.z+0.20;
+                    pen.position.z = navigator.position.z+0.04;
+                    mail.position.z = navigator.position.z+0.04;
+                    rectangle.position.y =  navigator.position.y + 0.1;
+
+                }
+                else if(object.name=="pen"){
+                    active.position.y = navigator.position.y + 0.2 - 0.2;
+                    home.position.z = navigator.position.z+0.04;
+                    pen.position.z = navigator.position.z+0.20;
+                    mail.position.z = navigator.position.z+0.04;                    
+                    rectangle.position.y =  navigator.position.y - 0.1;                    
+                }
+                else if(object.name=="mail"){
+                    active.position.y = navigator.position.y + 0.2 - 0.4;
+                    home.position.z = navigator.position.z+0.04;
+                    pen.position.z = navigator.position.z+0.04;
+                    mail.position.z = navigator.position.z+0.20;
+                    rectangle.position.y =  navigator.position.y - 0.3;
+                }
             }
     }
 }

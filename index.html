@@ -17,14 +17,14 @@
           }                               
 
         body {margin: 0; overflow:hidden; height:100%;
-              cursor: url('./src/images/cursor.png'), auto;
+              /*cursor: url('./src/images/cursor.png'), auto;*/
               }
         canvas { width: 100%; height: 100% }                       
 		</style>
 	</head>
 	<body>
             <div id="container"></div>
-            <audio id="player" controls autoplay loop src='./src/sounds/St Francis - Josh Lippi & The Overtimers.mp3' style="display:none;" ></audio>
+            <audio id="player" controls loop src='./src/sounds/St Francis - Josh Lippi & The Overtimers.mp3' style="display:none;" ></audio>
             <script type="module" src="./app.js"></script>
             <script src="./src/js/libs/ammo.js"></script>
             <script type="x-shader/x-vertex" id="vertexshader">
