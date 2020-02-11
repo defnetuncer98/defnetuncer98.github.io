@@ -114,13 +114,19 @@ function onDocumentMouseClick( event ) {
                         currentpenpage = 3;
                         nextmesh.material.color=new THREE.Color(0.8, 0.8, 0.8);
                     }
-                    if(currentpenpage==1) {
+                    else if(currentpenpage==1) {
                         prevmesh.material.color=new THREE.Color(0.02,0.02, 0.02);                    
+                        video.src = "./src/videos/tt.mp4";
+                        video.load(); // must call after setting/changing source
+                        video.play();
+                    }
+                    else if(currentpenpage==0){
+                        video.src = "./src/videos/cat.mp4";
+                        video.load(); // must call after setting/changing source
+                        video.play();
                     }
                     penpages[currentpenpage].visible=true;
-                    video.src = "./src/videos/cat.mp4";
-                    video.load(); // must call after setting/changing source
-                    video.play();
+
                 }
                 else if(object.name=="prevpenpage"){
                     penpages[currentpenpage].visible=false;
@@ -131,11 +137,18 @@ function onDocumentMouseClick( event ) {
                     }
                     if(currentpenpage==2) {
                         nextmesh.material.color=new THREE.Color(0.02, 0.02, 0.02);
-                    }              
+                    }
+                    else if(currentpenpage==1){
+                        video.src = "./src/videos/tt.mp4";
+                        video.load(); // must call after setting/changing source
+                        video.play();
+                    }
+                    else if(currentpenpage==0) {
+                        video.src = "./src/videos/cat.mp4";
+                        video.load(); // must call after setting/changing source
+                        video.play();
+                    }
                     penpages[currentpenpage].visible=true;
-                    video.src = "./src/videos/cat.mp4";
-                    video.load(); // must call after setting/changing source
-                    video.play();
                 }
             }
        }
@@ -205,7 +218,7 @@ function loadVideos(){
 	videoTexture.minFilter = THREE.LinearFilter;
 	videoTexture.magFilter = THREE.LinearFilter;
 	
-	var movieMaterial = new THREE.MeshStandardMaterial( { map: videoTexture, overdraw: true, metalness:0.1, roughness:0.0, emissive:0xffffff, emissiveIntensity:0.05 } );
+	var movieMaterial = new THREE.MeshStandardMaterial( { map: videoTexture, overdraw: true, metalness:0.1, roughness:0.5, emissive:0xffffff, emissiveIntensity:0.1 } );
 	var movieGeometry = new THREE.PlaneGeometry( 2.3, 1.2, 4, 4 );
 	var movieScreen = new THREE.Mesh( movieGeometry, movieMaterial );
     movieScreen.position.set(0.0, 1.37, -0.4);
@@ -272,6 +285,7 @@ function loadTexts(){
         meshes.push(whiterectangle);
         scene.add(whiterectangle);
         materials[whiterectangle.uuid] = whiterectangle.material;
+
     });
 
     loader.load( './src/fonts/icons.json', function ( font ) {
@@ -307,9 +321,21 @@ function loadTexts(){
         penpagegroup.add(text);
         materials[text.uuid] = text.material;
 
+        text = createText(font, "I", x-0.1, y-0.7, z+0.6, "");
+        text.material.opacity = 1.0;
+        meshes.push(text);
+        penpagegroup.add(text);
+        materials[text.uuid] = text.material;
+
 
     });
-
+    loader.load( './src/fonts/icons2.json', function ( font ) {
+        var text = createText(font, "Ä", x-0.1, y-0.9, z+0.6,"");
+        text.material.opacity = 1.0;
+        meshes.push(text);
+        penpagegroup.add(text);
+        materials[text.uuid] = text.material;
+    });
 
     loader.load( './src/fonts/Playfair Display_Regular.json', function ( font ) {
         var x = 0.0;
@@ -327,10 +353,31 @@ function loadTexts(){
     });
 
     loader.load( './src/fonts/Titillium_Regular.json', function ( font ) {
-        var x = 0.0;
-        var y = 1.2;
-        var z = 0.0;    
-        hello = createText(font, "I ' m  D e f n e  T u n ç e r", x, y-0.2, z, "", 0.1, new THREE.MeshBasicMaterial( {
+        var text = createText(font, "WebGL, three.js", x+0.2, y-0.7, z+0.35, "", 0.05);
+        text.material.opacity = 1.0;
+        meshes.push(text);
+        penpages[0].add(text);
+        materials[text.uuid] = text.material;
+
+        var text = createText(font, "machine learning, python, \nsci-kit learn, librosa", x+0.37, y-0.7, z+0.35, "", 0.05);
+        text.material.opacity = 1.0;
+        meshes.push(text);
+        penpages[1].add(text);
+        materials[text.uuid] = text.material;
+
+        var text = createText(font, "defnetuncer98.github.io/smellycat/", x+0.5, y-0.9, z+0.35, "", 0.05);
+        text.material.opacity = 1.0;
+        meshes.push(text);
+        penpages[0].add(text);
+        materials[text.uuid] = text.material;   
+        
+        var text = createText(font, "github.com/Tomayto-Tomahto/demo", x+0.55, y-0.9, z+0.35, "", 0.05);
+        text.material.opacity = 1.0;
+        meshes.push(text);
+        penpages[1].add(text);
+        materials[text.uuid] = text.material;   
+        
+        hello = createText(font, "I ' m  D e f n e  T u n ç e r", 0.0, 1.0, 0.0, "", 0.1, new THREE.MeshBasicMaterial( {
             color: 0x000000,
             transparent: true,
             opacity: 1.0,
@@ -342,6 +389,15 @@ function loadTexts(){
     scene.add(penpagegroup);
     scene.add(homepagegroup);
     penpagegroup.visible=false;
+    scene.add(penpages[0]);
+    penpages[0].visible=false;
+    scene.add(penpages[1]);
+    penpages[1].visible=false;
+    scene.add(penpages[2]);
+    penpages[2].visible=false;
+    scene.add(penpages[3]);
+    penpages[3].visible=false;
+
 }
 
 var hello;
@@ -423,6 +479,21 @@ function loadMeshes(){
     penpagegroup.add(prevmesh);
     meshes.push(prevmesh);
     materials[prevmesh.uuid] = prevmesh.material;
+
+    var mesh = new THREE.Mesh( new THREE.BoxBufferGeometry(),
+    new THREE.MeshStandardMaterial( {
+            color: new THREE.Color(0.0, 0.0, 0.0), 
+            roughness:1.0,
+            metalness:0.0,
+            transparent:true,
+            opacity:0.9
+    } ) );
+    mesh.scale.set(1.2, 0.4, 0.1);
+    mesh.position.set(posx+0.5, posy-0.8, posz+0.2);
+    penpagegroup.add(mesh);
+    meshes.push(mesh);
+    materials[mesh.uuid] = mesh.material;
+
 }
 
 var camera;
