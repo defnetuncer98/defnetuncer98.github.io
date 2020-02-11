@@ -64,7 +64,9 @@ bloomLayer.set(BLOOM_SCENE);
 
 var home, pen, mail;
 var homepagegroup = new THREE.Group();
+var penpages = [new THREE.Group(),new THREE.Group(),new THREE.Group(),new THREE.Group()];
 var penpagegroup = new THREE.Group();
+var currentpenpage = 0;
 var mailpagegroup = new THREE.Group();
 
 function onDocumentMouseClick( event ) {
@@ -100,7 +102,44 @@ function onDocumentMouseClick( event ) {
                    loadAudioText();
                    playertext.visible=true;
                }            
-       }       
+       }  
+       if(nowactive=="pen"){
+            var intersects = raycaster.intersectObjects( penpagegroup.children );
+            if ( intersects.length > 0 ) {
+                var object = intersects[ 0 ].object;
+                if(object.name=="nextpenpage"){
+                    penpages[currentpenpage].visible=false;
+                    currentpenpage+=1;
+                    if(currentpenpage==4) {
+                        currentpenpage = 3;
+                        nextmesh.material.color=new THREE.Color(0.8, 0.8, 0.8);
+                    }
+                    if(currentpenpage==1) {
+                        prevmesh.material.color=new THREE.Color(0.02,0.02, 0.02);                    
+                    }
+                    penpages[currentpenpage].visible=true;
+                    video.src = "./src/videos/cat.mp4";
+                    video.load(); // must call after setting/changing source
+                    video.play();
+                }
+                else if(object.name=="prevpenpage"){
+                    penpages[currentpenpage].visible=false;
+                    currentpenpage-=1;
+                    if(currentpenpage==-1) {
+                        currentpenpage=0;
+                        prevmesh.material.color=new THREE.Color(0.8, 0.8, 0.8);
+                    }
+                    if(currentpenpage==2) {
+                        nextmesh.material.color=new THREE.Color(0.02, 0.02, 0.02);
+                    }              
+                    penpages[currentpenpage].visible=true;
+                    video.src = "./src/videos/cat.mp4";
+                    video.load(); // must call after setting/changing source
+                    video.play();
+                }
+            }
+       }
+       
 }
 
 
@@ -139,10 +178,40 @@ Ammo().then(function (AmmoLib) {
 function init() {
     initScene();
     initRenderer();
+    loadVideos();
     loadModels();
     loadAudioText();
     loadMeshes();
     loadTexts();
+}
+
+var video, videoImage, videoImageContext, videoTexture;
+
+function loadVideos(){
+	video = document.createElement( 'video' );
+    video.src = "./src/videos/cat.mp4";
+    video.loop = true;
+	video.load(); // must call after setting/changing source
+    video.play();
+    videoImage = document.createElement( 'canvas' );
+	videoImage.width = 1920;
+	videoImage.height = 1080;
+
+	videoImageContext = videoImage.getContext( '2d' );
+	videoImageContext.fillStyle = '#000000';
+	videoImageContext.fillRect( 0, 0, videoImage.width, videoImage.height );
+
+	videoTexture = new THREE.Texture( videoImage );
+	videoTexture.minFilter = THREE.LinearFilter;
+	videoTexture.magFilter = THREE.LinearFilter;
+	
+	var movieMaterial = new THREE.MeshStandardMaterial( { map: videoTexture, overdraw: true, metalness:0.1, roughness:0.0, emissive:0xffffff, emissiveIntensity:0.05 } );
+	var movieGeometry = new THREE.PlaneGeometry( 2.3, 1.2, 4, 4 );
+	var movieScreen = new THREE.Mesh( movieGeometry, movieMaterial );
+    movieScreen.position.set(0.0, 1.37, -0.4);
+    meshes.push(movieScreen);
+    penpagegroup.add(movieScreen);
+
 }
 
 function loadAudioText(){
@@ -226,6 +295,19 @@ function loadTexts(){
 
         scene.add(navgroup);
 
+        var text = createText(font, ">", x+2.0, y+0.4, z+0.3, "nextpenpage");
+        text.material.opacity = 1.0;
+        meshes.push(text);
+        penpagegroup.add(text);
+        materials[text.uuid] = text.material;
+
+        text = createText(font, "<", x+1.8, y+0.4, z+0.3, "prevpenpage");
+        text.material.opacity = 1.0;
+        meshes.push(text);
+        penpagegroup.add(text);
+        materials[text.uuid] = text.material;
+
+
     });
 
 
@@ -257,13 +339,17 @@ function loadTexts(){
         homepagegroup.add(hello);
     });
     
+    scene.add(penpagegroup);
     scene.add(homepagegroup);
+    penpagegroup.visible=false;
 }
+
 var hello;
-var navigatormesh, activemesh;
+var activemesh, navigatormesh;
+var nextmesh, prevmesh;
 
 function loadMeshes(){
-    phonescreen = new THREE.Mesh( new THREE.PlaneBufferGeometry(), new THREE.MeshBasicMaterial( { color: new THREE.Color(0,0,0) } ) );
+    phonescreen = new THREE.Mesh( new THREE.PlaneBufferGeometry(), new THREE.MeshStandardMaterial( { color: new THREE.Color(0,0,0), roughness:0.1, metalness:0.1 } ) );
     phonescreen.name = "phonescreen";
     phonescreen.scale.x = 0.4;
     phonescreen.scale.y = 0.18;
@@ -275,7 +361,7 @@ function loadMeshes(){
     materials[phonescreen.uuid] = phonescreen.material;
     navgroup.add(phonescreen);
 
-    screen = new THREE.Mesh( new THREE.PlaneBufferGeometry(), new THREE.MeshBasicMaterial( { color: new THREE.Color(1,1,1) } ) );
+    screen = new THREE.Mesh( new THREE.PlaneBufferGeometry(), new THREE.MeshStandardMaterial( { color: new THREE.Color(1,1,1), roughness:0.0, metalness:0.05, emissive:0xffffff, emissiveIntensity:0.2} ) );
     //screen.layers.enable(BLOOM_SCENE);                                 
     screen.name = "screen";
     screen.scale.x = 2.3;
@@ -296,6 +382,8 @@ function loadMeshes(){
                 color: new THREE.Color(0.02,0.02,0.02), 
                 roughness:1.0,
                 metalness:0.0,
+                transparent:true,
+                opacity:0.8
     } ) );
 
     navigatormesh.scale.set(scx, scy, scz);
@@ -305,13 +393,36 @@ function loadMeshes(){
     materials[navigatormesh.uuid] = navigatormesh.material;
 
     activemesh = new THREE.Mesh( new THREE.BoxBufferGeometry(),
-        new THREE.MeshNormalMaterial( {    } ) );
+        new THREE.MeshNormalMaterial( { transparent:true, opacity:0.8   } ) );
 
     activemesh.scale.set(scx, scx, scz);
     activemesh.position.set(posx, posy + scy/2 - scx/2, posz+scz+0.15 );
     scene.add(activemesh);
     meshes.push(activemesh);
     materials[activemesh.uuid] = activemesh.material;
+
+
+    nextmesh = new THREE.Mesh( new THREE.CircleBufferGeometry(0.09, 32),
+    new THREE.MeshStandardMaterial( {
+            color: new THREE.Color(0.02,0.02,0.02), 
+            roughness:1.0,
+            metalness:0.0,
+    } ) );
+    nextmesh.position.set(posx+2.0, posy+0.5, posz+0.2);
+    penpagegroup.add(nextmesh);
+    meshes.push(nextmesh);
+    materials[nextmesh.uuid] = nextmesh.material;
+
+    prevmesh = new THREE.Mesh( new THREE.CircleBufferGeometry(0.09, 32),
+    new THREE.MeshStandardMaterial( {
+            color: new THREE.Color(0.02,0.02,0.02), 
+            roughness:1.0,
+            metalness:0.0,
+    } ) );
+    prevmesh.position.set(posx+1.8, posy+0.5, posz+0.2);
+    penpagegroup.add(prevmesh);
+    meshes.push(prevmesh);
+    materials[prevmesh.uuid] = prevmesh.material;
 }
 
 var camera;
@@ -469,7 +580,7 @@ function loadGLTFModel(model) {
                     var material = new THREE.MeshStandardMaterial( {
                         map:object.material.map,
                         roughness:0.0,
-                        metalness:0.0,
+                        metalness:0.2,
                     } );
                     object.material = material;
                 }
@@ -482,9 +593,8 @@ function loadGLTFModel(model) {
                 else if(model.name=="Workspace") {
                     var material = new THREE.MeshStandardMaterial( {
                         map:object.material.map,
-                        envMap:envMap,
                         roughness:0.0,
-                        metalness:0.0,
+                        metalness:0.2,
                         flatShading: true,
                     } );
                     object.material = material;
@@ -530,10 +640,19 @@ function animate() {
     var delta = clock.getDelta();
     requestAnimationFrame( animate );
 
-    if(nowactive == "home"){
+    if(meshes.length>100){
         if(hellocount==20 || hellocount==0) helloup = !helloup;
         if(helloup) {hellocount+=1; fighter.position.y+=0.001;}
         else {hellocount-=1; fighter.position.y-=0.001;}
+    }
+
+    if(nowactive=="pen"){
+        if ( video.readyState === video.HAVE_ENOUGH_DATA ) 
+        {
+            videoImageContext.drawImage( video, 0, 0 );
+            if ( videoTexture ) 
+                videoTexture.needsUpdate = true;
+        }    
     }
 
     camera.position.x = ( mouseX ) * .0001;
@@ -614,6 +733,7 @@ function onDocumentMouseMove( event ) {
                     mail.position.z = navigatormesh.position.z+0.04;
                     whiterectangle.position.y =  navigatormesh.position.y + 0.1;
                     homepagegroup.visible=true;
+                    penpages[currentpenpage].visible=false;
                     penpagegroup.visible=false;
                     mailpagegroup.visible=false;
                 }
@@ -625,6 +745,7 @@ function onDocumentMouseMove( event ) {
                     mail.position.z = navigatormesh.position.z+0.04;                    
                     whiterectangle.position.y =  navigatormesh.position.y - 0.1;                    
                     homepagegroup.visible=false;
+                    penpages[currentpenpage].visible=true;
                     penpagegroup.visible=true;
                     mailpagegroup.visible=false;
                 }
@@ -636,6 +757,7 @@ function onDocumentMouseMove( event ) {
                     mail.position.z = navigatormesh.position.z+0.20;
                     whiterectangle.position.y =  navigatormesh.position.y - 0.3;
                     homepagegroup.visible=false;
+                    penpages[currentpenpage].visible=false;
                     penpagegroup.visible=false;
                     mailpagegroup.visible=true;
 
