@@ -25,10 +25,67 @@ var MODELS = [
     {
         name: "Fighter",
         path: "./src/models/fighter.glb",
-        position: { x: -1.2, y: 0.3, z: 0.5 },
+        position: { x: 1.85, y: 0.25, z: 0.7 },
         rotation: { x: 0, y: 0, z: 0 },
         scale: 0.1,
     },    
+    {
+        name: "Corner",
+        path: "./src/models/corner.glb",
+        position: { x: 1.7, y: 0.5, z: 0.6 },
+        rotation: { x: 0, y: 0, z: 0 },
+        scale: 0.08,
+    },    
+    {
+        name: "Corner",
+        path: "./src/models/corner.glb",
+        position: { x: 1.7, y: 0.2, z: 0.6 },
+        rotation: { x: 0, y: 0, z: Math.PI/2 },
+        scale: 0.08,
+    },    
+    {
+        name: "Corner",
+        path: "./src/models/corner.glb",
+        position: { x: 2.0, y: 0.2, z: 0.9 },
+        rotation: { x: 0, y: Math.PI, z: Math.PI/2 },
+        scale: 0.08,
+    },    
+    {
+        name: "Corner",
+        path: "./src/models/corner.glb",
+        position: { x: 2.0, y: 0.5, z: 0.6 },
+        rotation: { x: Math.PI, y: Math.PI, z: Math.PI/2 },
+        scale: 0.08,
+    },    
+    {
+        name: "Corner",
+        path: "./src/models/corner.glb",
+        position: { x: 1.7, y: 0.5, z: 0.9 },
+        rotation: { x: Math.PI, y: 0, z: Math.PI/2 },
+        scale: 0.08,
+    },   
+    {
+        name: "Corner",
+        path: "./src/models/corner.glb",
+        position: { x: 2.0, y: 0.2, z: 0.6 },
+        rotation: { x: Math.PI/2, y: Math.PI, z: Math.PI/2 },
+        scale: 0.08,
+    },    
+    {
+        name: "Corner",
+        path: "./src/models/corner.glb",
+        position: { x: 1.7, y: 0.2, z: 0.9 },
+        rotation: { x: 0, y: Math.PI/2, z: Math.PI/2 },
+        scale: 0.08,
+    },  
+    {
+        name: "Corner",
+        path: "./src/models/corner.glb",
+        position: { x: 2.0, y: 0.5, z: 0.9 },
+        rotation: { x: 0, y: Math.PI, z: 0 },
+        scale: 0.08,
+    },      
+
     // {
     //     name: "Flower",
     //     path: "./src/models/flower.glb",
@@ -204,6 +261,7 @@ function loadVideos(){
 	video = document.createElement( 'video' );
     video.src = "./src/videos/cat.mp4";
     video.loop = true;
+    video.muted = true;
 	video.load(); // must call after setting/changing source
     video.play();
     videoImage = document.createElement( 'canvas' );
@@ -349,7 +407,21 @@ function loadTexts(){
         } ));
         homepagegroup.add(text);
 
+        var text = createText(font, "SMELLY CAT", x+1.0, y+0.3, z, "", 0.2, new THREE.MeshBasicMaterial( {
+            color: 0x000000,
+            transparent: true,
+            opacity: 1.0,
+            side: THREE.DoubleSide
+        } ));
+        penpages[0].add(text);
 
+        var text = createText(font, "TOMAYTOMAHTO", x+1.0, y+0.3, z, "", 0.2, new THREE.MeshBasicMaterial( {
+            color: 0x000000,
+            transparent: true,
+            opacity: 1.0,
+            side: THREE.DoubleSide
+        } ));
+        penpages[1].add(text);
     });
 
     loader.load( './src/fonts/Titillium_Regular.json', function ( font ) {
@@ -384,6 +456,15 @@ function loadTexts(){
             side: THREE.DoubleSide
         } ));
         homepagegroup.add(hello);
+
+        hello = createText(font, "Smelly Cat is a web gaming experience inspired\n by Bedroom In Arles by Vincent van Gogh.", 1.0, 1.3, 0.0, "", 0.05, new THREE.MeshBasicMaterial( {
+            color: 0x000000,
+            transparent: true,
+            opacity: 1.0,
+            side: THREE.DoubleSide
+        } ));
+        penpages[0].add(hello);
+
     });
     
     scene.add(penpagegroup);
@@ -480,6 +561,7 @@ function loadMeshes(){
     meshes.push(prevmesh);
     materials[prevmesh.uuid] = prevmesh.material;
 
+    // tag and links
     var mesh = new THREE.Mesh( new THREE.BoxBufferGeometry(),
     new THREE.MeshStandardMaterial( {
             color: new THREE.Color(0.0, 0.0, 0.0), 
@@ -490,6 +572,21 @@ function loadMeshes(){
     } ) );
     mesh.scale.set(1.2, 0.4, 0.1);
     mesh.position.set(posx+0.5, posy-0.8, posz+0.2);
+    penpagegroup.add(mesh);
+    meshes.push(mesh);
+    materials[mesh.uuid] = mesh.material;
+
+    // tag and links
+    var mesh = new THREE.Mesh( new THREE.BoxBufferGeometry(),
+    new THREE.MeshStandardMaterial( {
+            color: new THREE.Color(1.0, 1.0, 1.0), 
+            roughness:1.0,
+            metalness:0.0,
+            transparent:true,
+            opacity:0.9
+    } ) );
+    mesh.scale.set(2.0, 0.8, 0.1);
+    mesh.position.set(posx+2.5, posy, posz+0.2);
     penpagegroup.add(mesh);
     meshes.push(mesh);
     materials[mesh.uuid] = mesh.material;
