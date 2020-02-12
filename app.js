@@ -18,8 +18,8 @@ var MODELS = [
     {
         name: "Workspace",
         path: "./src/models/workspace.glb",
-        position: { x: 0.2, y: 0, z: 0.4 },
-        rotation: { x: 0, y: 0, z: 0 },
+        position: { x: -0.5, y: 0, z: -0.2 },
+        rotation: { x: 0, y: 0.4, z: 0 },
         scale: 0.01,
     },
     {
@@ -279,7 +279,8 @@ function loadVideos(){
 	var movieMaterial = new THREE.MeshStandardMaterial( { map: videoTexture, overdraw: true, metalness:0.1, roughness:0.5, emissive:0xffffff, emissiveIntensity:0.1 } );
 	var movieGeometry = new THREE.PlaneGeometry( 2.3, 1.2, 4, 4 );
 	var movieScreen = new THREE.Mesh( movieGeometry, movieMaterial );
-    movieScreen.position.set(0.0, 1.37, -0.4);
+    movieScreen.position.set( -1.39, 1.37, -0.39 );
+    movieScreen.rotation.set(0.0, 0.4, 0.0);
     meshes.push(movieScreen);
     penpagegroup.add(movieScreen);
 
@@ -379,7 +380,7 @@ function loadTexts(){
         penpagegroup.add(text);
         materials[text.uuid] = text.material;
 
-        text = createText(font, "I", x-0.1, y-0.7, z+0.6, "");
+        text = createText(font, "I", x+0.7, y-0.5, z+0.6, "");
         text.material.opacity = 1.0;
         meshes.push(text);
         penpagegroup.add(text);
@@ -388,7 +389,7 @@ function loadTexts(){
 
     });
     loader.load( './src/fonts/icons2.json', function ( font ) {
-        var text = createText(font, "Ä", x-0.1, y-0.9, z+0.6,"");
+        var text = createText(font, "Ä", x+0.7, y-0.7, z+0.6,"");
         text.material.opacity = 1.0;
         meshes.push(text);
         penpagegroup.add(text);
@@ -399,15 +400,16 @@ function loadTexts(){
         var x = 0.0;
         var y = 1.2;
         var z = 0.0;            
-        var text = createText(font, "HELLO", x, y, z, "", 0.3, new THREE.MeshBasicMaterial( {
+        var text = createText(font, "HELLO", x-1.2, y, z-0.0, "", 0.3, new THREE.MeshBasicMaterial( {
             color: 0x000000,
             transparent: true,
             opacity: 1.0,
             side: THREE.DoubleSide
         } ));
+        text.rotation.y = 0.4;
         homepagegroup.add(text);
 
-        var text = createText(font, "SMELLY CAT", x+1.0, y+0.3, z, "", 0.2, new THREE.MeshBasicMaterial( {
+        var text = createText(font, "SMELLY CAT", x+1.2, y+0.3, z, "", 0.2, new THREE.MeshBasicMaterial( {
             color: 0x000000,
             transparent: true,
             opacity: 1.0,
@@ -415,7 +417,7 @@ function loadTexts(){
         } ));
         penpages[0].add(text);
 
-        var text = createText(font, "TOMAYTOMAHTO", x+1.0, y+0.3, z, "", 0.2, new THREE.MeshBasicMaterial( {
+        var text = createText(font, "TOMAYTOMAHTO", x+1.2, y+0.3, z, "", 0.15, new THREE.MeshBasicMaterial( {
             color: 0x000000,
             transparent: true,
             opacity: 1.0,
@@ -425,36 +427,37 @@ function loadTexts(){
     });
 
     loader.load( './src/fonts/Titillium_Regular.json', function ( font ) {
-        var text = createText(font, "WebGL, three.js", x+0.2, y-0.7, z+0.35, "", 0.05);
+        var text = createText(font, "WebGL, three.js", x+1.0, y-0.5, z+0.8, "", 0.05);
         text.material.opacity = 1.0;
         meshes.push(text);
         penpages[0].add(text);
         materials[text.uuid] = text.material;
 
-        var text = createText(font, "machine learning, python, \nsci-kit learn, librosa", x+0.37, y-0.7, z+0.35, "", 0.05);
+        var text = createText(font, "machine learning, python, \nsci-kit learn, librosa", x+1.18, y-0.5, z+0.8, "", 0.05);
         text.material.opacity = 1.0;
         meshes.push(text);
         penpages[1].add(text);
         materials[text.uuid] = text.material;
 
-        var text = createText(font, "defnetuncer98.github.io/smellycat/", x+0.5, y-0.9, z+0.35, "", 0.05);
+        var text = createText(font, "defnetuncer98.github.io/smellycat/", x+1.3, y-0.7, z+0.8, "", 0.05);
         text.material.opacity = 1.0;
         meshes.push(text);
         penpages[0].add(text);
         materials[text.uuid] = text.material;   
         
-        var text = createText(font, "github.com/Tomayto-Tomahto/demo", x+0.55, y-0.9, z+0.35, "", 0.05);
+        var text = createText(font, "github.com/Tomayto-Tomahto/demo", x+1.35, y-0.7, z+0.8, "", 0.05);
         text.material.opacity = 1.0;
         meshes.push(text);
         penpages[1].add(text);
         materials[text.uuid] = text.material;   
         
-        hello = createText(font, "I ' m  D e f n e  T u n ç e r", 0.0, 1.0, 0.0, "", 0.1, new THREE.MeshBasicMaterial( {
+        hello = createText(font, "I ' m  D e f n e  T u n ç e r", -1.2, 1.0, 0.0, "", 0.1, new THREE.MeshBasicMaterial( {
             color: 0x000000,
             transparent: true,
             opacity: 1.0,
             side: THREE.DoubleSide
         } ));
+        hello.rotation.y = 0.4;
         homepagegroup.add(hello);
 
         hello = createText(font, "Smelly Cat is a web gaming experience inspired\n by Bedroom In Arles by Vincent van Gogh.", 1.0, 1.3, 0.0, "", 0.05, new THREE.MeshBasicMaterial( {
@@ -464,7 +467,14 @@ function loadTexts(){
             side: THREE.DoubleSide
         } ));
         penpages[0].add(hello);
-
+        
+        hello = createText(font, "Your Personal AI Pronunciation Coach\nTrained and tested on the dataset for English language\n learners with Turkish accent and reached an F1-score\n of 94%.", 1.1, 1.4, 0.0, "", 0.05, new THREE.MeshBasicMaterial( {
+            color: 0x000000,
+            transparent: true,
+            opacity: 1.0,
+            side: THREE.DoubleSide
+        } ));
+        penpages[1].add(hello);
     });
     
     scene.add(penpagegroup);
@@ -490,9 +500,10 @@ function loadMeshes(){
     phonescreen.name = "phonescreen";
     phonescreen.scale.x = 0.4;
     phonescreen.scale.y = 0.18;
-    phonescreen.position.set(-1.55, 0.035, 0.36);
+    phonescreen.position.set(-2.23, 0.035, 0.84);
     phonescreen.rotation.x = -Math.PI/2;
-    phonescreen.rotation.z = -Math.PI/3 + 0.08;
+    phonescreen.rotation.z = -Math.PI/3 + 0.5;
+    phonescreen.rotation.y = 0.0;
     phonescreen.layers.enable(BLOOM_SCENE);
     meshes.push(phonescreen);
     materials[phonescreen.uuid] = phonescreen.material;
@@ -503,12 +514,13 @@ function loadMeshes(){
     screen.name = "screen";
     screen.scale.x = 2.3;
     screen.scale.y = 1.2;
-    screen.position.set( 0, 1.37, -0.45 );
+    screen.position.set( -1.4, 1.37, -0.4 );
+    screen.rotation.set(0.0,0.4,0.0);
     scene.add(screen);
     meshes.push(screen);
     materials[screen.uuid] = screen.material;
 
-    var posx = -1.4;
+    var posx = 0.0;
     var posy = 1.5;
     var posz = -0.5;
     var scx = 0.2;
@@ -571,12 +583,12 @@ function loadMeshes(){
             opacity:0.9
     } ) );
     mesh.scale.set(1.2, 0.4, 0.1);
-    mesh.position.set(posx+0.5, posy-0.8, posz+0.2);
+    mesh.position.set(posx+1.4, posy-0.6, posz+0.5);
     penpagegroup.add(mesh);
     meshes.push(mesh);
     materials[mesh.uuid] = mesh.material;
 
-    // tag and links
+    // header
     var mesh = new THREE.Mesh( new THREE.BoxBufferGeometry(),
     new THREE.MeshStandardMaterial( {
             color: new THREE.Color(1.0, 1.0, 1.0), 
@@ -586,7 +598,7 @@ function loadMeshes(){
             opacity:0.9
     } ) );
     mesh.scale.set(2.0, 0.8, 0.1);
-    mesh.position.set(posx+2.5, posy, posz+0.2);
+    mesh.position.set(posx+1.2, posy-0.1, posz+0.2);
     penpagegroup.add(mesh);
     meshes.push(mesh);
     materials[mesh.uuid] = mesh.material;
