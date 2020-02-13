@@ -315,14 +315,14 @@ function loadTexts(){
     var x = navigatormesh.position.x;
     var y = navigatormesh.position.y;
     var z = navigatormesh.position.z;
-    loader.load( './src/fonts/Roboto_Mono.json', function ( font ) {
-        var text = createText(font, "and I'm a developer", -1.2, 0.8, 0.0, "", 0.1, new THREE.MeshBasicMaterial( {
+    loader.load( './src/fonts/Hippotamia.json', function ( font ) {
+        var text = createText(font, "senior computer science student", -1.2, 1.0, 0.0, "", 0.1, new THREE.MeshBasicMaterial( {
             color: 0x000000,
             transparent: true,
             opacity: 1.0,
             side: THREE.DoubleSide
         } ));
-        hello.rotation.y = 0.4;
+        text.rotation.y = 0.4;
         homepagegroup.add(text);
     });
     loader.load( './src/fonts/player.json', function ( font ) {
@@ -408,7 +408,7 @@ function loadTexts(){
 
     loader.load( './src/fonts/Playfair Display_Regular.json', function ( font ) {
         var x = 0.0;
-        var y = 1.2;
+        var y = 1.4;
         var z = 0.0;            
         var text = createText(font, "HELLO", x-1.2, y, z-0.0, "", 0.3, new THREE.MeshBasicMaterial( {
             color: 0x000000,
@@ -419,7 +419,7 @@ function loadTexts(){
         text.rotation.y = 0.4;
         homepagegroup.add(text);
 
-        var text = createText(font, "SMELLY CAT", x+1.1, y+0.3, z, "", 0.2, new THREE.MeshBasicMaterial( {
+        var text = createText(font, "SMELLY CAT", x+1.1, y+0.0, z, "", 0.2, new THREE.MeshBasicMaterial( {
             color: 0x000000,
             transparent: true,
             opacity: 1.0,
@@ -427,7 +427,7 @@ function loadTexts(){
         } ));
         penpages[0].add(text);
 
-        var text = createText(font, "TOMAYTOMAHTO", x+1.15, y+0.3, z, "", 0.15, new THREE.MeshBasicMaterial( {
+        var text = createText(font, "TOMAYTOMAHTO", x+1.15, y, z, "", 0.15, new THREE.MeshBasicMaterial( {
             color: 0x000000,
             transparent: true,
             opacity: 1.0,
@@ -461,7 +461,7 @@ function loadTexts(){
         penpages[1].add(text);
         materials[text.uuid] = text.material;   
         
-        hello = createText(font, "I ' m  D e f n e  T u n ç e r", -1.2, 1.0, 0.0, "", 0.1, new THREE.MeshBasicMaterial( {
+        hello = createText(font, "I ' m  D e f n e  T u n ç e r", -1.2, 1.2, 0.0, "", 0.1, new THREE.MeshBasicMaterial( {
             color: 0x000000,
             transparent: true,
             opacity: 1.0,
@@ -568,6 +568,7 @@ function loadMeshes(){
             metalness:0.0,
     } ) );
     nextmesh.position.set(posx+2.0, posy+0.5, posz+0.2);
+    nextmesh.name = "nextpenpage";
     penpagegroup.add(nextmesh);
     meshes.push(nextmesh);
     materials[nextmesh.uuid] = nextmesh.material;
@@ -579,6 +580,7 @@ function loadMeshes(){
             metalness:0.0,
     } ) );
     prevmesh.position.set(posx+1.8, posy+0.5, posz+0.2);
+    prevmesh.name = "prevpenpage";
     penpagegroup.add(prevmesh);
     meshes.push(prevmesh);
     materials[prevmesh.uuid] = prevmesh.material;
