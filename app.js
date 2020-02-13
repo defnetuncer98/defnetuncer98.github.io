@@ -768,9 +768,12 @@ function loadModels() {
 }
 
 var fighter;
+var rotatefighter = false;
+
 function loadGLTFModel(model) {
     var loader = new GLTFLoader();
     loader.load(model.path, function (gltf) {
+        gltf.scene.name = model.name;
         gltf.scene.traverse(function (object) {
             if (object.isMesh) {
                 object.castShadow = true;
@@ -825,9 +828,11 @@ function loadGLTFModel(model) {
             hologrammixer = mixer;
             hologram = gltf;
             hologram.scene.visible=false;
+            scene.add(gltf.scene);
         }
-        else if(model.name=="Fighter") fighter = gltf.scene;
-        gltf.scene.name = model.name;
+        else if(model.name=="Fighter") {
+            fighter = gltf.scene; 
+        }
         scene.add(gltf.scene);
     });
 }
@@ -847,6 +852,7 @@ function animate() {
         if(hellocount==20 || hellocount==0) helloup = !helloup;
         if(helloup) {hellocount+=1; fighter.position.y+=0.001;}
         else {hellocount-=1; fighter.position.y-=0.001;}
+        if(rotatefighter) fighter.rotation.y += 0.05;
     }
 
     if(nowactive=="pen"){
@@ -914,6 +920,10 @@ function onDocumentMouseMove( event ) {
     mouseY = ( event.clientY - windowHalfY ) * 10;
     mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
     mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+
+    if(mouseX>5000 && mouseX<5600 && mouseY>800 && mouseY<1200) rotatefighter = true;
+    else rotatefighter = false;
+
     raycaster.setFromCamera( mouse, camera );
     var intersects = raycaster.intersectObjects( navgroup.children );
     if ( intersects.length > 0 ) {
@@ -967,4 +977,5 @@ function onDocumentMouseMove( event ) {
                 }
             }
     }
+
 }
