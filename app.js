@@ -18,7 +18,7 @@ var MODELS = [
     {
         name: "Workspace",
         path: "./src/models/workspace.glb",
-        position: { x: -0.5, y: 0, z: -0.2 },
+        position: { x: -0.6, y: 0, z: -0.18 },
         rotation: { x: 0, y: 0.4, z: 0 },
         scale: 0.01,
     },
@@ -96,8 +96,8 @@ var MODELS = [
     {
         name: "Coffee",
         path: "./src/models/coffee/scene.gltf",
-        position: { x: 1.55, y: 0.25, z: 0.2},
-        rotation: { x: 0, y: 0, z: 0 },
+        position: { x: -2.2, y: 0.25, z: 0.6},
+        rotation: { x: 0, y: Math.PI+0.6, z: 0 },
         scale: 0.016,
     },           
     // {
@@ -276,7 +276,7 @@ function loadVideos(){
 	videoTexture.minFilter = THREE.LinearFilter;
 	videoTexture.magFilter = THREE.LinearFilter;
 	
-	var movieMaterial = new THREE.MeshStandardMaterial( { map: videoTexture, overdraw: true, metalness:0.1, roughness:0.5, emissive:0xffffff, emissiveIntensity:0.1 } );
+	var movieMaterial = new THREE.MeshBasicMaterial( { map: videoTexture, color:new THREE.Color(0.5,0.5,0.5)} );
 	var movieGeometry = new THREE.PlaneGeometry( 2.3, 1.2, 4, 4 );
 	var movieScreen = new THREE.Mesh( movieGeometry, movieMaterial );
     movieScreen.position.set( -1.39, 1.37, -0.39 );
@@ -289,7 +289,7 @@ function loadVideos(){
 function loadAudioText(){
     var loader = new THREE.FontLoader();
     loader.load( './src/fonts/Roboto_Regular.json', function ( font ) {
-        playertext = createText(font, playlist[current], -1.5, 0.5, 0.5, "", 0.03);
+        playertext = createText(font, playlist[current], 0.9, 0.5, 0.5, "", 0.03);
         //playertext.layers.enable(BLOOM_SCENE);
         playertext.visible=false;
         scene.add( playertext );
@@ -315,23 +315,33 @@ function loadTexts(){
     var x = navigatormesh.position.x;
     var y = navigatormesh.position.y;
     var z = navigatormesh.position.z;
+    loader.load( './src/fonts/Roboto_Mono.json', function ( font ) {
+        var text = createText(font, "and I'm a developer", -1.2, 0.8, 0.0, "", 0.1, new THREE.MeshBasicMaterial( {
+            color: 0x000000,
+            transparent: true,
+            opacity: 1.0,
+            side: THREE.DoubleSide
+        } ));
+        hello.rotation.y = 0.4;
+        homepagegroup.add(text);
+    });
     loader.load( './src/fonts/player.json', function ( font ) {
         var y = 0.35;
         var z = 0.5;
         var text;
-        text = createText(font, "B", -1.4, y, z, name="next");
+        text = createText(font, "B", 1.0, y, z, name="next");
         //text.layers.enable(BLOOM_SCENE);
         meshes.push(text);
         playergroup.add( text );
         materials[text.uuid] = text.material;
 
-        text = createText(font, "C", -1.5, y, z, name="play");
+        text = createText(font, "C", 0.9, y, z, name="play");
         //text.layers.enable(BLOOM_SCENE);
         meshes.push(text);
         playergroup.add( text );
         materials[text.uuid] = text.material;
 
-        text = createText(font, "A", -1.6, y, z, name="prev");
+        text = createText(font, "A", 0.8, y, z, name="prev");
         //text.layers.enable(BLOOM_SCENE);
         playergroup.add( text );
         playergroup.visible=false;
@@ -409,7 +419,7 @@ function loadTexts(){
         text.rotation.y = 0.4;
         homepagegroup.add(text);
 
-        var text = createText(font, "SMELLY CAT", x+1.2, y+0.3, z, "", 0.2, new THREE.MeshBasicMaterial( {
+        var text = createText(font, "SMELLY CAT", x+1.1, y+0.3, z, "", 0.2, new THREE.MeshBasicMaterial( {
             color: 0x000000,
             transparent: true,
             opacity: 1.0,
@@ -417,7 +427,7 @@ function loadTexts(){
         } ));
         penpages[0].add(text);
 
-        var text = createText(font, "TOMAYTOMAHTO", x+1.2, y+0.3, z, "", 0.15, new THREE.MeshBasicMaterial( {
+        var text = createText(font, "TOMAYTOMAHTO", x+1.15, y+0.3, z, "", 0.15, new THREE.MeshBasicMaterial( {
             color: 0x000000,
             transparent: true,
             opacity: 1.0,
@@ -500,9 +510,9 @@ function loadMeshes(){
     phonescreen.name = "phonescreen";
     phonescreen.scale.x = 0.4;
     phonescreen.scale.y = 0.18;
-    phonescreen.position.set(-2.23, 0.035, 0.84);
+    phonescreen.position.set(0.9, 0.035, 0.64);
     phonescreen.rotation.x = -Math.PI/2;
-    phonescreen.rotation.z = -Math.PI/3 + 0.5;
+    phonescreen.rotation.z = 1;
     phonescreen.rotation.y = 0.0;
     phonescreen.layers.enable(BLOOM_SCENE);
     meshes.push(phonescreen);
