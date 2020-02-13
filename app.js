@@ -208,10 +208,21 @@ function onDocumentMouseClick( event ) {
                     penpages[currentpenpage].visible=true;
                 }
             }
+            var intersects = raycaster.intersectObjects( penpages[current].children );
+            if ( intersects.length > 0 ) {
+                var object = intersects[ 0 ].object;
+                if(object.name=="linktosmelly"){
+                    linktosmelly.click();
+                }
+                else if(object.name=="linktotomayto"){
+                    linktotomayto.click();
+                }
+            }            
        }
-       
 }
 
+var linktosmelly =  document.getElementById('linktosmelly');
+var linktotomayto =  document.getElementById('linktotomayto');
 
 var materials = {};
 var matDark = new THREE.LineBasicMaterial( {
@@ -316,7 +327,7 @@ function loadTexts(){
     var y = navigatormesh.position.y;
     var z = navigatormesh.position.z;
     loader.load( './src/fonts/Hippotamia.json', function ( font ) {
-        var text = createText(font, "senior computer science student", -1.2, 1.0, 0.0, "", 0.1, new THREE.MeshBasicMaterial( {
+        var text = createText(font, "& a senior computer science student", -1.2, 1.0, 0.0, "", 0.1, new THREE.MeshBasicMaterial( {
             color: 0x000000,
             transparent: true,
             opacity: 1.0,
@@ -378,19 +389,19 @@ function loadTexts(){
 
         scene.add(navgroup);
 
-        var text = createText(font, ">", x+2.0, y+0.4, z+0.3, "nextpenpage");
+        var text = createText(font, ">", x+1.95, y-1.07, z+0.3, "nextpenpage");
         text.material.opacity = 1.0;
         meshes.push(text);
         penpagegroup.add(text);
         materials[text.uuid] = text.material;
 
-        text = createText(font, "<", x+1.8, y+0.4, z+0.3, "prevpenpage");
+        text = createText(font, "<", x+1.75, y-1.07, z+0.3, "prevpenpage");
         text.material.opacity = 1.0;
         meshes.push(text);
         penpagegroup.add(text);
         materials[text.uuid] = text.material;
 
-        text = createText(font, "I", x+0.7, y-0.5, z+0.6, "");
+        text = createText(font, "I", x+0.7, y-0.55, z+0.6, "");
         text.material.opacity = 1.0;
         meshes.push(text);
         penpagegroup.add(text);
@@ -399,7 +410,7 @@ function loadTexts(){
 
     });
     loader.load( './src/fonts/icons2.json', function ( font ) {
-        var text = createText(font, "Ä", x+0.7, y-0.7, z+0.6,"");
+        var text = createText(font, "Ä", x+0.7, y-0.75, z+0.6,"");
         text.material.opacity = 1.0;
         meshes.push(text);
         penpagegroup.add(text);
@@ -439,25 +450,25 @@ function loadTexts(){
     });
 
     loader.load( './src/fonts/Titillium_Regular.json', function ( font ) {
-        var text = createText(font, "WebGL, three.js", x+1.0, y-0.5, z+0.8, "", 0.05);
+        var text = createText(font, "WebGL, three.js", x+1.05, y-0.5, z+0.56, "", 0.05);
         text.material.opacity = 1.0;
         meshes.push(text);
         penpages[0].add(text);
         materials[text.uuid] = text.material;
 
-        var text = createText(font, "machine learning, python, \nsci-kit learn, librosa", x+1.18, y-0.5, z+0.8, "", 0.05);
+        var text = createText(font, "machine learning, python, \nsci-kit learn, librosa", x+1.2, y-0.5, z+0.56, "", 0.05);
         text.material.opacity = 1.0;
         meshes.push(text);
         penpages[1].add(text);
         materials[text.uuid] = text.material;
 
-        var text = createText(font, "defnetuncer98.github.io/smellycat/", x+1.3, y-0.7, z+0.8, "", 0.05,);
+        var text = createText(font, "defnetuncer98.github.io/smellycat/", x+1.35, y-0.7, z+0.56, "linktosmelly", 0.05,);
         text.material.opacity = 1.0;
         meshes.push(text);
         penpages[0].add(text);
         materials[text.uuid] = text.material;   
         
-        var text = createText(font, "github.com/Tomayto-Tomahto/demo", x+1.35, y-0.7, z+0.8, "", 0.05);
+        var text = createText(font, "github.com/Tomayto-Tomahto/demo", x+1.37, y-0.7, z+0.56, "linktotomayto", 0.05);
         text.material.opacity = 1.0;
         meshes.push(text);
         penpages[1].add(text);
@@ -574,7 +585,7 @@ function loadMeshes(){
             roughness:1.0,
             metalness:0.0,
     } ) );
-    nextmesh.position.set(posx+2.0, posy+0.5, posz+0.2);
+    nextmesh.position.set(posx+2.0, posy-1, posz+0.2);
     nextmesh.name = "nextpenpage";
     penpagegroup.add(nextmesh);
     meshes.push(nextmesh);
@@ -586,7 +597,7 @@ function loadMeshes(){
             roughness:1.0,
             metalness:0.0,
     } ) );
-    prevmesh.position.set(posx+1.8, posy+0.5, posz+0.2);
+    prevmesh.position.set(posx+1.8, posy-1, posz+0.2);
     prevmesh.name = "prevpenpage";
     penpagegroup.add(prevmesh);
     meshes.push(prevmesh);
