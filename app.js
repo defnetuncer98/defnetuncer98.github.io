@@ -25,63 +25,63 @@ var MODELS = [
     {
         name: "Fighter",
         path: "./src/models/fighter.glb",
-        position: { x: 1.85, y: 0.25, z: 0.7 },
+        position: { x: 1.85, y: 0.15, z: 0.7 },
         rotation: { x: 0, y: 0, z: 0 },
         scale: 0.1,
     },    
     {
         name: "Corner",
         path: "./src/models/corner.glb",
-        position: { x: 1.7, y: 0.5, z: 0.6 },
+        position: { x: 1.7, y: 0.4, z: 0.6 },
         rotation: { x: 0, y: 0, z: 0 },
         scale: 0.08,
     },    
     {
         name: "Corner",
         path: "./src/models/corner.glb",
-        position: { x: 1.7, y: 0.2, z: 0.6 },
+        position: { x: 1.7, y: 0.1, z: 0.6 },
         rotation: { x: 0, y: 0, z: Math.PI/2 },
         scale: 0.08,
     },    
     {
         name: "Corner",
         path: "./src/models/corner.glb",
-        position: { x: 2.0, y: 0.2, z: 0.9 },
+        position: { x: 2.0, y: 0.1, z: 0.9 },
         rotation: { x: 0, y: Math.PI, z: Math.PI/2 },
         scale: 0.08,
     },    
     {
         name: "Corner",
         path: "./src/models/corner.glb",
-        position: { x: 2.0, y: 0.5, z: 0.6 },
+        position: { x: 2.0, y: 0.4, z: 0.6 },
         rotation: { x: Math.PI, y: Math.PI, z: Math.PI/2 },
         scale: 0.08,
     },    
     {
         name: "Corner",
         path: "./src/models/corner.glb",
-        position: { x: 1.7, y: 0.5, z: 0.9 },
+        position: { x: 1.7, y: 0.4, z: 0.9 },
         rotation: { x: Math.PI, y: 0, z: Math.PI/2 },
         scale: 0.08,
     },   
     {
         name: "Corner",
         path: "./src/models/corner.glb",
-        position: { x: 2.0, y: 0.2, z: 0.6 },
+        position: { x: 2.0, y: 0.1, z: 0.6 },
         rotation: { x: Math.PI/2, y: Math.PI, z: Math.PI/2 },
         scale: 0.08,
     },    
     {
         name: "Corner",
         path: "./src/models/corner.glb",
-        position: { x: 1.7, y: 0.2, z: 0.9 },
+        position: { x: 1.7, y: 0.1, z: 0.9 },
         rotation: { x: 0, y: Math.PI/2, z: Math.PI/2 },
         scale: 0.08,
     },  
     {
         name: "Corner",
         path: "./src/models/corner.glb",
-        position: { x: 2.0, y: 0.5, z: 0.9 },
+        position: { x: 2.0, y: 0.4, z: 0.9 },
         rotation: { x: 0, y: Math.PI, z: 0 },
         scale: 0.08,
     },      
@@ -404,13 +404,14 @@ function loadTexts(){
         meshes.push(text);
         penpagegroup.add(text);
         materials[text.uuid] = text.material;
+
     });
 
     loader.load( './src/fonts/Playfair Display_Regular.json', function ( font ) {
         var x = 0.0;
         var y = 1.4;
         var z = 0.0;            
-        var text = createText(font, "HELLO", x-1.2, y, z-0.0, "", 0.3, new THREE.MeshBasicMaterial( {
+        var text = createText(font, "HELLO", x-1.4, y, z-0.2, "", 0.3, new THREE.MeshBasicMaterial( {
             color: 0x000000,
             transparent: true,
             opacity: 1.0,
@@ -419,7 +420,8 @@ function loadTexts(){
         text.rotation.y = 0.4;
         homepagegroup.add(text);
 
-        var text = createText(font, "SMELLY CAT", x+1.1, y+0.0, z, "", 0.2, new THREE.MeshBasicMaterial( {
+
+        var text = createText(font, "SMELLY CAT", x+1.1, y+0.0, z-0.1, "", 0.2, new THREE.MeshBasicMaterial( {
             color: 0x000000,
             transparent: true,
             opacity: 1.0,
@@ -427,7 +429,7 @@ function loadTexts(){
         } ));
         penpages[0].add(text);
 
-        var text = createText(font, "TOMAYTOMAHTO", x+1.15, y, z, "", 0.15, new THREE.MeshBasicMaterial( {
+        var text = createText(font, "TOMAYTOMAHTO", x+1.15, y+0.1, z-0.1, "", 0.15, new THREE.MeshBasicMaterial( {
             color: 0x000000,
             transparent: true,
             opacity: 1.0,
@@ -449,7 +451,7 @@ function loadTexts(){
         penpages[1].add(text);
         materials[text.uuid] = text.material;
 
-        var text = createText(font, "defnetuncer98.github.io/smellycat/", x+1.3, y-0.7, z+0.8, "", 0.05);
+        var text = createText(font, "defnetuncer98.github.io/smellycat/", x+1.3, y-0.7, z+0.8, "", 0.05,);
         text.material.opacity = 1.0;
         meshes.push(text);
         penpages[0].add(text);
@@ -469,6 +471,11 @@ function loadTexts(){
         } ));
         hello.rotation.y = 0.4;
         homepagegroup.add(hello);
+
+        
+        var text = createText(font, "I ' m  D e f n e  T u n ç e r", -1.22, 1.19, -0.02, "", 0.1, new THREE.MeshNormalMaterial( {} ));
+        text.rotation.y = 0.4;
+        homepagegroup.add(text);
 
         hello = createText(font, "Smelly Cat is a web gaming experience inspired\n by Bedroom In Arles by Vincent van Gogh.", 1.0, 1.3, 0.0, "", 0.05, new THREE.MeshBasicMaterial( {
             color: 0x000000,
@@ -780,6 +787,10 @@ function loadGLTFModel(model) {
                     var material = new THREE.MeshStandardMaterial( {
                         color: new THREE.Color(0,0,0),
                     } );
+                    object.material = material;
+                }
+                else if(model.name=="Corner") {
+                    var material = new THREE.MeshNormalMaterial({flatShading:true});
                     object.material = material;
                 }
                 else if(model.name=="Workspace") {
