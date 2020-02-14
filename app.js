@@ -3,7 +3,6 @@ import { GLTFLoader } from './src/jsm/loaders/GLTFLoader.js';
 import { EffectComposer } from './src/jsm/postprocessing/EffectComposer.js';
 import { RenderPass } from './src/jsm/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from './src/jsm/postprocessing/UnrealBloomPass.js';
-import { AnaglyphEffect } from './src/jsm/effects/AnaglyphEffect.js';
 import { RGBELoader } from './src/jsm/loaders/RGBELoader.js';
 import { ShaderPass } from './src/jsm/postprocessing/ShaderPass.js';
 
@@ -85,6 +84,14 @@ var MODELS = [
         rotation: { x: 0, y: Math.PI, z: 0 },
         scale: 0.08,
     },      
+
+    {
+        name: "Def",
+        path: "./src/models/defne.glb",
+        position: { x: -0.4, y: 0.8, z: 0.6 },
+        rotation: { x: 0, y: 0, z: 0 },
+        scale: 10,
+    },     
 
     // {
     //     name: "Flower",
@@ -219,8 +226,26 @@ function onDocumentMouseClick( event ) {
                 }
             }            
        }
+       else if (nowactive=="mail"){
+        var intersects = raycaster.intersectObjects( mailpagegroup.children );
+        if ( intersects.length > 0 ) {
+            var object = intersects[ 0 ].object;
+            if(object.name=="linktogithub"){
+                linktogithub.click();
+            }
+            else if(object.name=="linktoresume"){
+                linktoresume.click();
+            }
+            else if(object.name=="linktolinkedin"){
+                linktolinkedin.click();
+            }
+        }
+    }
 }
 
+var linktoresume =  document.getElementById('linktoresume');
+var linktogithub =  document.getElementById('linktogithub');
+var linktolinkedin =  document.getElementById('linktolinkedin');
 var linktosmelly =  document.getElementById('linktosmelly');
 var linktotomayto =  document.getElementById('linktotomayto');
 
@@ -292,6 +317,7 @@ function loadVideos(){
 	var movieScreen = new THREE.Mesh( movieGeometry, movieMaterial );
     movieScreen.position.set( -1.39, 1.37, -0.39 );
     movieScreen.rotation.set(0.0, 0.4, 0.0);
+    materials[movieScreen.uuid] = movieMaterial;
     meshes.push(movieScreen);
     scene.add(movieScreen);
 
@@ -401,7 +427,7 @@ function loadTexts(){
         penpagegroup.add(text);
         materials[text.uuid] = text.material;
 
-        text = createText(font, "I", x+0.7, y-0.55, z+0.6, "");
+        text = createText(font, "I", x+0.7, y-0.55, z+0.6, "tagicon");
         text.material.opacity = 1.0;
         meshes.push(text);
         penpagegroup.add(text);
@@ -409,6 +435,16 @@ function loadTexts(){
 
 
     });
+
+    loader.load( './src/fonts/icons3.json', function ( font ) {
+        var text = createText(font, "C", -1.76, 0.85, 0.1, "linktoresume");
+        text.material.opacity = 1.0;
+        meshes.push(text);
+        text.rotation.y=0.4;
+        mailpagegroup.add(text);
+        materials[text.uuid] = text.material;
+    });
+
     loader.load( './src/fonts/icons2.json', function ( font ) {
         var text = createText(font, "Ä", x+0.7, y-0.75, z+0.6,"");
         text.material.opacity = 1.0;
@@ -416,7 +452,13 @@ function loadTexts(){
         penpagegroup.add(text);
         materials[text.uuid] = text.material;
 
-        var text = createText(font, "Ä", x+0.7, y-0.75, z+0.6,"");
+        var text = createText(font, "Ä", x+0.7, y-0.85, z+0.6,"linktogithub", 0.15);
+        text.material.opacity = 1.0;
+        meshes.push(text);
+        mailpagegroup.add(text);
+        materials[text.uuid] = text.material;
+
+        var text = createText(font, "ã", x+0.9, y-0.85, z+0.6,"linktolinkedin", 0.15);
         text.material.opacity = 1.0;
         meshes.push(text);
         mailpagegroup.add(text);
@@ -452,6 +494,14 @@ function loadTexts(){
             side: THREE.DoubleSide
         } ));
         penpages[1].add(text);
+
+        var text = createText(font, "Reach me!", x+1.5, y+0.1, z-0.1, "", 0.15, new THREE.MeshNormalMaterial( {
+            color: 0x000000,
+            transparent: true,
+            opacity: 1.0,
+            side: THREE.DoubleSide
+        } ));
+        mailpagegroup.add(text);
     });
 
     loader.load( './src/fonts/Titillium_Regular.json', function ( font ) {
@@ -491,6 +541,8 @@ function loadTexts(){
         
         var text = createText(font, "I ' m  D e f n e  T u n ç e r", -1.22, 1.19, -0.02, "", 0.1, new THREE.MeshNormalMaterial( {} ));
         text.rotation.y = 0.4;
+        materials[text.uuid] = text.material;
+        meshes.push(text);
         homepagegroup.add(text);
 
         hello = createText(font, "Smelly Cat is a web gaming experience inspired\n by Bedroom In Arles by Vincent van Gogh.", 1.0, 1.3, 0.0, "", 0.05, new THREE.MeshBasicMaterial( {
@@ -512,7 +564,9 @@ function loadTexts(){
     
     scene.add(penpagegroup);
     scene.add(homepagegroup);
+    scene.add(mailpagegroup);
     penpagegroup.visible=false;
+    mailpagegroup.visible=false;
     scene.add(penpages[0]);
     penpages[0].visible=false;
     scene.add(penpages[1]);
@@ -608,6 +662,19 @@ function loadMeshes(){
     penpagegroup.add(prevmesh);
     meshes.push(prevmesh);
     materials[prevmesh.uuid] = prevmesh.material;
+
+    mesh = new THREE.Mesh( new THREE.CircleBufferGeometry(0.12, 32),
+    new THREE.MeshStandardMaterial( {
+            color: new THREE.Color(0.02,0.02,0.02), 
+            roughness:1.0,
+            metalness:0.0,
+    } ) );
+    mesh.position.set(posx-1.8, posy-0.6, posz+0.5);
+    mesh.name = "linktoresume";
+    mesh.rotation.y = 0.4;
+    mailpagegroup.add(mesh);
+    meshes.push(mesh);
+    materials[mesh.uuid] = mesh.material;
 
     // tag and links
     var mesh = new THREE.Mesh( new THREE.BoxBufferGeometry(),
@@ -734,7 +801,7 @@ function initRenderer() {
     var bloomPass = new UnrealBloomPass( new THREE.Vector2( window.innerWidth, window.innerHeight ), 1.5, 0.4, 0.85 );    
     bloomPass.radius = 0;
     bloomPass.threshold = 0.3;
-    bloomPass.strength = 1;
+    bloomPass.strength = 2;
     bloomComposer = new EffectComposer( renderer );
     bloomComposer.renderToScreen = false;
     bloomComposer.setSize(
@@ -783,7 +850,7 @@ function loadModels() {
 
 var fighter;
 var rotatefighter = false;
-
+var def;
 function loadGLTFModel(model) {
     var loader = new GLTFLoader();
     loader.load(model.path, function (gltf) {
@@ -799,6 +866,10 @@ function loadGLTFModel(model) {
                         metalness:0.2,
                     } );
                     object.material = material;
+                }
+                else if(model.name=="Def") {
+                    var material = new THREE.MeshBasicMaterial( {map:object.material.map} );
+                    object.material = material;                    
                 }
                 else if(model.name=="Fighter") {
                     var material = new THREE.MeshStandardMaterial( {
@@ -847,6 +918,10 @@ function loadGLTFModel(model) {
         else if(model.name=="Fighter") {
             fighter = gltf.scene; 
         }
+        else if(model.name=="Def"){
+            def = gltf.scene;
+            def.visible=false;
+        }
         scene.add(gltf.scene);
     });
 }
@@ -881,29 +956,28 @@ function animate() {
     camera.lookAt(0,0.8,0);
 
     //console.log(meshes.length);
-//    if(meshes.length===155){
-//        if(nowactive=="home"){
-            //hologram.scene.visible=true;
-            //hologrammixer.update(delta);
-//        }
-//        else{
-            //hologram.scene.visible=false;
-//        }
+//    if(meshes.length==189){
+//     //    if(nowactive=="home"){
+//     //         hologram.scene.visible=true;
+//     //         hologrammixer.update(delta);
+//     //    }
+//     //    else{
+//     //         hologram.scene.visible=false;
+//     //    }
 //        renderBloom();
 //        finalComposer.render();
 //    }
 //    else {
-        //renderer.render(scene,camera);
-//    }
+        renderer.render(scene,camera);
+   //}
 }
 
 function renderBloom() {
     meshes.forEach(darkenNonBloomed);
     scene.background=new THREE.Color(0,0,0);
     bloomComposer.render();
-    meshes.forEach(restoreMaterial);
     scene.background=envMap;
-    scene.environment=envMap;
+    meshes.forEach(restoreMaterial);
 }
 
 var darkMaterial = new THREE.MeshBasicMaterial( { color: "black" } );
@@ -966,6 +1040,21 @@ function onDocumentMouseMove( event ) {
             }
         }
     }
+    else if (nowactive=="mail"){
+        var intersects = raycaster.intersectObjects( mailpagegroup.children );
+        if ( intersects.length > 0 ) {
+            var object = intersects[ 0 ].object;
+            if(object.name=="linktogithub"){
+                document.body.style.cursor = "pointer"
+            }
+            else if(object.name=="linktoresume"){
+                document.body.style.cursor = "pointer"
+            }
+            else if(object.name=="linktolinkedin"){
+                document.body.style.cursor = "pointer"
+            }
+        }
+    }
 
     raycaster.setFromCamera( mouse, camera );
     var intersects = raycaster.intersectObjects( navgroup.children );
@@ -983,6 +1072,7 @@ function onDocumentMouseMove( event ) {
                 playergroup.visible=false;
                 playertext.visible=false;
                 if(object.name=="home" && nowactive!="home"){
+                    def.visible=false;
                     document.body.style.cursor = "pointer"
                     nowactive = "home";
                     activemesh.position.y = navigatormesh.position.y + 0.2 ;
@@ -1000,6 +1090,7 @@ function onDocumentMouseMove( event ) {
                     video.play();
                 }
                 else if(object.name=="pen" && nowactive!="pen"){
+                    def.visible=false;
                     document.body.style.cursor = "pointer"
                     nowactive = "pen";
                     activemesh.position.y = navigatormesh.position.y + 0.2 - 0.2;
@@ -1017,6 +1108,7 @@ function onDocumentMouseMove( event ) {
                     video.play();
                 }
                 else if(object.name=="mail" && nowactive!="mail"){
+                    def.visible=true;
                     document.body.style.cursor = "pointer"
                     nowactive = "mail";
                     activemesh.position.y = navigatormesh.position.y + 0.2 - 0.4;
