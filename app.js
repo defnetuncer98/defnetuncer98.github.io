@@ -270,7 +270,7 @@ var video, videoImage, videoImageContext, videoTexture;
 
 function loadVideos(){
 	video = document.createElement( 'video' );
-    video.src = "./src/videos/cat.mp4";
+    video.src = "./src/videos/home.mp4";
     video.loop = true;
     video.muted = true;
 	video.load(); // must call after setting/changing source
@@ -293,7 +293,7 @@ function loadVideos(){
     movieScreen.position.set( -1.39, 1.37, -0.39 );
     movieScreen.rotation.set(0.0, 0.4, 0.0);
     meshes.push(movieScreen);
-    penpagegroup.add(movieScreen);
+    scene.add(movieScreen);
 
 }
 
@@ -327,7 +327,7 @@ function loadTexts(){
     var y = navigatormesh.position.y;
     var z = navigatormesh.position.z;
     loader.load( './src/fonts/Hippotamia.json', function ( font ) {
-        var text = createText(font, "& a senior computer science student", -1.2, 1.0, 0.0, "", 0.1, new THREE.MeshBasicMaterial( {
+        var text = createText(font, "& a senior computer science student", -1.3, 1.0, -0.1, "", 0.1, new THREE.MeshBasicMaterial( {
             color: 0x000000,
             transparent: true,
             opacity: 1.0,
@@ -416,13 +416,18 @@ function loadTexts(){
         penpagegroup.add(text);
         materials[text.uuid] = text.material;
 
+        var text = createText(font, "Ä", x+0.7, y-0.75, z+0.6,"");
+        text.material.opacity = 1.0;
+        meshes.push(text);
+        mailpagegroup.add(text);
+        materials[text.uuid] = text.material;
     });
 
     loader.load( './src/fonts/Playfair Display_Regular.json', function ( font ) {
         var x = 0.0;
         var y = 1.4;
         var z = 0.0;            
-        var text = createText(font, "HELLO", x-1.4, y, z-0.2, "", 0.3, new THREE.MeshBasicMaterial( {
+        var text = createText(font, "HELLO", x-1.3, y, z-0.1, "", 0.3, new THREE.MeshBasicMaterial( {
             color: 0x000000,
             transparent: true,
             opacity: 1.0,
@@ -538,6 +543,7 @@ function loadMeshes(){
     navgroup.add(phonescreen);
 
     screen = new THREE.Mesh( new THREE.PlaneBufferGeometry(), new THREE.MeshStandardMaterial( { color: new THREE.Color(1,1,1), roughness:0.0, metalness:0.05, emissive:0xffffff, emissiveIntensity:0.2} ) );
+    screenmaterial = screen.material;
     //screen.layers.enable(BLOOM_SCENE);                                 
     screen.name = "screen";
     screen.scale.x = 2.3;
@@ -651,7 +657,7 @@ var clicked = false;
 var effect;
 var screen;
 var phonescreen;
-
+var screenmaterial;
 /**
  * Initialize ThreeJS THREE.Scene
  */
@@ -661,7 +667,7 @@ function initScene() {
     mouseY=0;
     camera.position.x = ( mouseX ) * .0001;
     camera.position.y = 1 + ( - mouseY ) * .0001;
-    camera.position.set( 0, 1, 4 );
+    camera.position.set( 0, 0, 3.5 );
     camera.lookAt(0,0.5,0);
     clock = new THREE.Clock();
     scene = new THREE.Scene();
@@ -758,9 +764,6 @@ function initRenderer() {
     finalComposer.addPass(renderScene);
     finalComposer.addPass(finalPass);
 
-
-    effect = new AnaglyphEffect( renderer );
-    effect.setSize( window.innerWidth, window.innerHeight );
                 
     //renderer.physicallyCorrectLights=true;
     container.appendChild( renderer.domElement );
@@ -866,18 +869,16 @@ function animate() {
         if(rotatefighter) fighter.rotation.y += 0.05;
     }
 
-    if(nowactive=="pen"){
-        if ( video.readyState === video.HAVE_ENOUGH_DATA ) 
-        {
-            videoImageContext.drawImage( video, 0, 0 );
-            if ( videoTexture ) 
-                videoTexture.needsUpdate = true;
-        }    
-    }
+    if ( video.readyState === video.HAVE_ENOUGH_DATA ) 
+    {
+        videoImageContext.drawImage( video, 0, 0 );
+        if ( videoTexture ) 
+            videoTexture.needsUpdate = true;
+    }    
 
-    camera.position.x = ( mouseX ) * .0001;
-    camera.position.y = 1 + ( - mouseY ) * .0001;
-    camera.lookAt(0,0.5,0);
+    camera.position.x = ( - mouseX ) * .0001;
+    camera.position.y = 1.2 + ( mouseY ) * .0001;
+    camera.lookAt(0,0.8,0);
 
     //console.log(meshes.length);
 //    if(meshes.length===155){
@@ -892,7 +893,7 @@ function animate() {
 //        finalComposer.render();
 //    }
 //    else {
-        renderer.render(scene,camera);
+        //renderer.render(scene,camera);
 //    }
 }
 
@@ -935,11 +936,43 @@ function onDocumentMouseMove( event ) {
     if(mouseX>5000 && mouseX<5600 && mouseY>800 && mouseY<1200) rotatefighter = true;
     else rotatefighter = false;
 
+    var intersects = raycaster.intersectObjects( playergroup.children );
+    if ( intersects.length > 0 ) {
+        document.body.style.cursor = "pointer"
+    }
+    else{
+        document.body.style.cursor = "auto"
+    }
+
+    if(nowactive=="pen"){
+        var intersects = raycaster.intersectObjects( penpages[current].children );
+        if ( intersects.length > 0 ) {
+            var object = intersects[ 0 ].object;
+            if(object.name=="linktosmelly"){
+                document.body.style.cursor = "pointer"
+            }
+            else if(object.name=="linktotomayto"){
+                document.body.style.cursor = "pointer"
+            }
+        }
+        var intersects = raycaster.intersectObjects( penpagegroup.children );
+        if ( intersects.length > 0 ) {
+            var object = intersects[ 0 ].object;
+            if(object.name=="nextpenpage"){
+                document.body.style.cursor = "pointer"
+            }
+            else if(object.name=="prevpenpage"){
+                document.body.style.cursor = "pointer"
+            }
+        }
+    }
+
     raycaster.setFromCamera( mouse, camera );
     var intersects = raycaster.intersectObjects( navgroup.children );
     if ( intersects.length > 0 ) {
             var object = intersects[ 0 ].object;
             if(object.name=="phonescreen"){
+                document.body.style.cursor = "pointer"
                 clicked=true;
                 object.material.color=new THREE.Color(1,1,1),
                 playergroup.visible=true;
@@ -949,7 +982,8 @@ function onDocumentMouseMove( event ) {
                 phonescreen.material.color=new THREE.Color(0,0,0);
                 playergroup.visible=false;
                 playertext.visible=false;
-                if(object.name=="home"){
+                if(object.name=="home" && nowactive!="home"){
+                    document.body.style.cursor = "pointer"
                     nowactive = "home";
                     activemesh.position.y = navigatormesh.position.y + 0.2 ;
                     home.position.z = navigatormesh.position.z+0.20;
@@ -960,8 +994,13 @@ function onDocumentMouseMove( event ) {
                     penpages[currentpenpage].visible=false;
                     penpagegroup.visible=false;
                     mailpagegroup.visible=false;
+                    screen.material = screenmaterial;
+                    video.src = "./src/videos/home.mp4";
+                    video.load(); // must call after setting/changing source
+                    video.play();
                 }
-                else if(object.name=="pen"){
+                else if(object.name=="pen" && nowactive!="pen"){
+                    document.body.style.cursor = "pointer"
                     nowactive = "pen";
                     activemesh.position.y = navigatormesh.position.y + 0.2 - 0.2;
                     home.position.z = navigatormesh.position.z+0.04;
@@ -972,8 +1011,13 @@ function onDocumentMouseMove( event ) {
                     penpages[currentpenpage].visible=true;
                     penpagegroup.visible=true;
                     mailpagegroup.visible=false;
+                    if(currentpenpage==0) video.src = "./src/videos/cat.mp4";
+                    if(currentpenpage==1) video.src = "./src/videos/tt.mp4";
+                    video.load(); // must call after setting/changing source
+                    video.play();
                 }
-                else if(object.name=="mail"){
+                else if(object.name=="mail" && nowactive!="mail"){
+                    document.body.style.cursor = "pointer"
                     nowactive = "mail";
                     activemesh.position.y = navigatormesh.position.y + 0.2 - 0.4;
                     home.position.z = navigatormesh.position.z+0.04;
@@ -984,7 +1028,12 @@ function onDocumentMouseMove( event ) {
                     penpages[currentpenpage].visible=false;
                     penpagegroup.visible=false;
                     mailpagegroup.visible=true;
-
+                    video.src = "./src/videos/resume.mp4";
+                    video.load(); // must call after setting/changing source
+                    video.play();
+                    //var loader = new THREE.TextureLoader();
+                    //var texture = loader.load('./src/images/resume.png');
+                    //screen.material = new THREE.MeshBasicMaterial({map:texture, color:new THREE.Color(0.7,0.7,0.7)})
                 }
             }
     }
