@@ -17,7 +17,7 @@ var MODELS = [
     {
         name: "Workspace",
         path: "./src/models/workspace.glb",
-        position: { x: -0.6, y: 0, z: -0.18 },
+        position: { x: -0.6, y: 0, z: 0.25 },
         rotation: { x: 0, y: 0.4, z: 0 },
         scale: 0.01,
     },
@@ -239,12 +239,16 @@ function onDocumentMouseClick( event ) {
             else if(object.name=="linktolinkedin"){
                 linktolinkedin.click();
             }
+            else if(object.name=="mailto"){
+                mailto.click();
+            }
         }
     }
 }
 
 var linktoresume =  document.getElementById('linktoresume');
 var linktogithub =  document.getElementById('linktogithub');
+var mailto =  document.getElementById('mailto');
 var linktolinkedin =  document.getElementById('linktolinkedin');
 var linktosmelly =  document.getElementById('linktosmelly');
 var linktotomayto =  document.getElementById('linktotomayto');
@@ -432,6 +436,12 @@ function loadTexts(){
         meshes.push(text);
         penpagegroup.add(text);
         materials[text.uuid] = text.material;
+        
+        var text = createText(font, "m", x+0.7, y-0.87, z+0.6,"mailto", 0.15);
+        text.material.opacity = 1.0;
+        meshes.push(text);
+        mailpagegroup.add(text);
+        materials[text.uuid] = text.material;
 
 
     });
@@ -452,13 +462,13 @@ function loadTexts(){
         penpagegroup.add(text);
         materials[text.uuid] = text.material;
 
-        var text = createText(font, "Ä", x+0.7, y-0.85, z+0.6,"linktogithub", 0.15);
+        var text = createText(font, "Ä", x+0.9, y-0.85, z+0.6,"linktogithub", 0.15);
         text.material.opacity = 1.0;
         meshes.push(text);
         mailpagegroup.add(text);
         materials[text.uuid] = text.material;
 
-        var text = createText(font, "ã", x+0.9, y-0.85, z+0.6,"linktolinkedin", 0.15);
+        var text = createText(font, "ã", x+1.1, y-0.85, z+0.6,"linktolinkedin", 0.15);
         text.material.opacity = 1.0;
         meshes.push(text);
         mailpagegroup.add(text);
@@ -587,7 +597,7 @@ function loadMeshes(){
     phonescreen.name = "phonescreen";
     phonescreen.scale.x = 0.4;
     phonescreen.scale.y = 0.18;
-    phonescreen.position.set(0.9, 0.035, 0.64);
+    phonescreen.position.set(0.94, 0.0325, 0.64);
     phonescreen.rotation.x = -Math.PI/2;
     phonescreen.rotation.z = 1;
     phonescreen.rotation.y = 0.0;
@@ -941,7 +951,7 @@ function animate() {
         if(hellocount==20 || hellocount==0) helloup = !helloup;
         if(helloup) {hellocount+=1; fighter.position.y+=0.001;}
         else {hellocount-=1; fighter.position.y-=0.001;}
-        if(rotatefighter) fighter.rotation.y += 0.05;
+        if(rotatefighter) fighter.rotation.y += 0.08;
     }
 
     if ( video.readyState === video.HAVE_ENOUGH_DATA ) 
@@ -1006,8 +1016,8 @@ function onDocumentMouseMove( event ) {
     mouseY = ( event.clientY - windowHalfY ) * 10;
     mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
     mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
-
-    if(mouseX>5000 && mouseX<5600 && mouseY>800 && mouseY<1200) rotatefighter = true;
+    console.log(mouseX, mouseY);
+    if(mouseX>5200 && mouseX<5900 && mouseY>1500 && mouseY<1900) rotatefighter = true;
     else rotatefighter = false;
 
     var intersects = raycaster.intersectObjects( playergroup.children );
@@ -1051,6 +1061,9 @@ function onDocumentMouseMove( event ) {
                 document.body.style.cursor = "pointer"
             }
             else if(object.name=="linktolinkedin"){
+                document.body.style.cursor = "pointer"
+            }
+            else if(object.name=="mailto"){
                 document.body.style.cursor = "pointer"
             }
         }
