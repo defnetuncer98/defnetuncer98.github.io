@@ -92,28 +92,13 @@ var MODELS = [
         rotation: { x: 0, y: 0, z: 0 },
         scale: 10,
     },     
-
-    // {
-    //     name: "Flower",
-    //     path: "./src/models/flower.glb",
-    //     position: { x: 0.8, y: 1.8, z: 0.2},
-    //     rotation: { x: Math.PI/2, y: 0, z: 0 },
-    //     scale: 0.15,
-    // },   
     {
         name: "Coffee",
         path: "./src/models/coffee/scene.gltf",
         position: { x: -2.2, y: 0.25, z: 0.6},
         rotation: { x: 0, y: Math.PI+0.6, z: 0 },
         scale: 0.016,
-    },           
-    // {
-    //     name: "Hologram",
-    //     path: "./src/models/ornithoptera_cassandra/scene.gltf",
-    //     position: { x: 0.0, y: 1.3, z: 0.2},
-    //     rotation: { x: Math.PI/2, y: 0, z: 0 },
-    //     scale: 0.1,
-    // },          
+    },                   
 ]
 var hologram;
 var hologrammixer;
@@ -148,12 +133,10 @@ function onDocumentMouseClick( event ) {
                }
                else if(object.name=="next"){
                    current+=1;
-                   if(current==playlist.length) current=0;
                    scene.remove(playertext);
+                   if(current==playlist.length) current=0;
                    player.src='./src/sounds/'+playlist[current]+'.mp3';
-                   player.load();
-                   player.play();
-                   loadAudioText();
+                   player.load();player.play();loadAudioText();
                    playertext.visible=true;
                }
                else if(object.name=="prev"){
@@ -161,9 +144,7 @@ function onDocumentMouseClick( event ) {
                    scene.remove(playertext);
                    if(current==-1) current=playlist.length-1;
                    player.src='./src/sounds/'+playlist[current]+'.mp3';
-                   player.load();
-                   player.play();
-                   loadAudioText();
+                   player.load();player.play();loadAudioText();
                    playertext.visible=true;
                }            
        }  
@@ -182,20 +163,17 @@ function onDocumentMouseClick( event ) {
                         currentpage=0;
                         pageselector.position.x=-2.03;
                         prevmesh.material.color=new THREE.Color(0.02,0.02, 0.02);                    
-                        video.src = "./src/videos/tt2.mp4";
-                        video.load(); // must call after setting/changing source
-                        video.play();
+                        video.src = "./src/videos/tt2.mp4"; video.load(); video.play();
                     }
                     else if(currentpenpage==0){
                         pageselector.position.x=-2.03;
                         currentpage=0;
-                        video.src = "./src/videos/cat.mp4";
-                        video.load(); // must call after setting/changing source
-                        video.play();
+                        video.src = "./src/videos/cat.mp4"; video.load(); video.play();
                     }
-                    else if(currentpage==2){
+                    else if(currentpenpage==2){
                         pageselector.position.x=-2.03;
                         currentpage=0;
+                        video.src = "./src/videos/rockornot.mp4"; video.load(); video.play();
                     }
                     penpages[currentpenpage].visible=true;
 
@@ -208,24 +186,25 @@ function onDocumentMouseClick( event ) {
                         currentpenpage=0;
                         prevmesh.material.color=new THREE.Color(0.8, 0.8, 0.8);
                     }
-                    if(currentpenpage==2) {
+                    else if(currentpenpage==3) {
                         pageselector.position.x=-2.03;
                         currentpage=0;
                         nextmesh.material.color=new THREE.Color(0.02, 0.02, 0.02);
                     }
+                    else if(currentpenpage==2){
+                        pageselector.position.x=-2.03;
+                        currentpage=0;
+                        video.src = "./src/videos/rockornot.mp4"; video.load(); video.play();
+                    }
                     else if(currentpenpage==1){
                         pageselector.position.x=-2.03;
                         currentpage=0;
-                        video.src = "./src/videos/tt2.mp4";
-                        video.load(); // must call after setting/changing source
-                        video.play();
+                        video.src = "./src/videos/tt2.mp4"; video.load(); video.play();
                     }
                     else if(currentpenpage==0) {
                         pageselector.position.x=-2.03;
                         currentpage=0;
-                        video.src = "./src/videos/cat.mp4";
-                        video.load(); // must call after setting/changing source
-                        video.play();
+                        video.src = "./src/videos/cat.mp4"; video.load(); video.play();
                     }
                     penpages[currentpenpage].visible=true;
                 }
@@ -242,8 +221,17 @@ function onDocumentMouseClick( event ) {
                 else if(object.name=="linktoyoutube"){
                     linktoyoutube.click();
                 }
+                else if(object.name=="linktoyoutuberon"){
+                    linktoyoutuberon.click();
+                }
                 else if(object.name=="linktogame"){
                     linktogame.click();
+                }
+                else if(object.name=="linktomedium"){
+                    linktomedium.click();
+                }
+                else if(object.name=="linktorockornot"){
+                    linktorockornot.click();
                 }
             }            
        }
@@ -272,25 +260,17 @@ var linktogithub =  document.getElementById('linktogithub');
 var mailto =  document.getElementById('mailto');
 var linktolinkedin =  document.getElementById('linktolinkedin');
 var linktosmelly =  document.getElementById('linktosmelly');
+var linktorockornot =  document.getElementById('linktorockornot');
 var linktotomayto =  document.getElementById('linktotomayto');
 var linktoyoutube =  document.getElementById('linktoyoutube');
+var linktoyoutuberon =  document.getElementById('linktoyoutuberon');
 var linktogame =  document.getElementById('linktogame');
+var linktomedium =  document.getElementById('linktomedium');
 
 var materials = {};
-var matDark = new THREE.LineBasicMaterial( {
-    color: 0xffffff,
-    side: THREE.DoubleSide
-} );
 
 var matLite = new THREE.MeshBasicMaterial( {
     color: 0xffffff,
-    transparent: true,
-    opacity: 0.4,
-    side: THREE.DoubleSide
-} );
-
-var matDark = new THREE.MeshBasicMaterial( {
-    color: 0x000000,
     transparent: true,
     opacity: 0.4,
     side: THREE.DoubleSide
@@ -300,7 +280,6 @@ var playertext;
 var playergroup = new THREE.Group();
 var navgroup = new THREE.Group();
 var whiterectangle;
-
 
 Ammo().then(function (AmmoLib) {
     Ammo = AmmoLib;
@@ -347,7 +326,6 @@ function loadVideos(){
     materials[movieScreen.uuid] = movieMaterial;
     meshes.push(movieScreen);
     scene.add(movieScreen);
-
 }
 
 function loadAudioText(){
@@ -388,7 +366,13 @@ function loadTexts(){
         meshes.push(text);
         penpages[0].add(text);
         materials[text.uuid] = text.material;
-
+        
+        var text = createText(font, "read me!", x+1.1, y-0.75, z+0.6,"linktomedium", 0.1);
+        text.material.opacity = 1.0;
+        meshes.push(text);
+        penpages[2].add(text);
+        materials[text.uuid] = text.material;
+        
         var text = createText(font, "& a senior computer science student", -1.3, 1.0, -0.1, "", 0.1, new THREE.MeshBasicMaterial( {
             color: 0x000000,
             transparent: true,
@@ -515,6 +499,12 @@ function loadTexts(){
         meshes.push(text);
         penpages[0].add(text);
         materials[text.uuid] = text.material;
+        
+        var text = createText(font, "Ä", x+1.4, y-0.75, z+0.6,"linktorockornot", 0.15);
+        text.material.opacity = 1.0;
+        meshes.push(text);
+        penpages[2].add(text);
+        materials[text.uuid] = text.material;
 
         var text = createText(font, "Ä", x+1.4, y-0.75, z+0.6,"linktotomayto", 0.15);
         text.material.opacity = 1.0;
@@ -526,6 +516,12 @@ function loadTexts(){
         text.material.opacity = 1.0;
         meshes.push(text);
         penpages[1].add(text);
+        materials[text.uuid] = text.material;
+
+        var text = createText(font, "y", x+1.6, y-0.75, z+0.6,"linktoyoutuberon", 0.15);
+        text.material.opacity = 1.0;
+        meshes.push(text);
+        penpages[2].add(text);
         materials[text.uuid] = text.material;
 
         var text = createText(font, "Ä", x+0.9, y-0.85, z+0.6,"linktogithub", 0.15);
@@ -570,6 +566,14 @@ function loadTexts(){
             side: THREE.DoubleSide
         } ));
         penpages[1].add(text);
+        
+        var text = createText(font, "ROCK OR NOT?", x+1, y+0.3, z-0.1, "", 0.15, new THREE.MeshBasicMaterial( {
+            color: 0xffffff,
+            transparent: true,
+            opacity: 1.0,
+            side: THREE.DoubleSide
+        } ));
+        penpages[2].add(text);
 
         var text = createText(font, "Reach me!", x+1.5, y+0.1, z-0.1, "", 0.15, new THREE.MeshNormalMaterial( {
             color: 0x000000,
@@ -585,6 +589,12 @@ function loadTexts(){
         text.material.opacity = 1.0;
         meshes.push(text);
         penpages[0].add(text);
+        materials[text.uuid] = text.material;
+
+        var text = createText(font, "machine learning, python, \nsci-kit learn, librosa", x+0.8, y-0.4, z+0.56, "", 0.05);
+        text.material.opacity = 1.0;
+        meshes.push(text);
+        penpages[2].add(text);
         materials[text.uuid] = text.material;
 
         var text = createText(font, "machine learning, python, \nsci-kit learn, librosa", x+0.8, y-0.4, z+0.56, "", 0.05);
@@ -609,7 +619,15 @@ function loadTexts(){
         meshes.push(text);
         homepagegroup.add(text);
 
-        hello = createText(font, "Smelly Cat is a web gaming experience inspired\n by Bedroom In Arles by Vincent van Gogh.", 0.98, 1.5, -0.1, "", 0.05, new THREE.MeshBasicMaterial( {
+        hello = createText(font, "This sure does. | Music Genre Prediction System", 0.98, 1.5, -0.1, "", 0.05, new THREE.MeshBasicMaterial( {
+            color: 0xffffff,
+            transparent: true,
+            opacity: 1.0,
+            side: THREE.DoubleSide
+        } ));
+        penpages[2].add(hello);
+
+        hello = createText(font, "Smelly Cat is a web gaming experience inspired\n by Bedroom In Arles by Vincent van Gogh.", 0.98, 1.4, -0.1, "", 0.05, new THREE.MeshBasicMaterial( {
             color: 0xffffff,
             transparent: true,
             opacity: 1.0,
@@ -617,7 +635,7 @@ function loadTexts(){
         } ));
         penpages[0].add(hello);
         
-        hello = createText(font, "Your Personal AI Pronunciation Coach\nTrained and tested on the dataset for English language\n learners with Turkish accent and reached an F1-score\n of 94%.", 1.1, 1.6, -0.1, "", 0.05, new THREE.MeshBasicMaterial( {
+        hello = createText(font, "Your Personal AI Pronunciation Coach\n Automatic mispronunciation detection system is trained\nand tested on the dataset for English language learners\nwith Turkish accent and reached an F1-score of 94%.", 1.1, 1.6, -0.1, "", 0.05, new THREE.MeshBasicMaterial( {
             color: 0xffffff,
             transparent: true,
             opacity: 1.0,
@@ -1095,11 +1113,22 @@ function onDocumentMouseMove( event ) {
                 document.body.style.cursor = "pointer"
                 linkhover.position.set(object.position.x, object.position.y+0.03, object.position.z);
             }
+            else if(object.name=="linktorockornot" && currentpenpage==2){
+                document.body.style.cursor = "pointer"
+                linkhover.position.set(object.position.x, object.position.y+0.03, object.position.z);
+            }
             else if(object.name=="linktoyoutube" && currentpenpage==1){
                 document.body.style.cursor = "pointer"
                 linkhover.position.set(object.position.x, object.position.y+0.03, object.position.z);
             }
+            else if(object.name=="linktoyoutuberon" && currentpenpage==2){
+                document.body.style.cursor = "pointer"
+                linkhover.position.set(object.position.x, object.position.y+0.03, object.position.z);
+            }
             else if(object.name=="linktogame"){
+                document.body.style.cursor = "pointer"
+            }
+            else if(object.name=="linktomedium"){
                 document.body.style.cursor = "pointer"
             }
         }
@@ -1121,6 +1150,9 @@ function onDocumentMouseMove( event ) {
                 else if(currentpenpage==1 && currentpage!=1){
                     video.src = "./src/videos/tt2.mp4";video.load();video.play();
                 }
+                else if(currentpenpage==2 && currentpage!=1){
+                    video.src = "./src/videos/rockornot.mp4";video.load();video.play();
+                }
                 currentpage=1;
             }
             else if(object.name=="page2"){
@@ -1132,6 +1164,9 @@ function onDocumentMouseMove( event ) {
                 else if(currentpenpage==1 && currentpage!=2){
                     video.src = "./src/videos/tt.mp4";video.load();video.play();
                 }
+                else if(currentpenpage==2 && currentpage!=2){
+                    video.src = "./src/videos/rockornot2.mp4";video.load();video.play();
+                }
                 currentpage=2;
             }
             else if(object.name=="page3"){
@@ -1142,6 +1177,9 @@ function onDocumentMouseMove( event ) {
                 }
                 else if(currentpenpage==1 && currentpage!=3){
                     video.src = "./src/videos/tt3.mp4";video.load();video.play();
+                }
+                else if(currentpenpage==2 && currentpage!=3){
+                    video.src = "./src/videos/rockornot3.mp4";video.load();video.play();
                 }
                 currentpage=3;
             }
