@@ -182,7 +182,7 @@ function onDocumentMouseClick( event ) {
                         currentpage=0;
                         pageselector.position.x=-2.03;
                         prevmesh.material.color=new THREE.Color(0.02,0.02, 0.02);                    
-                        video.src = "./src/videos/tt.mp4";
+                        video.src = "./src/videos/tt2.mp4";
                         video.load(); // must call after setting/changing source
                         video.play();
                     }
@@ -216,7 +216,7 @@ function onDocumentMouseClick( event ) {
                     else if(currentpenpage==1){
                         pageselector.position.x=-2.03;
                         currentpage=0;
-                        video.src = "./src/videos/tt.mp4";
+                        video.src = "./src/videos/tt2.mp4";
                         video.load(); // must call after setting/changing source
                         video.play();
                     }
@@ -1119,7 +1119,7 @@ function onDocumentMouseMove( event ) {
                     video.src = "./src/videos/cat.mp4";video.load();video.play();
                 }
                 else if(currentpenpage==1 && currentpage!=1){
-                    video.src = "./src/videos/tt.mp4";video.load();video.play();
+                    video.src = "./src/videos/tt2.mp4";video.load();video.play();
                 }
                 currentpage=1;
             }
@@ -1130,7 +1130,7 @@ function onDocumentMouseMove( event ) {
                     video.src = "./src/videos/cat2.mp4";video.load();video.play();
                 }
                 else if(currentpenpage==1 && currentpage!=2){
-                    video.src = "./src/videos/tt2.mp4";video.load();video.play();
+                    video.src = "./src/videos/tt.mp4";video.load();video.play();
                 }
                 currentpage=2;
             }
