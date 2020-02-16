@@ -179,15 +179,23 @@ function onDocumentMouseClick( event ) {
                         nextmesh.material.color=new THREE.Color(0.8, 0.8, 0.8);
                     }
                     else if(currentpenpage==1) {
+                        currentpage=0;
+                        pageselector.position.x=-2.03;
                         prevmesh.material.color=new THREE.Color(0.02,0.02, 0.02);                    
                         video.src = "./src/videos/tt.mp4";
                         video.load(); // must call after setting/changing source
                         video.play();
                     }
                     else if(currentpenpage==0){
+                        pageselector.position.x=-2.03;
+                        currentpage=0;
                         video.src = "./src/videos/cat.mp4";
                         video.load(); // must call after setting/changing source
                         video.play();
+                    }
+                    else if(currentpage==2){
+                        pageselector.position.x=-2.03;
+                        currentpage=0;
                     }
                     penpages[currentpenpage].visible=true;
 
@@ -196,18 +204,25 @@ function onDocumentMouseClick( event ) {
                     penpages[currentpenpage].visible=false;
                     currentpenpage-=1;
                     if(currentpenpage==-1) {
+                        pageselector.position.x=-2.03;
                         currentpenpage=0;
                         prevmesh.material.color=new THREE.Color(0.8, 0.8, 0.8);
                     }
                     if(currentpenpage==2) {
+                        pageselector.position.x=-2.03;
+                        currentpage=0;
                         nextmesh.material.color=new THREE.Color(0.02, 0.02, 0.02);
                     }
                     else if(currentpenpage==1){
+                        pageselector.position.x=-2.03;
+                        currentpage=0;
                         video.src = "./src/videos/tt.mp4";
                         video.load(); // must call after setting/changing source
                         video.play();
                     }
                     else if(currentpenpage==0) {
+                        pageselector.position.x=-2.03;
+                        currentpage=0;
                         video.src = "./src/videos/cat.mp4";
                         video.load(); // must call after setting/changing source
                         video.play();
@@ -215,7 +230,7 @@ function onDocumentMouseClick( event ) {
                     penpages[currentpenpage].visible=true;
                 }
             }
-            var intersects = raycaster.intersectObjects( penpages[current].children );
+            var intersects = raycaster.intersectObjects( penpages[currentpenpage].children );
             if ( intersects.length > 0 ) {
                 var object = intersects[ 0 ].object;
                 if(object.name=="linktosmelly"){
@@ -223,6 +238,12 @@ function onDocumentMouseClick( event ) {
                 }
                 else if(object.name=="linktotomayto"){
                     linktotomayto.click();
+                }
+                else if(object.name=="linktoyoutube"){
+                    linktoyoutube.click();
+                }
+                else if(object.name=="linktogame"){
+                    linktogame.click();
                 }
             }            
        }
@@ -252,6 +273,8 @@ var mailto =  document.getElementById('mailto');
 var linktolinkedin =  document.getElementById('linktolinkedin');
 var linktosmelly =  document.getElementById('linktosmelly');
 var linktotomayto =  document.getElementById('linktotomayto');
+var linktoyoutube =  document.getElementById('linktoyoutube');
+var linktogame =  document.getElementById('linktogame');
 
 var materials = {};
 var matDark = new THREE.LineBasicMaterial( {
@@ -351,12 +374,20 @@ function createText(font, message, x, y, z, name="", size=0.1, mat=matLite){
     return text;
 }
 
+var pageselector;
+
 function loadTexts(){
     var loader = new THREE.FontLoader();
     var x = navigatormesh.position.x;
     var y = navigatormesh.position.y;
     var z = navigatormesh.position.z;
     loader.load( './src/fonts/Hippotamia.json', function ( font ) {
+        var text = createText(font, "try me!", x+1.1, y-0.75, z+0.6,"linktogame", 0.1);
+        text.material.opacity = 1.0;
+        meshes.push(text);
+        penpages[0].add(text);
+        materials[text.uuid] = text.material;
+
         var text = createText(font, "& a senior computer science student", -1.3, 1.0, -0.1, "", 0.1, new THREE.MeshBasicMaterial( {
             color: 0x000000,
             transparent: true,
@@ -365,24 +396,50 @@ function loadTexts(){
         } ));
         text.rotation.y = 0.4;
         homepagegroup.add(text);
+
+        
+        text = createText(font, "</>", x+0.3, y-0.4, z+0.6, "tagicon");
+        text.material.opacity = 1.0;
+        meshes.push(text);
+        penpagegroup.add(text);
+        materials[text.uuid] = text.material;
+        
+        var text = createText(font, "1", x-2.0, y-0.9, z+0.4, "page1", 0.1);
+        text.material.opacity = 1.0;
+        text.rotation.y = 0.4;
+        penpagegroup.add(text);
+
+        var text = createText(font, "2", x-1.85, y-0.9, z+0.4, "page2", 0.1);
+        text.material.opacity = 1.0;
+        text.rotation.y = 0.4;
+        penpagegroup.add(text);
+
+        var text = createText(font, "3", x-1.70, y-0.9, z+0.4, "page3", 0.1);
+        text.material.opacity = 1.0;
+        text.rotation.y = 0.4;
+        penpagegroup.add(text);
     });
     loader.load( './src/fonts/player.json', function ( font ) {
-        var y = 0.35;
-        var z = 0.5;
         var text;
-        text = createText(font, "B", 1.0, y, z, name="next");
+        
+        pageselector = createText(font, "I", -2.03, y-0.93, z+0.4, "", 0.15, new THREE.MeshNormalMaterial({}));
+        pageselector.material.opacity = 1.0;
+        pageselector.rotation.y = 0.4;
+        penpagegroup.add(pageselector);
+
+        text = createText(font, "B", 1.0, 0.35, 0.5, name="next");
         //text.layers.enable(BLOOM_SCENE);
         meshes.push(text);
         playergroup.add( text );
         materials[text.uuid] = text.material;
 
-        text = createText(font, "C", 0.9, y, z, name="play");
+        text = createText(font, "C", 0.9, 0.35, 0.5, name="play");
         //text.layers.enable(BLOOM_SCENE);
         meshes.push(text);
         playergroup.add( text );
         materials[text.uuid] = text.material;
 
-        text = createText(font, "A", 0.8, y, z, name="prev");
+        text = createText(font, "A", 0.8, 0.35, 0.5, name="prev");
         //text.layers.enable(BLOOM_SCENE);
         playergroup.add( text );
         playergroup.visible=false;
@@ -430,19 +487,12 @@ function loadTexts(){
         meshes.push(text);
         penpagegroup.add(text);
         materials[text.uuid] = text.material;
-
-        text = createText(font, "I", x+0.7, y-0.55, z+0.6, "tagicon");
-        text.material.opacity = 1.0;
-        meshes.push(text);
-        penpagegroup.add(text);
-        materials[text.uuid] = text.material;
         
         var text = createText(font, "m", x+0.7, y-0.87, z+0.6,"mailto", 0.15);
         text.material.opacity = 1.0;
         meshes.push(text);
         mailpagegroup.add(text);
         materials[text.uuid] = text.material;
-
 
     });
 
@@ -456,10 +506,22 @@ function loadTexts(){
     });
 
     loader.load( './src/fonts/icons2.json', function ( font ) {
-        var text = createText(font, "Ä", x+0.7, y-0.75, z+0.6,"");
+        var text = createText(font, "Ä", x+1.4, y-0.75, z+0.6,"linktosmelly", 0.15);
         text.material.opacity = 1.0;
         meshes.push(text);
-        penpagegroup.add(text);
+        penpages[0].add(text);
+        materials[text.uuid] = text.material;
+
+        var text = createText(font, "Ä", x+1.4, y-0.75, z+0.6,"linktotomayto", 0.15);
+        text.material.opacity = 1.0;
+        meshes.push(text);
+        penpages[1].add(text);
+        materials[text.uuid] = text.material;
+        
+        var text = createText(font, "y", x+1.6, y-0.75, z+0.6,"linktoyoutube", 0.15);
+        text.material.opacity = 1.0;
+        meshes.push(text);
+        penpages[1].add(text);
         materials[text.uuid] = text.material;
 
         var text = createText(font, "Ä", x+0.9, y-0.85, z+0.6,"linktogithub", 0.15);
@@ -489,16 +551,16 @@ function loadTexts(){
         homepagegroup.add(text);
 
 
-        var text = createText(font, "SMELLY CAT", x+1.1, y+0.0, z-0.1, "", 0.2, new THREE.MeshBasicMaterial( {
-            color: 0x000000,
+        var text = createText(font, "SMELLY CAT", x+1.1, y+0.2, z-0.1, "", 0.2, new THREE.MeshBasicMaterial( {
+            color: 0xffffff,
             transparent: true,
             opacity: 1.0,
             side: THREE.DoubleSide
         } ));
         penpages[0].add(text);
 
-        var text = createText(font, "TOMAYTOMAHTO", x+1.15, y+0.1, z-0.1, "", 0.15, new THREE.MeshBasicMaterial( {
-            color: 0x000000,
+        var text = createText(font, "TOMAYTOMAHTO", x+1.15, y+0.3, z-0.1, "", 0.15, new THREE.MeshBasicMaterial( {
+            color: 0xffffff,
             transparent: true,
             opacity: 1.0,
             side: THREE.DoubleSide
@@ -515,29 +577,17 @@ function loadTexts(){
     });
 
     loader.load( './src/fonts/Titillium_Regular.json', function ( font ) {
-        var text = createText(font, "WebGL, three.js", x+1.05, y-0.5, z+0.56, "", 0.05);
+        var text = createText(font, "WebGL, three.js", x+0.7, y-0.4, z+0.56, "", 0.05);
         text.material.opacity = 1.0;
         meshes.push(text);
         penpages[0].add(text);
         materials[text.uuid] = text.material;
 
-        var text = createText(font, "machine learning, python, \nsci-kit learn, librosa", x+1.2, y-0.5, z+0.56, "", 0.05);
+        var text = createText(font, "machine learning, python, \nsci-kit learn, librosa", x+0.8, y-0.4, z+0.56, "", 0.05);
         text.material.opacity = 1.0;
         meshes.push(text);
         penpages[1].add(text);
         materials[text.uuid] = text.material;
-
-        var text = createText(font, "defnetuncer98.github.io/smellycat/", x+1.35, y-0.7, z+0.56, "linktosmelly", 0.05,);
-        text.material.opacity = 1.0;
-        meshes.push(text);
-        penpages[0].add(text);
-        materials[text.uuid] = text.material;   
-        
-        var text = createText(font, "github.com/Tomayto-Tomahto/demo", x+1.37, y-0.7, z+0.56, "linktotomayto", 0.05);
-        text.material.opacity = 1.0;
-        meshes.push(text);
-        penpages[1].add(text);
-        materials[text.uuid] = text.material;   
         
         hello = createText(font, "I ' m  D e f n e  T u n ç e r", -1.2, 1.2, 0.0, "", 0.1, new THREE.MeshBasicMaterial( {
             color: 0x000000,
@@ -555,16 +605,16 @@ function loadTexts(){
         meshes.push(text);
         homepagegroup.add(text);
 
-        hello = createText(font, "Smelly Cat is a web gaming experience inspired\n by Bedroom In Arles by Vincent van Gogh.", 1.0, 1.3, 0.0, "", 0.05, new THREE.MeshBasicMaterial( {
-            color: 0x000000,
+        hello = createText(font, "Smelly Cat is a web gaming experience inspired\n by Bedroom In Arles by Vincent van Gogh.", 0.98, 1.5, -0.1, "", 0.05, new THREE.MeshBasicMaterial( {
+            color: 0xffffff,
             transparent: true,
             opacity: 1.0,
             side: THREE.DoubleSide
         } ));
         penpages[0].add(hello);
         
-        hello = createText(font, "Your Personal AI Pronunciation Coach\nTrained and tested on the dataset for English language\n learners with Turkish accent and reached an F1-score\n of 94%.", 1.1, 1.4, 0.0, "", 0.05, new THREE.MeshBasicMaterial( {
-            color: 0x000000,
+        hello = createText(font, "Your Personal AI Pronunciation Coach\nTrained and tested on the dataset for English language\n learners with Turkish accent and reached an F1-score\n of 94%.", 1.1, 1.6, -0.1, "", 0.05, new THREE.MeshBasicMaterial( {
+            color: 0xffffff,
             transparent: true,
             opacity: 1.0,
             side: THREE.DoubleSide
@@ -673,7 +723,7 @@ function loadMeshes(){
     meshes.push(prevmesh);
     materials[prevmesh.uuid] = prevmesh.material;
 
-    mesh = new THREE.Mesh( new THREE.CircleBufferGeometry(0.12, 32),
+    var mesh = new THREE.Mesh( new THREE.CircleBufferGeometry(0.12, 32),
     new THREE.MeshStandardMaterial( {
             color: new THREE.Color(0.02,0.02,0.02), 
             roughness:1.0,
@@ -687,34 +737,34 @@ function loadMeshes(){
     materials[mesh.uuid] = mesh.material;
 
     // tag and links
-    var mesh = new THREE.Mesh( new THREE.BoxBufferGeometry(),
-    new THREE.MeshStandardMaterial( {
-            color: new THREE.Color(0.0, 0.0, 0.0), 
-            roughness:1.0,
-            metalness:0.0,
-            transparent:true,
-            opacity:0.9
-    } ) );
-    mesh.scale.set(1.2, 0.4, 0.1);
-    mesh.position.set(posx+1.4, posy-0.6, posz+0.5);
-    penpagegroup.add(mesh);
-    meshes.push(mesh);
-    materials[mesh.uuid] = mesh.material;
+    // var mesh = new THREE.Mesh( new THREE.BoxBufferGeometry(),
+    // new THREE.MeshStandardMaterial( {
+    //         color: new THREE.Color(0.0, 0.0, 0.0), 
+    //         roughness:1.0,
+    //         metalness:0.0,
+    //         transparent:true,
+    //         opacity:0.9
+    // } ) );
+    // mesh.scale.set(1.2, 0.4, 0.1);
+    // mesh.position.set(posx+1.4, posy-0.6, posz+0.5);
+    // penpagegroup.add(mesh);
+    // meshes.push(mesh);
+    // materials[mesh.uuid] = mesh.material;
 
     // header
-    var mesh = new THREE.Mesh( new THREE.BoxBufferGeometry(),
-    new THREE.MeshStandardMaterial( {
-            color: new THREE.Color(1.0, 1.0, 1.0), 
-            roughness:1.0,
-            metalness:0.0,
-            transparent:true,
-            opacity:0.9
-    } ) );
-    mesh.scale.set(2.0, 0.8, 0.1);
-    mesh.position.set(posx+1.2, posy-0.1, posz+0.2);
-    penpagegroup.add(mesh);
-    meshes.push(mesh);
-    materials[mesh.uuid] = mesh.material;
+    // var mesh = new THREE.Mesh( new THREE.BoxBufferGeometry(),
+    // new THREE.MeshStandardMaterial( {
+    //         color: new THREE.Color(1.0, 1.0, 1.0), 
+    //         roughness:1.0,
+    //         metalness:0.0,
+    //         transparent:true,
+    //         opacity:0.9
+    // } ) );
+    // mesh.scale.set(2.0, 0.8, 0.1);
+    // mesh.position.set(posx+1.2, posy-0.1, posz+0.2);
+    // penpagegroup.add(mesh);
+    // meshes.push(mesh);
+    // materials[mesh.uuid] = mesh.material;
 
 }
 
@@ -1010,13 +1060,13 @@ var playlist = ['St Francis - Josh Lippi & The Overtimers',
                 'Fresno Alley - Josh Lippi & The Overtimers']
 var current = 0;
 var nowactive = "home";
+var currentpage = 1;
 
 function onDocumentMouseMove( event ) {
     mouseX = ( event.clientX - windowHalfX ) * 10;
     mouseY = ( event.clientY - windowHalfY ) * 10;
     mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
     mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
-    console.log(mouseX, mouseY);
     if(mouseX>5200 && mouseX<5900 && mouseY>1500 && mouseY<1900) rotatefighter = true;
     else rotatefighter = false;
 
@@ -1038,6 +1088,9 @@ function onDocumentMouseMove( event ) {
             else if(object.name=="linktotomayto"){
                 document.body.style.cursor = "pointer"
             }
+            else if(object.name=="linktogame"){
+                document.body.style.cursor = "pointer"
+            }
         }
         var intersects = raycaster.intersectObjects( penpagegroup.children );
         if ( intersects.length > 0 ) {
@@ -1047,6 +1100,39 @@ function onDocumentMouseMove( event ) {
             }
             else if(object.name=="prevpenpage"){
                 document.body.style.cursor = "pointer"
+            }
+            else if(object.name=="page1"){
+                document.body.style.cursor = "pointer"
+                pageselector.position.x=-2.03;
+                if(currentpenpage==0 && currentpage!=1){
+                    video.src = "./src/videos/cat.mp4";video.load();video.play();
+                }
+                else if(currentpenpage==1 && currentpage!=1){
+                    video.src = "./src/videos/tt.mp4";video.load();video.play();
+                }
+                currentpage=1;
+            }
+            else if(object.name=="page2"){
+                document.body.style.cursor = "pointer"
+                pageselector.position.x=-1.88;
+                if(currentpenpage==0 && currentpage!=2){
+                    video.src = "./src/videos/cat2.mp4";video.load();video.play();
+                }
+                else if(currentpenpage==1 && currentpage!=2){
+                    video.src = "./src/videos/tt2.mp4";video.load();video.play();
+                }
+                currentpage=2;
+            }
+            else if(object.name=="page3"){
+                document.body.style.cursor = "pointer"
+                pageselector.position.x=-1.73;
+                if(currentpenpage==0 && currentpage!=3){
+                    video.src = "./src/videos/cat3.mp4";video.load();video.play();
+                }
+                else if(currentpenpage==1 && currentpage!=3){
+                    video.src = "./src/videos/tt3.mp4";video.load();video.play();
+                }
+                currentpage=3;
             }
         }
     }
