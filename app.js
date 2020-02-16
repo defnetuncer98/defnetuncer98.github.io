@@ -375,6 +375,7 @@ function createText(font, message, x, y, z, name="", size=0.1, mat=matLite){
 }
 
 var pageselector;
+var linkhover;
 
 function loadTexts(){
     var loader = new THREE.FontLoader();
@@ -397,7 +398,10 @@ function loadTexts(){
         text.rotation.y = 0.4;
         homepagegroup.add(text);
 
-        
+        linkhover = createText(font, '{    }', 0,0,6, "linkhover", 0.1, new THREE.MeshNormalMaterial({}));
+        linkhover.material.opacity = 1.0;
+        scene.add(linkhover);
+
         text = createText(font, "</>", x+0.3, y-0.4, z+0.6, "tagicon");
         text.material.opacity = 1.0;
         meshes.push(text);
@@ -488,7 +492,7 @@ function loadTexts(){
         penpagegroup.add(text);
         materials[text.uuid] = text.material;
         
-        var text = createText(font, "m", x+0.7, y-0.87, z+0.6,"mailto", 0.15);
+        var text = createText(font, "m", x+0.7, y-0.87, z+0.6,"mailto", 0.13);
         text.material.opacity = 1.0;
         meshes.push(text);
         mailpagegroup.add(text);
@@ -530,7 +534,7 @@ function loadTexts(){
         mailpagegroup.add(text);
         materials[text.uuid] = text.material;
 
-        var text = createText(font, "ã", x+1.1, y-0.85, z+0.6,"linktolinkedin", 0.15);
+        var text = createText(font, "l", x+1.1, y-0.85, z+0.6,"linktolinkedin", 0.13);
         text.material.opacity = 1.0;
         meshes.push(text);
         mailpagegroup.add(text);
@@ -1076,17 +1080,24 @@ function onDocumentMouseMove( event ) {
     }
     else{
         document.body.style.cursor = "auto"
+        linkhover.position.set(0,0,6);
     }
 
     if(nowactive=="pen"){
-        var intersects = raycaster.intersectObjects( penpages[current].children );
+        var intersects = raycaster.intersectObjects( penpages[currentpenpage].children );
         if ( intersects.length > 0 ) {
             var object = intersects[ 0 ].object;
-            if(object.name=="linktosmelly"){
+            if(object.name=="linktosmelly" && currentpenpage==0){
                 document.body.style.cursor = "pointer"
+                linkhover.position.set(object.position.x, object.position.y+0.03, object.position.z);
             }
-            else if(object.name=="linktotomayto"){
+            else if(object.name=="linktotomayto" && currentpenpage==1){
                 document.body.style.cursor = "pointer"
+                linkhover.position.set(object.position.x, object.position.y+0.03, object.position.z);
+            }
+            else if(object.name=="linktoyoutube" && currentpenpage==1){
+                document.body.style.cursor = "pointer"
+                linkhover.position.set(object.position.x, object.position.y+0.03, object.position.z);
             }
             else if(object.name=="linktogame"){
                 document.body.style.cursor = "pointer"
@@ -1141,15 +1152,18 @@ function onDocumentMouseMove( event ) {
         if ( intersects.length > 0 ) {
             var object = intersects[ 0 ].object;
             if(object.name=="linktogithub"){
+                linkhover.position.set(object.position.x, object.position.y+0.03, object.position.z);
                 document.body.style.cursor = "pointer"
             }
             else if(object.name=="linktoresume"){
                 document.body.style.cursor = "pointer"
             }
             else if(object.name=="linktolinkedin"){
+                linkhover.position.set(object.position.x, object.position.y+0.03, object.position.z);
                 document.body.style.cursor = "pointer"
             }
             else if(object.name=="mailto"){
+                linkhover.position.set(object.position.x, object.position.y+0.03, object.position.z);
                 document.body.style.cursor = "pointer"
             }
         }
