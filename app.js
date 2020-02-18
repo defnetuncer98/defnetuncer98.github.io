@@ -613,7 +613,7 @@ function loadTexts(){
         } ));
         penpages[1].add(text);
         
-        var text = createText(font, "MALL-E", x+1, y+0.3, z-0.1, "", 0.15, new THREE.MeshBasicMaterial( {
+        var text = createText(font, "MALL-E", x+0.8, y+0.3, z-0.1, "", 0.15, new THREE.MeshBasicMaterial( {
             color: 0xffffff,
             transparent: true,
             opacity: 1.0,
