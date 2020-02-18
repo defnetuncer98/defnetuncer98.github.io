@@ -100,6 +100,7 @@ var MODELS = [
         scale: 0.016,
     },                   
 ]
+
 var hologram;
 var hologrammixer;
 
@@ -165,6 +166,12 @@ function onDocumentMouseClick( event ) {
                         prevmesh.material.color=new THREE.Color(0.02,0.02, 0.02);                    
                         video.src = "./src/videos/tt2.mp4"; video.load(); video.play();
                     }
+                    else if(currentpenpage==3) {
+                        currentpage=0;
+                        pageselector.position.x=-2.03;
+                        prevmesh.material.color=new THREE.Color(0.02,0.02, 0.02);                    
+                        video.src = "./src/videos/vizgooglefit.mp4"; video.load(); video.play();
+                    }
                     else if(currentpenpage==0){
                         pageselector.position.x=-2.03;
                         currentpage=0;
@@ -190,6 +197,7 @@ function onDocumentMouseClick( event ) {
                         pageselector.position.x=-2.03;
                         currentpage=0;
                         nextmesh.material.color=new THREE.Color(0.02, 0.02, 0.02);
+                        video.src = "./src/videos/vizgooglefit.mp4"; video.load(); video.play();
                     }
                     else if(currentpenpage==2){
                         pageselector.position.x=-2.03;
@@ -206,6 +214,7 @@ function onDocumentMouseClick( event ) {
                         currentpage=0;
                         video.src = "./src/videos/cat.mp4"; video.load(); video.play();
                     }
+                    
                     penpages[currentpenpage].visible=true;
                 }
             }
@@ -229,6 +238,12 @@ function onDocumentMouseClick( event ) {
                 }
                 else if(object.name=="linktomedium"){
                     linktomedium.click();
+                }
+                else if(object.name=="linktovizgooglefittryme"){
+                    linktovizgooglefittryme.click();
+                }
+                else if(object.name=="linktovizgooglefit"){
+                    linktovizgooglefit.click();
                 }
                 else if(object.name=="linktorockornot"){
                     linktorockornot.click();
@@ -266,6 +281,8 @@ var linktoyoutube =  document.getElementById('linktoyoutube');
 var linktoyoutuberon =  document.getElementById('linktoyoutuberon');
 var linktogame =  document.getElementById('linktogame');
 var linktomedium =  document.getElementById('linktomedium');
+var linktovizgooglefit = document.getElementById('linktovizgooglefit');
+var linktovizgooglefittryme = document.getElementById('linktovizgooglefittryme');
 
 var materials = {};
 
@@ -281,11 +298,8 @@ var playergroup = new THREE.Group();
 var navgroup = new THREE.Group();
 var whiterectangle;
 
-Ammo().then(function (AmmoLib) {
-    Ammo = AmmoLib;
-    init();
-    animate();
-});
+init();
+animate();
 
 function init() {
     initScene();
@@ -361,6 +375,12 @@ function loadTexts(){
     var y = navigatormesh.position.y;
     var z = navigatormesh.position.z;
     loader.load( './src/fonts/Hippotamia.json', function ( font ) {
+        var text = createText(font, "try me!", x+1.1, y-0.75, z+0.6,"linktovizgooglefittryme", 0.1);
+        text.material.opacity = 1.0;
+        meshes.push(text);
+        penpages[3].add(text);
+        materials[text.uuid] = text.material;
+
         var text = createText(font, "try me!", x+1.1, y-0.75, z+0.6,"linktogame", 0.1);
         text.material.opacity = 1.0;
         meshes.push(text);
@@ -494,6 +514,12 @@ function loadTexts(){
     });
 
     loader.load( './src/fonts/icons2.json', function ( font ) {
+        var text = createText(font, "Ä", x+1.4, y-0.75, z+0.6,"linktovizgooglefit", 0.15);
+        text.material.opacity = 1.0;
+        meshes.push(text);
+        penpages[3].add(text);
+        materials[text.uuid] = text.material;
+
         var text = createText(font, "Ä", x+1.4, y-0.75, z+0.6,"linktosmelly", 0.15);
         text.material.opacity = 1.0;
         meshes.push(text);
@@ -575,16 +601,27 @@ function loadTexts(){
         } ));
         penpages[2].add(text);
 
-        var text = createText(font, "Reach me!", x+1.5, y+0.1, z-0.1, "", 0.15, new THREE.MeshNormalMaterial( {
-            color: 0x000000,
+        var text = createText(font, "vizGoogleFit", x+0.9, y+0.3, z-0.1, "", 0.15, new THREE.MeshBasicMaterial( {
+            color: 0xffffff,
             transparent: true,
             opacity: 1.0,
             side: THREE.DoubleSide
         } ));
+        penpages[3].add(text);
+
+        var text = createText(font, "Reach me!", x+1.5, y+0.1, z-0.1, "", 0.15, new THREE.MeshNormalMaterial( {} ));
         mailpagegroup.add(text);
     });
 
     loader.load( './src/fonts/Titillium_Regular.json', function ( font ) {
+
+        var text = createText(font, "D3.js", x+0.5, y-0.4, z+0.56, "", 0.05);
+        text.material.opacity = 1.0;
+        meshes.push(text);
+        penpages[3].add(text);
+        materials[text.uuid] = text.material;
+
+    
         var text = createText(font, "WebGL, three.js", x+0.7, y-0.4, z+0.56, "", 0.05);
         text.material.opacity = 1.0;
         meshes.push(text);
@@ -618,6 +655,14 @@ function loadTexts(){
         materials[text.uuid] = text.material;
         meshes.push(text);
         homepagegroup.add(text);
+
+        hello = createText(font, "Visualize your Google Fit Data!", 0.8, 1.5, -0.1, "", 0.05, new THREE.MeshBasicMaterial( {
+            color: 0xffffff,
+            transparent: true,
+            opacity: 1.0,
+            side: THREE.DoubleSide
+        } ));
+        penpages[3].add(hello);
 
         hello = createText(font, "This sure does. | Music Genre Prediction System", 0.98, 1.5, -0.1, "", 0.05, new THREE.MeshBasicMaterial( {
             color: 0xffffff,
@@ -848,8 +893,10 @@ function onWindowResize() {
 }
 
 var envMap;
+var canvas;
+
 function initRenderer() {
-    var canvas = document.createElement( 'canvas' );
+    canvas = document.createElement( 'canvas' );
     var context = canvas.getContext( 'webgl2', { alpha: false } );
     var container = document.getElementById('container');
     renderer = new THREE.WebGLRenderer( { canvas: canvas, context: context, antialias:true } );
@@ -1010,7 +1057,8 @@ function loadGLTFModel(model) {
 
 var hellocount = 1;
 var helloup = true;
-
+var loading = document.getElementById('loading');
+var slide = document.getElementById('slide');
 /**
  * Render loop. Renders the next frame of all animations
  */
@@ -1018,26 +1066,35 @@ function animate() {
     // Get the time elapsed since the last frame
     var delta = clock.getDelta();
     requestAnimationFrame( animate );
-
-    if(meshes.length>100){
+    if(meshes.length==281){
+        canvas.display='block';
+        slide.style.display='none';
+        loading.style.display='none';
         if(hellocount==20 || hellocount==0) helloup = !helloup;
         if(helloup) {hellocount+=1; fighter.position.y+=0.001;}
         else {hellocount-=1; fighter.position.y-=0.001;}
         if(rotatefighter) fighter.rotation.y += 0.08;
+
+        if ( video.readyState === video.HAVE_ENOUGH_DATA ) 
+        {
+            videoImageContext.drawImage( video, 0, 0 );
+            if ( videoTexture ) 
+                videoTexture.needsUpdate = true;
+        }    
+    
+        camera.position.x = ( - mouseX ) * .0001;
+        camera.position.y = 1.2 + ( mouseY ) * .0001;
+        camera.lookAt(0,0.8,0);
+
+        renderer.render(scene,camera);
+    }
+    else {
+        document.getElementById('loading').innerText = Math.round(meshes.length*100 / 281) + '%';
     }
 
-    if ( video.readyState === video.HAVE_ENOUGH_DATA ) 
-    {
-        videoImageContext.drawImage( video, 0, 0 );
-        if ( videoTexture ) 
-            videoTexture.needsUpdate = true;
-    }    
 
-    camera.position.x = ( - mouseX ) * .0001;
-    camera.position.y = 1.2 + ( mouseY ) * .0001;
-    camera.lookAt(0,0.8,0);
 
-    //console.log(meshes.length);
+//    console.log(meshes.length);
 //    if(meshes.length==189){
 //     //    if(nowactive=="home"){
 //     //         hologram.scene.visible=true;
@@ -1050,8 +1107,8 @@ function animate() {
 //        finalComposer.render();
 //    }
 //    else {
-        renderer.render(scene,camera);
-   //}
+//        renderer.render(scene,camera);
+//    }
 }
 
 function renderBloom() {
@@ -1125,7 +1182,14 @@ function onDocumentMouseMove( event ) {
                 document.body.style.cursor = "pointer"
                 linkhover.position.set(object.position.x, object.position.y+0.03, object.position.z);
             }
+            else if(object.name=="linktovizgooglefit" && currentpenpage==3){
+                document.body.style.cursor = "pointer"
+                linkhover.position.set(object.position.x, object.position.y+0.03, object.position.z);
+            }
             else if(object.name=="linktogame"){
+                document.body.style.cursor = "pointer"
+            }
+            else if(object.name=="linktovizgooglefittryme"){
                 document.body.style.cursor = "pointer"
             }
             else if(object.name=="linktomedium"){
@@ -1152,6 +1216,9 @@ function onDocumentMouseMove( event ) {
                 }
                 else if(currentpenpage==2 && currentpage!=1){
                     video.src = "./src/videos/rockornot.mp4";video.load();video.play();
+                }
+                else if(currentpenpage==3 && currentpage!=1){
+                    video.src = "./src/videos/vizgooglefit.mp4";video.load();video.play();
                 }
                 currentpage=1;
             }
