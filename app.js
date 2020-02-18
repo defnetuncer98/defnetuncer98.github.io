@@ -114,7 +114,7 @@ bloomLayer.set(BLOOM_SCENE);
 
 var home, pen, mail;
 var homepagegroup = new THREE.Group();
-var penpages = [new THREE.Group(),new THREE.Group(),new THREE.Group(),new THREE.Group()];
+var penpages = [new THREE.Group(),new THREE.Group(),new THREE.Group(),new THREE.Group(), new THREE.Group()];
 var penpagegroup = new THREE.Group();
 var currentpenpage = 0;
 var mailpagegroup = new THREE.Group();
@@ -156,7 +156,7 @@ function onDocumentMouseClick( event ) {
                 if(object.name=="nextpenpage"){
                     penpages[currentpenpage].visible=false;
                     currentpenpage+=1;
-                    if(currentpenpage==4) {
+                    if(currentpenpage==5) {
                         currentpenpage = 3;
                         nextmesh.material.color=new THREE.Color(0.8, 0.8, 0.8);
                     }
@@ -181,6 +181,11 @@ function onDocumentMouseClick( event ) {
                         pageselector.position.x=-2.03;
                         currentpage=0;
                         video.src = "./src/videos/rockornot.mp4"; video.load(); video.play();
+                    }
+                    else if(currentpenpage==4){
+                        pageselector.position.x=-2.03;
+                        currentpage=0;
+                        video.src = "./src/videos/malle.mp4"; video.load(); video.play();
                     }
                     penpages[currentpenpage].visible=true;
 
@@ -213,6 +218,11 @@ function onDocumentMouseClick( event ) {
                         pageselector.position.x=-2.03;
                         currentpage=0;
                         video.src = "./src/videos/cat.mp4"; video.load(); video.play();
+                    }
+                    else if(currentpenpage==4) {
+                        pageselector.position.x=-2.03;
+                        currentpage=0;
+                        video.src = "./src/videos/malle.mp4"; video.load(); video.play();
                     }
                     
                     penpages[currentpenpage].visible=true;
@@ -248,6 +258,9 @@ function onDocumentMouseClick( event ) {
                 else if(object.name=="linktorockornot"){
                     linktorockornot.click();
                 }
+                else if(object.name=="linktomalle"){
+                    linktomalle.click();
+                }
             }            
        }
        else if (nowactive=="mail"){
@@ -281,6 +294,7 @@ var linktoyoutube =  document.getElementById('linktoyoutube');
 var linktoyoutuberon =  document.getElementById('linktoyoutuberon');
 var linktogame =  document.getElementById('linktogame');
 var linktomedium =  document.getElementById('linktomedium');
+var linktomalle =  document.getElementById('linktomalle');
 var linktovizgooglefit = document.getElementById('linktovizgooglefit');
 var linktovizgooglefittryme = document.getElementById('linktovizgooglefittryme');
 
@@ -332,7 +346,7 @@ function loadVideos(){
 	videoTexture.minFilter = THREE.LinearFilter;
 	videoTexture.magFilter = THREE.LinearFilter;
 	
-	var movieMaterial = new THREE.MeshBasicMaterial( { map: videoTexture, color:new THREE.Color(0.5,0.5,0.5)} );
+	var movieMaterial = new THREE.MeshBasicMaterial( { map: videoTexture, color:new THREE.Color(0.6,0.6,0.6)} );
 	var movieGeometry = new THREE.PlaneGeometry( 2.3, 1.2, 4, 4 );
 	var movieScreen = new THREE.Mesh( movieGeometry, movieMaterial );
     movieScreen.position.set( -1.39, 1.37, -0.39 );
@@ -520,6 +534,12 @@ function loadTexts(){
         penpages[3].add(text);
         materials[text.uuid] = text.material;
 
+        var text = createText(font, "Ä", x+1.4, y-0.75, z+0.6,"linktomalle", 0.15);
+        text.material.opacity = 1.0;
+        meshes.push(text);
+        penpages[4].add(text);
+        materials[text.uuid] = text.material;
+
         var text = createText(font, "Ä", x+1.4, y-0.75, z+0.6,"linktosmelly", 0.15);
         text.material.opacity = 1.0;
         meshes.push(text);
@@ -593,6 +613,14 @@ function loadTexts(){
         } ));
         penpages[1].add(text);
         
+        var text = createText(font, "MALL-E", x+1, y+0.3, z-0.1, "", 0.15, new THREE.MeshBasicMaterial( {
+            color: 0xffffff,
+            transparent: true,
+            opacity: 1.0,
+            side: THREE.DoubleSide
+        } ));
+        penpages[4].add(text);
+
         var text = createText(font, "ROCK OR NOT?", x+1, y+0.3, z-0.1, "", 0.15, new THREE.MeshBasicMaterial( {
             color: 0xffffff,
             transparent: true,
@@ -621,11 +649,16 @@ function loadTexts(){
         penpages[3].add(text);
         materials[text.uuid] = text.material;
 
-    
         var text = createText(font, "WebGL, three.js", x+0.7, y-0.4, z+0.56, "", 0.05);
         text.material.opacity = 1.0;
         meshes.push(text);
         penpages[0].add(text);
+        materials[text.uuid] = text.material;
+
+        var text = createText(font, "Java Spring Boot, MySql,\nThymeleaf", x+0.8, y-0.4, z+0.56, "", 0.05);
+        text.material.opacity = 1.0;
+        meshes.push(text);
+        penpages[4].add(text);
         materials[text.uuid] = text.material;
 
         var text = createText(font, "machine learning, python, \nsci-kit learn, librosa", x+0.8, y-0.4, z+0.56, "", 0.05);
@@ -656,6 +689,14 @@ function loadTexts(){
         meshes.push(text);
         homepagegroup.add(text);
 
+        hello = createText(font, "Online Shopping System", 0.8, 1.5, -0.1, "", 0.05, new THREE.MeshBasicMaterial( {
+            color: 0xffffff,
+            transparent: true,
+            opacity: 1.0,
+            side: THREE.DoubleSide
+        } ));
+        penpages[4].add(hello);
+        
         hello = createText(font, "Visualize your Google Fit Data!", 0.8, 1.5, -0.1, "", 0.05, new THREE.MeshBasicMaterial( {
             color: 0xffffff,
             transparent: true,
@@ -696,6 +737,8 @@ function loadTexts(){
     mailpagegroup.visible=false;
     scene.add(penpages[0]);
     penpages[0].visible=false;
+    scene.add(penpages[4]);
+    penpages[4].visible=false;
     scene.add(penpages[1]);
     penpages[1].visible=false;
     scene.add(penpages[2]);
@@ -1066,7 +1109,8 @@ function animate() {
     // Get the time elapsed since the last frame
     var delta = clock.getDelta();
     requestAnimationFrame( animate );
-    if(meshes.length==281){
+    console.log(meshes.length);
+    if(meshes.length==283){
         canvas.display='block';
         slide.style.display='none';
         loading.style.display='none';
@@ -1186,6 +1230,10 @@ function onDocumentMouseMove( event ) {
                 document.body.style.cursor = "pointer"
                 linkhover.position.set(object.position.x, object.position.y+0.03, object.position.z);
             }
+            else if(object.name=="linktomalle" && currentpenpage==4){
+                document.body.style.cursor = "pointer"
+                linkhover.position.set(object.position.x, object.position.y+0.03, object.position.z);
+            }
             else if(object.name=="linktogame"){
                 document.body.style.cursor = "pointer"
             }
@@ -1220,6 +1268,9 @@ function onDocumentMouseMove( event ) {
                 else if(currentpenpage==3 && currentpage!=1){
                     video.src = "./src/videos/vizgooglefit.mp4";video.load();video.play();
                 }
+                else if(currentpenpage==4 && currentpage!=1){
+                    video.src = "./src/videos/malle.mp4";video.load();video.play();
+                }
                 currentpage=1;
             }
             else if(object.name=="page2"){
@@ -1230,6 +1281,9 @@ function onDocumentMouseMove( event ) {
                 }
                 else if(currentpenpage==1 && currentpage!=2){
                     video.src = "./src/videos/tt.mp4";video.load();video.play();
+                }
+                else if(currentpenpage==4 && currentpage!=2){
+                    video.src = "./src/videos/malle2.mp4";video.load();video.play();
                 }
                 else if(currentpenpage==2 && currentpage!=2){
                     video.src = "./src/videos/rockornot2.mp4";video.load();video.play();
@@ -1244,6 +1298,9 @@ function onDocumentMouseMove( event ) {
                 }
                 else if(currentpenpage==1 && currentpage!=3){
                     video.src = "./src/videos/tt3.mp4";video.load();video.play();
+                }
+                else if(currentpenpage==4 && currentpage!=3){
+                    video.src = "./src/videos/malle3.mp4";video.load();video.play();
                 }
                 else if(currentpenpage==2 && currentpage!=3){
                     video.src = "./src/videos/rockornot3.mp4";video.load();video.play();
