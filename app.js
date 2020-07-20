@@ -114,7 +114,7 @@ bloomLayer.set(BLOOM_SCENE);
 
 var home, pen, mail;
 var homepagegroup = new THREE.Group();
-var penpages = [new THREE.Group(),new THREE.Group(),new THREE.Group(),new THREE.Group(), new THREE.Group()];
+var penpages = [new THREE.Group(),new THREE.Group(),new THREE.Group(),new THREE.Group(),new THREE.Group(), new THREE.Group()];
 var penpagegroup = new THREE.Group();
 var currentpenpage = 0;
 var mailpagegroup = new THREE.Group();
@@ -156,36 +156,41 @@ function onDocumentMouseClick( event ) {
                 if(object.name=="nextpenpage"){
                     penpages[currentpenpage].visible=false;
                     currentpenpage+=1;
-                    if(currentpenpage==5) {
-                        currentpenpage = 3;
+                    if(currentpenpage==6) {
+                        currentpenpage = 5;
                         nextmesh.material.color=new THREE.Color(0.8, 0.8, 0.8);
                     }
-                    else if(currentpenpage==1) {
+                    else if(currentpenpage==2) {
                         currentpage=0;
                         pageselector.position.x=-2.03;
                         prevmesh.material.color=new THREE.Color(0.02,0.02, 0.02);                    
                         video.src = "./src/videos/tt2.mp4"; video.load(); video.play();
                     }
-                    else if(currentpenpage==3) {
+                    else if(currentpenpage==4) {
                         currentpage=0;
                         pageselector.position.x=-2.03;
                         prevmesh.material.color=new THREE.Color(0.02,0.02, 0.02);                    
                         video.src = "./src/videos/vizgooglefit.mp4"; video.load(); video.play();
                     }
-                    else if(currentpenpage==0){
+                    else if(currentpenpage==1){
                         pageselector.position.x=-2.03;
                         currentpage=0;
                         video.src = "./src/videos/cat.mp4"; video.load(); video.play();
                     }
-                    else if(currentpenpage==2){
+                    else if(currentpenpage==3){
                         pageselector.position.x=-2.03;
                         currentpage=0;
                         video.src = "./src/videos/rockornot.mp4"; video.load(); video.play();
                     }
-                    else if(currentpenpage==4){
+                    else if(currentpenpage==5){
                         pageselector.position.x=-2.03;
                         currentpage=0;
                         video.src = "./src/videos/malle.mp4"; video.load(); video.play();
+                    }
+                    else if(currentpenpage==0){
+                        pageselector.position.x=-2.03;
+                        currentpage=0;
+                        video.src = "./src/videos/Echost Teaser.mp4"; video.load(); video.play();
                     }
                     penpages[currentpenpage].visible=true;
 
@@ -198,33 +203,37 @@ function onDocumentMouseClick( event ) {
                         currentpenpage=0;
                         prevmesh.material.color=new THREE.Color(0.8, 0.8, 0.8);
                     }
-                    else if(currentpenpage==3) {
+                    else if(currentpenpage==4) {
                         pageselector.position.x=-2.03;
                         currentpage=0;
                         nextmesh.material.color=new THREE.Color(0.02, 0.02, 0.02);
                         video.src = "./src/videos/vizgooglefit.mp4"; video.load(); video.play();
                     }
-                    else if(currentpenpage==2){
+                    else if(currentpenpage==3){
                         pageselector.position.x=-2.03;
                         currentpage=0;
                         video.src = "./src/videos/rockornot.mp4"; video.load(); video.play();
                     }
-                    else if(currentpenpage==1){
+                    else if(currentpenpage==2){
                         pageselector.position.x=-2.03;
                         currentpage=0;
                         video.src = "./src/videos/tt2.mp4"; video.load(); video.play();
                     }
-                    else if(currentpenpage==0) {
+                    else if(currentpenpage==1) {
                         pageselector.position.x=-2.03;
                         currentpage=0;
                         video.src = "./src/videos/cat.mp4"; video.load(); video.play();
                     }
-                    else if(currentpenpage==4) {
+                    else if(currentpenpage==5) {
                         pageselector.position.x=-2.03;
                         currentpage=0;
                         video.src = "./src/videos/malle.mp4"; video.load(); video.play();
                     }
-                    
+                    else if(currentpenpage==0) {
+                        pageselector.position.x=-2.03;
+                        currentpage=0;
+                        video.src = "./src/videos/Echost Teaser.mp4"; video.load(); video.play();
+                    }
                     penpages[currentpenpage].visible=true;
                 }
             }
@@ -260,6 +269,9 @@ function onDocumentMouseClick( event ) {
                 }
                 else if(object.name=="linktomalle"){
                     linktomalle.click();
+                }
+                else if(object.name=="linktoechost"){
+                    linktoechost.click();
                 }
             }            
        }
@@ -297,6 +309,7 @@ var linktomedium =  document.getElementById('linktomedium');
 var linktomalle =  document.getElementById('linktomalle');
 var linktovizgooglefit = document.getElementById('linktovizgooglefit');
 var linktovizgooglefittryme = document.getElementById('linktovizgooglefittryme');
+var linktoechost = document.getElementById('linktoechost');
 
 var materials = {};
 
@@ -331,7 +344,7 @@ function loadVideos(){
 	video = document.createElement( 'video' );
     video.src = "./src/videos/home.mp4";
     video.loop = true;
-    video.muted = true;
+    //video.muted = true;
 	video.load(); // must call after setting/changing source
     video.play();
     videoImage = document.createElement( 'canvas' );
@@ -392,19 +405,19 @@ function loadTexts(){
         var text = createText(font, "try me!", x+1.1, y-0.75, z+0.6,"linktovizgooglefittryme", 0.1);
         text.material.opacity = 1.0;
         meshes.push(text);
-        penpages[3].add(text);
+        penpages[4].add(text);
         materials[text.uuid] = text.material;
 
         var text = createText(font, "try me!", x+1.1, y-0.75, z+0.6,"linktogame", 0.1);
         text.material.opacity = 1.0;
         meshes.push(text);
-        penpages[0].add(text);
+        penpages[1].add(text);
         materials[text.uuid] = text.material;
         
         var text = createText(font, "read me!", x+1.1, y-0.75, z+0.6,"linktomedium", 0.1);
         text.material.opacity = 1.0;
         meshes.push(text);
-        penpages[2].add(text);
+        penpages[3].add(text);
         materials[text.uuid] = text.material;
         
         var text = createText(font, "& a senior computer science student", -1.3, 1.0, -0.1, "", 0.1, new THREE.MeshBasicMaterial( {
@@ -531,43 +544,49 @@ function loadTexts(){
         var text = createText(font, "Ä", x+1.4, y-0.75, z+0.6,"linktovizgooglefit", 0.15);
         text.material.opacity = 1.0;
         meshes.push(text);
-        penpages[3].add(text);
+        penpages[4].add(text);
         materials[text.uuid] = text.material;
 
         var text = createText(font, "Ä", x+1.4, y-0.75, z+0.6,"linktomalle", 0.15);
         text.material.opacity = 1.0;
         meshes.push(text);
-        penpages[4].add(text);
+        penpages[5].add(text);
         materials[text.uuid] = text.material;
 
         var text = createText(font, "Ä", x+1.4, y-0.75, z+0.6,"linktosmelly", 0.15);
         text.material.opacity = 1.0;
         meshes.push(text);
-        penpages[0].add(text);
+        penpages[1].add(text);
         materials[text.uuid] = text.material;
         
         var text = createText(font, "Ä", x+1.4, y-0.75, z+0.6,"linktorockornot", 0.15);
         text.material.opacity = 1.0;
         meshes.push(text);
-        penpages[2].add(text);
+        penpages[3].add(text);
         materials[text.uuid] = text.material;
 
         var text = createText(font, "Ä", x+1.4, y-0.75, z+0.6,"linktotomayto", 0.15);
         text.material.opacity = 1.0;
         meshes.push(text);
-        penpages[1].add(text);
+        penpages[2].add(text);
         materials[text.uuid] = text.material;
         
         var text = createText(font, "y", x+1.6, y-0.75, z+0.6,"linktoyoutube", 0.15);
         text.material.opacity = 1.0;
         meshes.push(text);
-        penpages[1].add(text);
+        penpages[2].add(text);
         materials[text.uuid] = text.material;
 
         var text = createText(font, "y", x+1.6, y-0.75, z+0.6,"linktoyoutuberon", 0.15);
         text.material.opacity = 1.0;
         meshes.push(text);
-        penpages[2].add(text);
+        penpages[3].add(text);
+        materials[text.uuid] = text.material;
+
+        var text = createText(font, "y", x+1.6, y-0.75, z+0.6,"linktoechost", 0.15);
+        text.material.opacity = 1.0;
+        meshes.push(text);
+        penpages[0].add(text);
         materials[text.uuid] = text.material;
 
         var text = createText(font, "Ä", x+0.9, y-0.85, z+0.6,"linktogithub", 0.15);
@@ -581,6 +600,8 @@ function loadTexts(){
         meshes.push(text);
         mailpagegroup.add(text);
         materials[text.uuid] = text.material;
+
+        
     });
 
     loader.load( './src/fonts/Playfair Display_Regular.json', function ( font ) {
@@ -596,6 +617,13 @@ function loadTexts(){
         text.rotation.y = 0.4;
         homepagegroup.add(text);
 
+        var text = createText(font, "ECHOST", x+0.6, y+0.3, z-0.1, "", 0.15, new THREE.MeshBasicMaterial( {
+            color: 0xffffff,
+            transparent: true,
+            opacity: 1.0,
+            side: THREE.DoubleSide
+        } ));
+        penpages[0].add(text);
 
         var text = createText(font, "SMELLY CAT", x+1.1, y+0.2, z-0.1, "", 0.2, new THREE.MeshBasicMaterial( {
             color: 0xffffff,
@@ -603,15 +631,15 @@ function loadTexts(){
             opacity: 1.0,
             side: THREE.DoubleSide
         } ));
-        penpages[0].add(text);
-
+        penpages[1].add(text);
+  
         var text = createText(font, "TOMAYTOMAHTO", x+1.15, y+0.3, z-0.1, "", 0.15, new THREE.MeshBasicMaterial( {
             color: 0xffffff,
             transparent: true,
             opacity: 1.0,
             side: THREE.DoubleSide
         } ));
-        penpages[1].add(text);
+        penpages[2].add(text);
         
         var text = createText(font, "MALL-E", x+0.8, y+0.3, z-0.1, "", 0.15, new THREE.MeshBasicMaterial( {
             color: 0xffffff,
@@ -619,7 +647,7 @@ function loadTexts(){
             opacity: 1.0,
             side: THREE.DoubleSide
         } ));
-        penpages[4].add(text);
+        penpages[5].add(text);
 
         var text = createText(font, "ROCK OR NOT?", x+1, y+0.3, z-0.1, "", 0.15, new THREE.MeshBasicMaterial( {
             color: 0xffffff,
@@ -627,7 +655,7 @@ function loadTexts(){
             opacity: 1.0,
             side: THREE.DoubleSide
         } ));
-        penpages[2].add(text);
+        penpages[3].add(text);
 
         var text = createText(font, "vizGoogleFit", x+0.9, y+0.3, z-0.1, "", 0.15, new THREE.MeshBasicMaterial( {
             color: 0xffffff,
@@ -635,7 +663,7 @@ function loadTexts(){
             opacity: 1.0,
             side: THREE.DoubleSide
         } ));
-        penpages[3].add(text);
+        penpages[4].add(text);
 
         var text = createText(font, "Reach me!", x+1.5, y+0.1, z-0.1, "", 0.15, new THREE.MeshNormalMaterial( {} ));
         mailpagegroup.add(text);
@@ -643,34 +671,40 @@ function loadTexts(){
 
     loader.load( './src/fonts/Titillium_Regular.json', function ( font ) {
 
-        var text = createText(font, "D3.js", x+0.5, y-0.4, z+0.56, "", 0.05);
-        text.material.opacity = 1.0;
-        meshes.push(text);
-        penpages[3].add(text);
-        materials[text.uuid] = text.material;
-
-        var text = createText(font, "WebGL, three.js", x+0.7, y-0.4, z+0.56, "", 0.05);
+        var text = createText(font, "Unity, Blender", x+0.7, y-0.4, z+0.56, "", 0.05);
         text.material.opacity = 1.0;
         meshes.push(text);
         penpages[0].add(text);
         materials[text.uuid] = text.material;
 
-        var text = createText(font, "Java Spring Boot, MySql,\nThymeleaf", x+0.8, y-0.4, z+0.56, "", 0.05);
+        var text = createText(font, "D3.js", x+0.5, y-0.4, z+0.56, "", 0.05);
         text.material.opacity = 1.0;
         meshes.push(text);
         penpages[4].add(text);
+        materials[text.uuid] = text.material;
+
+        var text = createText(font, "WebGL, three.js", x+0.7, y-0.4, z+0.56, "", 0.05);
+        text.material.opacity = 1.0;
+        meshes.push(text);
+        penpages[1].add(text);
+        materials[text.uuid] = text.material;
+
+        var text = createText(font, "Java Spring Boot, MySql,\nThymeleaf", x+0.8, y-0.4, z+0.56, "", 0.05);
+        text.material.opacity = 1.0;
+        meshes.push(text);
+        penpages[5].add(text);
+        materials[text.uuid] = text.material;
+
+        var text = createText(font, "machine learning, python, \nsci-kit learn, librosa", x+0.8, y-0.4, z+0.56, "", 0.05);
+        text.material.opacity = 1.0;
+        meshes.push(text);
+        penpages[3].add(text);
         materials[text.uuid] = text.material;
 
         var text = createText(font, "machine learning, python, \nsci-kit learn, librosa", x+0.8, y-0.4, z+0.56, "", 0.05);
         text.material.opacity = 1.0;
         meshes.push(text);
         penpages[2].add(text);
-        materials[text.uuid] = text.material;
-
-        var text = createText(font, "machine learning, python, \nsci-kit learn, librosa", x+0.8, y-0.4, z+0.56, "", 0.05);
-        text.material.opacity = 1.0;
-        meshes.push(text);
-        penpages[1].add(text);
         materials[text.uuid] = text.material;
         
         hello = createText(font, "I ' m  D e f n e  T u n ç e r", -1.2, 1.2, 0.0, "", 0.1, new THREE.MeshBasicMaterial( {
@@ -689,13 +723,21 @@ function loadTexts(){
         meshes.push(text);
         homepagegroup.add(text);
 
+        hello = createText(font, "Developed an indie RPG game:\n UI, quest system, save & load, inventory,\ninteraction with NPC and objects,\n dialogue system, skills, animations, cutscene.", 0.9, 1.6, -0.1, "", 0.05, new THREE.MeshBasicMaterial( {
+            color: 0xffffff,
+            transparent: true,
+            opacity: 1.0,
+            side: THREE.DoubleSide
+        } ));
+        penpages[0].add(hello);
+
         hello = createText(font, "Online Shopping System", 0.8, 1.5, -0.1, "", 0.05, new THREE.MeshBasicMaterial( {
             color: 0xffffff,
             transparent: true,
             opacity: 1.0,
             side: THREE.DoubleSide
         } ));
-        penpages[4].add(hello);
+        penpages[5].add(hello);
         
         hello = createText(font, "Visualize your Google Fit Data!", 0.8, 1.5, -0.1, "", 0.05, new THREE.MeshBasicMaterial( {
             color: 0xffffff,
@@ -703,7 +745,7 @@ function loadTexts(){
             opacity: 1.0,
             side: THREE.DoubleSide
         } ));
-        penpages[3].add(hello);
+        penpages[4].add(hello);
 
         hello = createText(font, "This sure does. | Music Genre Prediction System", 0.98, 1.5, -0.1, "", 0.05, new THREE.MeshBasicMaterial( {
             color: 0xffffff,
@@ -711,7 +753,7 @@ function loadTexts(){
             opacity: 1.0,
             side: THREE.DoubleSide
         } ));
-        penpages[2].add(hello);
+        penpages[3].add(hello);
 
         hello = createText(font, "Smelly Cat is a web gaming experience inspired\n by Bedroom In Arles by Vincent van Gogh.", 0.98, 1.4, -0.1, "", 0.05, new THREE.MeshBasicMaterial( {
             color: 0xffffff,
@@ -719,7 +761,7 @@ function loadTexts(){
             opacity: 1.0,
             side: THREE.DoubleSide
         } ));
-        penpages[0].add(hello);
+        penpages[1].add(hello);
         
         hello = createText(font, "Your Personal AI Pronunciation Coach\n Automatic mispronunciation detection system is trained\nand tested on the dataset for English language learners\nwith Turkish accent and reached an F1-score of 94%.", 1.1, 1.6, -0.1, "", 0.05, new THREE.MeshBasicMaterial( {
             color: 0xffffff,
@@ -727,7 +769,7 @@ function loadTexts(){
             opacity: 1.0,
             side: THREE.DoubleSide
         } ));
-        penpages[1].add(hello);
+        penpages[2].add(hello);
     });
     
     scene.add(penpagegroup);
@@ -739,6 +781,8 @@ function loadTexts(){
     penpages[0].visible=false;
     scene.add(penpages[4]);
     penpages[4].visible=false;
+    scene.add(penpages[5]);
+    penpages[5].visible=false;
     scene.add(penpages[1]);
     penpages[1].visible=false;
     scene.add(penpages[2]);
@@ -1109,8 +1153,8 @@ function animate() {
     // Get the time elapsed since the last frame
     var delta = clock.getDelta();
     requestAnimationFrame( animate );
-    console.log(meshes.length);
-    if(meshes.length==283){
+    console.log("Change below code with: ", meshes.length);
+    if(meshes.length==285){
         canvas.display='block';
         slide.style.display='none';
         loading.style.display='none';
@@ -1206,31 +1250,35 @@ function onDocumentMouseMove( event ) {
         var intersects = raycaster.intersectObjects( penpages[currentpenpage].children );
         if ( intersects.length > 0 ) {
             var object = intersects[ 0 ].object;
-            if(object.name=="linktosmelly" && currentpenpage==0){
+            if(object.name=="linktosmelly" && currentpenpage==1){
                 document.body.style.cursor = "pointer"
                 linkhover.position.set(object.position.x, object.position.y+0.03, object.position.z);
             }
-            else if(object.name=="linktotomayto" && currentpenpage==1){
+            else if(object.name=="linktotomayto" && currentpenpage==2){
                 document.body.style.cursor = "pointer"
                 linkhover.position.set(object.position.x, object.position.y+0.03, object.position.z);
             }
-            else if(object.name=="linktorockornot" && currentpenpage==2){
+            else if(object.name=="linktorockornot" && currentpenpage==3){
                 document.body.style.cursor = "pointer"
                 linkhover.position.set(object.position.x, object.position.y+0.03, object.position.z);
             }
-            else if(object.name=="linktoyoutube" && currentpenpage==1){
+            else if(object.name=="linktoyoutube" && currentpenpage==2){
                 document.body.style.cursor = "pointer"
                 linkhover.position.set(object.position.x, object.position.y+0.03, object.position.z);
             }
-            else if(object.name=="linktoyoutuberon" && currentpenpage==2){
+            else if(object.name=="linktoechost" && currentpenpage==0){
                 document.body.style.cursor = "pointer"
                 linkhover.position.set(object.position.x, object.position.y+0.03, object.position.z);
             }
-            else if(object.name=="linktovizgooglefit" && currentpenpage==3){
+            else if(object.name=="linktoyoutuberon" && currentpenpage==3){
                 document.body.style.cursor = "pointer"
                 linkhover.position.set(object.position.x, object.position.y+0.03, object.position.z);
             }
-            else if(object.name=="linktomalle" && currentpenpage==4){
+            else if(object.name=="linktovizgooglefit" && currentpenpage==4){
+                document.body.style.cursor = "pointer"
+                linkhover.position.set(object.position.x, object.position.y+0.03, object.position.z);
+            }
+            else if(object.name=="linktomalle" && currentpenpage==5){
                 document.body.style.cursor = "pointer"
                 linkhover.position.set(object.position.x, object.position.y+0.03, object.position.z);
             }
@@ -1257,18 +1305,21 @@ function onDocumentMouseMove( event ) {
                 document.body.style.cursor = "pointer"
                 pageselector.position.x=-2.03;
                 if(currentpenpage==0 && currentpage!=1){
-                    video.src = "./src/videos/cat.mp4";video.load();video.play();
+                    video.src = "./src/videos/Echost Teaser.mp4";video.load();video.play();
                 }
                 else if(currentpenpage==1 && currentpage!=1){
-                    video.src = "./src/videos/tt2.mp4";video.load();video.play();
+                    video.src = "./src/videos/cat.mp4";video.load();video.play();
                 }
                 else if(currentpenpage==2 && currentpage!=1){
-                    video.src = "./src/videos/rockornot.mp4";video.load();video.play();
+                    video.src = "./src/videos/tt2.mp4";video.load();video.play();
                 }
                 else if(currentpenpage==3 && currentpage!=1){
-                    video.src = "./src/videos/vizgooglefit.mp4";video.load();video.play();
+                    video.src = "./src/videos/rockornot.mp4";video.load();video.play();
                 }
                 else if(currentpenpage==4 && currentpage!=1){
+                    video.src = "./src/videos/vizgooglefit.mp4";video.load();video.play();
+                }
+                else if(currentpenpage==5 && currentpage!=1){
                     video.src = "./src/videos/malle.mp4";video.load();video.play();
                 }
                 currentpage=1;
@@ -1276,16 +1327,16 @@ function onDocumentMouseMove( event ) {
             else if(object.name=="page2"){
                 document.body.style.cursor = "pointer"
                 pageselector.position.x=-1.88;
-                if(currentpenpage==0 && currentpage!=2){
+                if(currentpenpage==1 && currentpage!=2){
                     video.src = "./src/videos/cat2.mp4";video.load();video.play();
                 }
-                else if(currentpenpage==1 && currentpage!=2){
+                else if(currentpenpage==2 && currentpage!=2){
                     video.src = "./src/videos/tt.mp4";video.load();video.play();
                 }
-                else if(currentpenpage==4 && currentpage!=2){
+                else if(currentpenpage==5 && currentpage!=2){
                     video.src = "./src/videos/malle2.mp4";video.load();video.play();
                 }
-                else if(currentpenpage==2 && currentpage!=2){
+                else if(currentpenpage==3 && currentpage!=2){
                     video.src = "./src/videos/rockornot2.mp4";video.load();video.play();
                 }
                 currentpage=2;
@@ -1293,16 +1344,16 @@ function onDocumentMouseMove( event ) {
             else if(object.name=="page3"){
                 document.body.style.cursor = "pointer"
                 pageselector.position.x=-1.73;
-                if(currentpenpage==0 && currentpage!=3){
+                if(currentpenpage==1 && currentpage!=3){
                     video.src = "./src/videos/cat3.mp4";video.load();video.play();
                 }
-                else if(currentpenpage==1 && currentpage!=3){
+                else if(currentpenpage==2 && currentpage!=3){
                     video.src = "./src/videos/tt3.mp4";video.load();video.play();
                 }
-                else if(currentpenpage==4 && currentpage!=3){
+                else if(currentpenpage==5 && currentpage!=3){
                     video.src = "./src/videos/malle3.mp4";video.load();video.play();
                 }
-                else if(currentpenpage==2 && currentpage!=3){
+                else if(currentpenpage==3 && currentpage!=3){
                     video.src = "./src/videos/rockornot3.mp4";video.load();video.play();
                 }
                 currentpage=3;
@@ -1377,8 +1428,8 @@ function onDocumentMouseMove( event ) {
                     penpages[currentpenpage].visible=true;
                     penpagegroup.visible=true;
                     mailpagegroup.visible=false;
-                    if(currentpenpage==0) video.src = "./src/videos/cat.mp4";
-                    if(currentpenpage==1) video.src = "./src/videos/tt.mp4";
+                    if(currentpenpage==0) video.src = "./src/videos/Echost Teaser.mp4";
+                    if(currentpenpage==1) video.src = "./src/videos/cat.mp4";
                     video.load(); // must call after setting/changing source
                     video.play();
                 }
