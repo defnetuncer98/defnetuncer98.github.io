@@ -112,12 +112,15 @@ var BLOOM_SCENE = 1;
 var bloomLayer = new THREE.Layers();
 bloomLayer.set(BLOOM_SCENE);
 
-var home, pen, mail;
+var home, pen, mail, art;
 var homepagegroup = new THREE.Group();
 var penpages = [new THREE.Group(),new THREE.Group(),new THREE.Group(),new THREE.Group(),new THREE.Group(), new THREE.Group()];
 var penpagegroup = new THREE.Group();
 var currentpenpage = 0;
+var currentartpage = 0;
 var mailpagegroup = new THREE.Group();
+var artpagegroup = new THREE.Group();
+
 
 function onDocumentMouseClick( event ) {
        event.preventDefault();
@@ -292,6 +295,56 @@ function onDocumentMouseClick( event ) {
                 mailto.click();
             }
         }
+        else if(nowactive=="art"){
+            var intersects = raycaster.intersectObjects( artpagegroup.children );
+            if ( intersects.length > 0 ) {
+                var object = intersects[ 0 ].object;
+                if(object.name=="nextartpage"){
+                    currentartpage+=1;
+                    if(currentartpage==4) {
+                        currentartpage = 3;
+                        nextmeshart.material.color=new THREE.Color(0.8, 0.8, 0.8);
+                    }
+                    else if(currentartpage==0){
+                        sketchfab1.style.display="block";
+                    }
+                    else if(currentartpage==1){
+                        sketchfab1.style.display="none";
+                        sketchfab2.style.display="block";
+                    }    
+                    else if(currentartpage==2){
+                        sketchfab2.style.display="none";
+                        sketchfab3.style.display="block";
+                    }
+                    else if(currentartpage==3){
+                        sketchfab3.style.display="none";
+                        sketchfab4.style.display="block";
+                    }              
+                }
+                else if(object.name=="prevartpage"){
+                    currentartpage-=1;
+                    if(currentartpage==-1) {
+                        currentartpage=0;
+                        prevmeshart.material.color=new THREE.Color(0.8, 0.8, 0.8);
+                    }
+                    else if(currentartpage==0){
+                        sketchfab2.style.display="none";
+                        sketchfab1.style.display="block";
+                    }
+                    else if(currentartpage==1){
+                        sketchfab3.style.display="none";
+                        sketchfab2.style.display="block";
+                    }    
+                    else if(currentartpage==2){
+                        sketchfab4.style.display="none";
+                        sketchfab3.style.display="block";
+                    }
+                    else if(currentartpage==3){
+                        sketchfab4.style.display="block";
+                    }    
+                }
+            }
+        }
     }
 }
 
@@ -310,7 +363,11 @@ var linktomalle =  document.getElementById('linktomalle');
 var linktovizgooglefit = document.getElementById('linktovizgooglefit');
 var linktovizgooglefittryme = document.getElementById('linktovizgooglefittryme');
 var linktoechost = document.getElementById('linktoechost');
-
+var sketchfab1 = document.getElementById('sketchfab1');
+var sketchfab2 = document.getElementById('sketchfab2');
+var sketchfab3 = document.getElementById('sketchfab3');
+var sketchfab4 = document.getElementById('sketchfab4');
+var sketchfabmodels = document.getElementById('sketchfab-models');
 var materials = {};
 
 var matLite = new THREE.MeshBasicMaterial( {
@@ -401,6 +458,34 @@ function loadTexts(){
     var x = navigatormesh.position.x;
     var y = navigatormesh.position.y;
     var z = navigatormesh.position.z;
+    loader.load( './src/fonts/arrow.json', function ( font ) {
+        var text = createText(font, "G", x+0.8, y-0.7, z+0.6);
+        text.rotateZ(2);
+        text.material.opacity = 1.0;
+        meshes.push(text);
+        penpages[0].add(text);
+        materials[text.uuid] = text.material;
+        
+        text = createText(font, "¡", 1.05, 0.35, 0.5, name="next",0.15);
+        //text.layers.enable(BLOOM_SCENE);
+        meshes.push(text);
+        playergroup.add( text );
+        materials[text.uuid] = text.material;
+
+        text = createText(font, "{", 0.9, 0.35, 0.5, name="play",0.15);
+        //text.layers.enable(BLOOM_SCENE);
+        meshes.push(text);
+        playergroup.add( text );
+        materials[text.uuid] = text.material;
+
+        text = createText(font, "~", 0.75, 0.35, 0.5, name="prev",0.15);
+        //text.layers.enable(BLOOM_SCENE);
+        playergroup.add( text );
+        playergroup.visible=false;
+        meshes.push(text);
+        scene.add(playergroup);
+        materials[text.uuid] = text.material;
+    });
     loader.load( './src/fonts/Hippotamia.json', function ( font ) {
         var text = createText(font, "try me!", x+1.1, y-0.75, z+0.6,"linktovizgooglefittryme", 0.1);
         text.material.opacity = 1.0;
@@ -412,6 +497,12 @@ function loadTexts(){
         text.material.opacity = 1.0;
         meshes.push(text);
         penpages[1].add(text);
+        materials[text.uuid] = text.material;
+
+        var text = createText(font, "wait for it!", x+1.1, y-0.75, z+0.6, 0.1);
+        text.material.opacity = 1.0;
+        meshes.push(text);
+        penpages[0].add(text);
         materials[text.uuid] = text.material;
         
         var text = createText(font, "read me!", x+1.1, y-0.75, z+0.6,"linktomedium", 0.1);
@@ -453,6 +544,12 @@ function loadTexts(){
         text.material.opacity = 1.0;
         text.rotation.y = 0.4;
         penpagegroup.add(text);
+
+        pen = createText(font, "</>", x, y - 0.05, z+0.04, "pen");
+        pen.material.opacity = 1.0;
+        meshes.push(pen);
+        materials[pen.uuid] = pen.material;
+        navgroup.add(pen);
     });
     loader.load( './src/fonts/player.json', function ( font ) {
         var text;
@@ -462,32 +559,19 @@ function loadTexts(){
         pageselector.rotation.y = 0.4;
         penpagegroup.add(pageselector);
 
-        text = createText(font, "B", 1.0, 0.35, 0.5, name="next");
-        //text.layers.enable(BLOOM_SCENE);
-        meshes.push(text);
-        playergroup.add( text );
-        materials[text.uuid] = text.material;
-
-        text = createText(font, "C", 0.9, 0.35, 0.5, name="play");
-        //text.layers.enable(BLOOM_SCENE);
-        meshes.push(text);
-        playergroup.add( text );
-        materials[text.uuid] = text.material;
-
-        text = createText(font, "A", 0.8, 0.35, 0.5, name="prev");
-        //text.layers.enable(BLOOM_SCENE);
-        playergroup.add( text );
-        playergroup.visible=false;
-        meshes.push(text);
-        scene.add(playergroup);
-        materials[text.uuid] = text.material;
-
         whiterectangle = createText(font, "I", navigatormesh.position.x, navigatormesh.position.y+0.1, navigatormesh.position.z+0.4, name="", 0.25);
         whiterectangle.material.opacity = 1.0;
         meshes.push(whiterectangle);
         scene.add(whiterectangle);
         materials[whiterectangle.uuid] = whiterectangle.material;
 
+    });
+    loader.load( './src/fonts/crazy.json', function ( font ) {
+        art = createText(font, "B", x, y-0.25, z+0.04, "art",0.15);
+        art.material.opacity = 1.0;
+        meshes.push(art);
+        materials[art.uuid] = art.material;
+        navgroup.add(art);
     });
 
     loader.load( './src/fonts/icons.json', function ( font ) {
@@ -497,13 +581,7 @@ function loadTexts(){
         materials[home.uuid] = home.material;
         navgroup.add(home);
 
-        pen = createText(font, "e", x, y - 0.05, z+0.04, "pen");
-        pen.material.opacity = 1.0;
-        meshes.push(pen);
-        materials[pen.uuid] = pen.material;
-        navgroup.add(pen);
-
-        mail = createText(font, "m", x, y-0.25, z+0.04, "mail");
+        mail = createText(font, "m", x, y-0.45, z+0.04, "mail");
         mail.material.opacity = 1.0;
         meshes.push(mail);
         navgroup.add(mail);
@@ -521,6 +599,18 @@ function loadTexts(){
         text.material.opacity = 1.0;
         meshes.push(text);
         penpagegroup.add(text);
+        materials[text.uuid] = text.material;
+
+        var text = createText(font, ">", x+1.95, y-1.07, z+0.3, "nextartpage");
+        text.material.opacity = 1.0;
+        meshes.push(text);
+        artpagegroup.add(text);
+        materials[text.uuid] = text.material;
+
+        text = createText(font, "<", x+1.75, y-1.07, z+0.3, "prevartpage");
+        text.material.opacity = 1.0;
+        meshes.push(text);
+        artpagegroup.add(text);
         materials[text.uuid] = text.material;
         
         var text = createText(font, "m", x+0.7, y-0.87, z+0.6,"mailto", 0.13);
@@ -775,8 +865,11 @@ function loadTexts(){
     scene.add(penpagegroup);
     scene.add(homepagegroup);
     scene.add(mailpagegroup);
+    scene.add(artpagegroup);
     penpagegroup.visible=false;
+    artpagegroup.visible=false;
     mailpagegroup.visible=false;
+    
     scene.add(penpages[0]);
     penpages[0].visible=false;
     scene.add(penpages[4]);
@@ -794,7 +887,7 @@ function loadTexts(){
 
 var hello;
 var activemesh, navigatormesh;
-var nextmesh, prevmesh;
+var nextmesh, prevmesh, nextmeshart, prevmeshart;
 
 function loadMeshes(){
     phonescreen = new THREE.Mesh( new THREE.PlaneBufferGeometry(), new THREE.MeshStandardMaterial( { color: new THREE.Color(0,0,0), roughness:0.1, metalness:0.1 } ) );
@@ -876,6 +969,30 @@ function loadMeshes(){
     penpagegroup.add(prevmesh);
     meshes.push(prevmesh);
     materials[prevmesh.uuid] = prevmesh.material;
+
+    nextmeshart = new THREE.Mesh( new THREE.CircleBufferGeometry(0.09, 32),
+    new THREE.MeshStandardMaterial( {
+            color: new THREE.Color(0.02,0.02,0.02), 
+            roughness:1.0,
+            metalness:0.0,
+    } ) );
+    nextmeshart.position.set(posx+2.0, posy-1, posz+0.2);
+    nextmeshart.name = "nextartpage";
+    artpagegroup.add(nextmeshart);
+    meshes.push(nextmeshart);
+    materials[nextmeshart.uuid] = nextmeshart.material;
+
+    prevmeshart = new THREE.Mesh( new THREE.CircleBufferGeometry(0.09, 32),
+    new THREE.MeshStandardMaterial( {
+            color: new THREE.Color(0.02,0.02,0.02), 
+            roughness:1.0,
+            metalness:0.0,
+    } ) );
+    prevmeshart.position.set(posx+1.8, posy-1, posz+0.2);
+    prevmeshart.name = "prevartpage";
+    artpagegroup.add(prevmeshart);
+    meshes.push(prevmeshart);
+    materials[prevmeshart.uuid] = prevmeshart.material;
 
     var mesh = new THREE.Mesh( new THREE.CircleBufferGeometry(0.12, 32),
     new THREE.MeshStandardMaterial( {
@@ -1154,7 +1271,7 @@ function animate() {
     var delta = clock.getDelta();
     requestAnimationFrame( animate );
     console.log("Change below code with: ", meshes.length);
-    if(meshes.length==285){
+    if(meshes.length==292){
         canvas.display='block';
         slide.style.display='none';
         loading.style.display='none';
@@ -1381,6 +1498,18 @@ function onDocumentMouseMove( event ) {
             }
         }
     }
+    else if(nowactive=="art"){
+        var intersects = raycaster.intersectObjects( artpagegroup.children );
+        if ( intersects.length > 0 ) {
+            var object = intersects[ 0 ].object;
+            if(object.name=="nextartpage"){
+                document.body.style.cursor = "pointer"
+            }
+            else if(object.name=="prevartpage"){
+                document.body.style.cursor = "pointer"
+            }
+        }   
+    }
 
     raycaster.setFromCamera( mouse, camera );
     var intersects = raycaster.intersectObjects( navgroup.children );
@@ -1399,17 +1528,20 @@ function onDocumentMouseMove( event ) {
                 playertext.visible=false;
                 if(object.name=="home" && nowactive!="home"){
                     def.visible=false;
+                    sketchfabmodels.style.display="none";
                     document.body.style.cursor = "pointer"
                     nowactive = "home";
                     activemesh.position.y = navigatormesh.position.y + 0.2 ;
                     home.position.z = navigatormesh.position.z+0.20;
                     pen.position.z = navigatormesh.position.z+0.04;
                     mail.position.z = navigatormesh.position.z+0.04;
+                    art.position.z = navigatormesh.position.z+0.04;
                     whiterectangle.position.y =  navigatormesh.position.y + 0.1;
-                    homepagegroup.visible=true;
                     penpages[currentpenpage].visible=false;
                     penpagegroup.visible=false;
                     mailpagegroup.visible=false;
+                    artpagegroup.visible=false;
+                    homepagegroup.visible=true;
                     screen.material = screenmaterial;
                     video.src = "./src/videos/home.mp4";
                     video.load(); // must call after setting/changing source
@@ -1417,17 +1549,20 @@ function onDocumentMouseMove( event ) {
                 }
                 else if(object.name=="pen" && nowactive!="pen"){
                     def.visible=false;
+                    sketchfabmodels.style.display="none";
                     document.body.style.cursor = "pointer"
                     nowactive = "pen";
                     activemesh.position.y = navigatormesh.position.y + 0.2 - 0.2;
                     home.position.z = navigatormesh.position.z+0.04;
                     pen.position.z = navigatormesh.position.z+0.20;
                     mail.position.z = navigatormesh.position.z+0.04;                    
+                    art.position.z = navigatormesh.position.z+0.04;
                     whiterectangle.position.y =  navigatormesh.position.y - 0.1;                    
                     homepagegroup.visible=false;
-                    penpages[currentpenpage].visible=true;
-                    penpagegroup.visible=true;
                     mailpagegroup.visible=false;
+                    artpagegroup.visible=false;
+                    penpagegroup.visible=true;
+                    penpages[currentpenpage].visible=true;
                     if(currentpenpage==0) video.src = "./src/videos/Echost Teaser.mp4";
                     if(currentpenpage==1) video.src = "./src/videos/cat.mp4";
                     video.load(); // must call after setting/changing source
@@ -1435,16 +1570,19 @@ function onDocumentMouseMove( event ) {
                 }
                 else if(object.name=="mail" && nowactive!="mail"){
                     def.visible=true;
+                    sketchfabmodels.style.display="none";
                     document.body.style.cursor = "pointer"
                     nowactive = "mail";
-                    activemesh.position.y = navigatormesh.position.y + 0.2 - 0.4;
+                    activemesh.position.y = navigatormesh.position.y + 0.2 - 0.6;
                     home.position.z = navigatormesh.position.z+0.04;
                     pen.position.z = navigatormesh.position.z+0.04;
                     mail.position.z = navigatormesh.position.z+0.20;
-                    whiterectangle.position.y =  navigatormesh.position.y - 0.3;
+                    art.position.z = navigatormesh.position.z+0.04;
+                    whiterectangle.position.y =  navigatormesh.position.y - 0.5;
                     homepagegroup.visible=false;
                     penpages[currentpenpage].visible=false;
                     penpagegroup.visible=false;
+                    artpagegroup.visible=false;
                     mailpagegroup.visible=true;
                     video.src = "./src/videos/resume.mp4";
                     video.load(); // must call after setting/changing source
@@ -1452,6 +1590,25 @@ function onDocumentMouseMove( event ) {
                     //var loader = new THREE.TextureLoader();
                     //var texture = loader.load('./src/images/resume.png');
                     //screen.material = new THREE.MeshBasicMaterial({map:texture, color:new THREE.Color(0.7,0.7,0.7)})
+                }
+                else if(object.name=="art" && nowactive!="art"){
+                    document.body.style.cursor = "pointer"
+                    nowactive = "art";
+                    sketchfabmodels.style.display="block";
+                    if(currentartpage==0){
+                        sketchfab1.style.display="block";
+                    }
+                    activemesh.position.y = navigatormesh.position.y + 0.2 - 0.4;
+                    home.position.z = navigatormesh.position.z+0.04;
+                    pen.position.z = navigatormesh.position.z+0.04;
+                    mail.position.z = navigatormesh.position.z+0.04;
+                    art.position.z = navigatormesh.position.z+0.20;
+                    whiterectangle.position.y =  navigatormesh.position.y - 0.3;
+                    homepagegroup.visible=false;
+                    penpages[currentpenpage].visible=false;
+                    penpagegroup.visible=false;
+                    mailpagegroup.visible=false;                    
+                    artpagegroup.visible=true;
                 }
             }
     }
