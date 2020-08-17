@@ -117,10 +117,10 @@ var homepagegroup = new THREE.Group();
 var penpages = [new THREE.Group(),new THREE.Group(),new THREE.Group(),new THREE.Group(),new THREE.Group(), new THREE.Group()];
 var penpagegroup = new THREE.Group();
 var currentpenpage = 0;
-var currentartpage = 0;
+//var currentartpage = 0;
 var mailpagegroup = new THREE.Group();
-var artpagegroup = new THREE.Group();
-
+//var artpagegroup = new THREE.Group();
+//var artpages = [new THREE.Group(),new THREE.Group(),new THREE.Group(),new THREE.Group(),new THREE.Group()];
 
 function onDocumentMouseClick( event ) {
        event.preventDefault();
@@ -288,6 +288,9 @@ function onDocumentMouseClick( event ) {
             else if(object.name=="linktoresume"){
                 linktoresume.click();
             }
+            else if(object.name=="linktoartstation"){
+                linktoartstation.click();
+            }
             else if(object.name=="linktolinkedin"){
                 linktolinkedin.click();
             }
@@ -295,79 +298,75 @@ function onDocumentMouseClick( event ) {
                 mailto.click();
             }
         }
-        else if(nowactive=="art"){
-            var intersects = raycaster.intersectObjects( artpagegroup.children );
-            if ( intersects.length > 0 ) {
-                var object = intersects[ 0 ].object;
-                if(object.name=="nextartpage"){
-                    currentartpage+=1;
-                    if(currentartpage==4) {
-                        currentartpage = 3;
-                        nextmeshart.material.color=new THREE.Color(0.8, 0.8, 0.8);
-                    }
-                    else if(currentartpage==0){
-                        sketchfab1.style.display="block";
-                    }
-                    else if(currentartpage==1){
-                        sketchfab1.style.display="none";
-                        sketchfab2.style.display="block";
-                    }    
-                    else if(currentartpage==2){
-                        sketchfab2.style.display="none";
-                        sketchfab3.style.display="block";
-                    }
-                    else if(currentartpage==3){
-                        sketchfab3.style.display="none";
-                        sketchfab4.style.display="block";
-                    }              
-                }
-                else if(object.name=="prevartpage"){
-                    currentartpage-=1;
-                    if(currentartpage==-1) {
-                        currentartpage=0;
-                        prevmeshart.material.color=new THREE.Color(0.8, 0.8, 0.8);
-                    }
-                    else if(currentartpage==0){
-                        sketchfab2.style.display="none";
-                        sketchfab1.style.display="block";
-                    }
-                    else if(currentartpage==1){
-                        sketchfab3.style.display="none";
-                        sketchfab2.style.display="block";
-                    }    
-                    else if(currentartpage==2){
-                        sketchfab4.style.display="none";
-                        sketchfab3.style.display="block";
-                    }
-                    else if(currentartpage==3){
-                        sketchfab4.style.display="block";
-                    }    
-                }
-            }
-        }
+        // else if(nowactive=="art"){
+        //     var intersects = raycaster.intersectObjects( artpagegroup.children );
+        //     if ( intersects.length > 0 ) {
+        //         var object = intersects[ 0 ].object;
+        //         if(object.name=="nextartpage"){
+        //             currentartpage+=1;
+        //             if(currentartpage==4) {
+        //                 currentartpage = 3;
+        //                 nextmeshart.material.color=new THREE.Color(0.8, 0.8, 0.8);
+        //             }
+        //             else if(currentartpage==0){
+        //                 sketchfabmodels.setAttribute("src",sketchfab1);
+        //             }
+        //             else if(currentartpage==1){
+        //                 sketchfabmodels.setAttribute("src",sketchfab2);
+        //             }    
+        //             else if(currentartpage==2){
+        //                 sketchfabmodels.setAttribute("src",sketchfab3);
+        //             }
+        //             else if(currentartpage==3){
+        //                 sketchfabmodels.setAttribute("src",sketchfab4);
+        //             }         
+        //         }
+        //         else if(object.name=="prevartpage"){
+        //             currentartpage-=1;
+        //             if(currentartpage==-1) {
+        //                 currentartpage=0;
+        //                 prevmeshart.material.color=new THREE.Color(0.8, 0.8, 0.8);
+        //             }
+        //             else if(currentartpage==0){
+        //                 sketchfabmodels.setAttribute("src",sketchfab1);
+        //             }
+        //             else if(currentartpage==1){
+        //                 sketchfabmodels.setAttribute("src",sketchfab2);
+        //             }    
+        //             else if(currentartpage==2){
+        //                 sketchfabmodels.setAttribute("src",sketchfab3);
+        //             }
+        //             else if(currentartpage==3){
+        //                 sketchfabmodels.setAttribute("src",sketchfab4);
+        //             } 
+        //         }
+        //     }
+        // }
     }
 }
 
-var linktoresume =  document.getElementById('linktoresume');
-var linktogithub =  document.getElementById('linktogithub');
-var mailto =  document.getElementById('mailto');
-var linktolinkedin =  document.getElementById('linktolinkedin');
-var linktosmelly =  document.getElementById('linktosmelly');
-var linktorockornot =  document.getElementById('linktorockornot');
-var linktotomayto =  document.getElementById('linktotomayto');
-var linktoyoutube =  document.getElementById('linktoyoutube');
-var linktoyoutuberon =  document.getElementById('linktoyoutuberon');
-var linktogame =  document.getElementById('linktogame');
-var linktomedium =  document.getElementById('linktomedium');
-var linktomalle =  document.getElementById('linktomalle');
-var linktovizgooglefit = document.getElementById('linktovizgooglefit');
-var linktovizgooglefittryme = document.getElementById('linktovizgooglefittryme');
-var linktoechost = document.getElementById('linktoechost');
-var sketchfab1 = document.getElementById('sketchfab1');
-var sketchfab2 = document.getElementById('sketchfab2');
-var sketchfab3 = document.getElementById('sketchfab3');
-var sketchfab4 = document.getElementById('sketchfab4');
-var sketchfabmodels = document.getElementById('sketchfab-models');
+const linktoresume =  document.getElementById('linktoresume');
+const linktoartstation =  document.getElementById('linktoartstation');
+const linktogithub =  document.getElementById('linktogithub');
+const mailto =  document.getElementById('mailto');
+const linktolinkedin =  document.getElementById('linktolinkedin');
+const linktosmelly =  document.getElementById('linktosmelly');
+const linktorockornot =  document.getElementById('linktorockornot');
+const linktotomayto =  document.getElementById('linktotomayto');
+const linktoyoutube =  document.getElementById('linktoyoutube');
+const linktoyoutuberon =  document.getElementById('linktoyoutuberon');
+const linktogame =  document.getElementById('linktogame');
+const linktomedium =  document.getElementById('linktomedium');
+const linktomalle =  document.getElementById('linktomalle');
+const linktovizgooglefit = document.getElementById('linktovizgooglefit');
+const linktovizgooglefittryme = document.getElementById('linktovizgooglefittryme');
+const linktoechost = document.getElementById('linktoechost');
+const sketchfab1 = "https://sketchfab.com/models/bc2acf3031384aad9ba089ccbd290a80/embed?autostart=1&amp;ui_controls=1&amp;ui_infos=1&amp;ui_inspector=1&amp;ui_stop=1&amp;ui_watermark=1&amp;ui_watermark_link=1";
+const sketchfab2 = "https://sketchfab.com/models/272fb272407547b3a252663175ce602d/embed?autostart=1&amp;ui_controls=1&amp;ui_infos=1&amp;ui_inspector=1&amp;ui_stop=1&amp;ui_watermark=1&amp;ui_watermark_link=1";
+const sketchfab3 = "https://sketchfab.com/models/045661f51acc4df5bfe1df3d731b8a53/embed?autostart=1&amp;ui_controls=1&amp;ui_infos=1&amp;ui_inspector=1&amp;ui_stop=1&amp;ui_watermark=1&amp;ui_watermark_link=1";
+const sketchfab4 = "https://sketchfab.com/models/d2f8daa7e9a446aabe6b3716d2c7ef31/embed?autostart=1&amp;ui_controls=1&amp;ui_infos=1&amp;ui_inspector=1&amp;ui_stop=1&amp;ui_watermark=1&amp;ui_watermark_link=1";
+const sketchfabmodels = document.getElementById('sketchfab-models');
+
 var materials = {};
 
 var matLite = new THREE.MeshBasicMaterial( {
@@ -566,13 +565,13 @@ function loadTexts(){
         materials[whiterectangle.uuid] = whiterectangle.material;
 
     });
-    loader.load( './src/fonts/crazy.json', function ( font ) {
-        art = createText(font, "B", x, y-0.25, z+0.04, "art",0.15);
-        art.material.opacity = 1.0;
-        meshes.push(art);
-        materials[art.uuid] = art.material;
-        navgroup.add(art);
-    });
+    // loader.load( './src/fonts/crazy.json', function ( font ) {
+    //     art = createText(font, "B", x, y-0.25, z+0.04, "art",0.15);
+    //     art.material.opacity = 1.0;
+    //     meshes.push(art);
+    //     materials[art.uuid] = art.material;
+    //     navgroup.add(art);
+    // });
 
     loader.load( './src/fonts/icons.json', function ( font ) {
         home = createText(font, "h", x, y + 0.15, z+0.20, "home");
@@ -581,7 +580,7 @@ function loadTexts(){
         materials[home.uuid] = home.material;
         navgroup.add(home);
 
-        mail = createText(font, "m", x, y-0.45, z+0.04, "mail");
+        mail = createText(font, "m", x, y-0.25, z+0.04, "mail");
         mail.material.opacity = 1.0;
         meshes.push(mail);
         navgroup.add(mail);
@@ -601,17 +600,17 @@ function loadTexts(){
         penpagegroup.add(text);
         materials[text.uuid] = text.material;
 
-        var text = createText(font, ">", x+1.95, y-1.07, z+0.3, "nextartpage");
-        text.material.opacity = 1.0;
-        meshes.push(text);
-        artpagegroup.add(text);
-        materials[text.uuid] = text.material;
+        // var text = createText(font, ">", x+1.95, y-1.07, z+0.3, "nextartpage");
+        // text.material.opacity = 1.0;
+        // meshes.push(text);
+        // //artpagegroup.add(text);
+        // materials[text.uuid] = text.material;
 
-        text = createText(font, "<", x+1.75, y-1.07, z+0.3, "prevartpage");
-        text.material.opacity = 1.0;
-        meshes.push(text);
-        artpagegroup.add(text);
-        materials[text.uuid] = text.material;
+        // text = createText(font, "<", x+1.75, y-1.07, z+0.3, "prevartpage");
+        // text.material.opacity = 1.0;
+        // meshes.push(text);
+        // //artpagegroup.add(text);
+        // materials[text.uuid] = text.material;
         
         var text = createText(font, "m", x+0.7, y-0.87, z+0.6,"mailto", 0.13);
         text.material.opacity = 1.0;
@@ -757,9 +756,15 @@ function loadTexts(){
 
         var text = createText(font, "Reach me!", x+1.5, y+0.1, z-0.1, "", 0.15, new THREE.MeshNormalMaterial( {} ));
         mailpagegroup.add(text);
-    });
+    }); 
 
-    loader.load( './src/fonts/Titillium_Regular.json', function ( font ) {
+        loader.load( './src/fonts/Titillium_Regular.json', function ( font ) {
+
+        var text = createText(font, "ARTSTATION",  x+1.5, y-0.85, z+0.6,"linktoartstation", 0.07);
+        text.material.opacity = 1.0;
+        meshes.push(text);
+        mailpagegroup.add(text);
+        materials[text.uuid] = text.material;
 
         var text = createText(font, "Unity, Blender", x+0.7, y-0.4, z+0.56, "", 0.05);
         text.material.opacity = 1.0;
@@ -865,9 +870,9 @@ function loadTexts(){
     scene.add(penpagegroup);
     scene.add(homepagegroup);
     scene.add(mailpagegroup);
-    scene.add(artpagegroup);
+    //scene.add(artpagegroup);
     penpagegroup.visible=false;
-    artpagegroup.visible=false;
+    //artpagegroup.visible=false;
     mailpagegroup.visible=false;
     
     scene.add(penpages[0]);
@@ -970,29 +975,29 @@ function loadMeshes(){
     meshes.push(prevmesh);
     materials[prevmesh.uuid] = prevmesh.material;
 
-    nextmeshart = new THREE.Mesh( new THREE.CircleBufferGeometry(0.09, 32),
-    new THREE.MeshStandardMaterial( {
-            color: new THREE.Color(0.02,0.02,0.02), 
-            roughness:1.0,
-            metalness:0.0,
-    } ) );
-    nextmeshart.position.set(posx+2.0, posy-1, posz+0.2);
-    nextmeshart.name = "nextartpage";
-    artpagegroup.add(nextmeshart);
-    meshes.push(nextmeshart);
-    materials[nextmeshart.uuid] = nextmeshart.material;
+    // nextmeshart = new THREE.Mesh( new THREE.CircleBufferGeometry(0.09, 32),
+    // new THREE.MeshStandardMaterial( {
+    //         color: new THREE.Color(0.02,0.02,0.02), 
+    //         roughness:1.0,
+    //         metalness:0.0,
+    // } ) );
+    // nextmeshart.position.set(posx+2.0, posy-1, posz+0.2);
+    // nextmeshart.name = "nextartpage";
+    // artpagegroup.add(nextmeshart);
+    // meshes.push(nextmeshart);
+    // materials[nextmeshart.uuid] = nextmeshart.material;
 
-    prevmeshart = new THREE.Mesh( new THREE.CircleBufferGeometry(0.09, 32),
-    new THREE.MeshStandardMaterial( {
-            color: new THREE.Color(0.02,0.02,0.02), 
-            roughness:1.0,
-            metalness:0.0,
-    } ) );
-    prevmeshart.position.set(posx+1.8, posy-1, posz+0.2);
-    prevmeshart.name = "prevartpage";
-    artpagegroup.add(prevmeshart);
-    meshes.push(prevmeshart);
-    materials[prevmeshart.uuid] = prevmeshart.material;
+    // prevmeshart = new THREE.Mesh( new THREE.CircleBufferGeometry(0.09, 32),
+    // new THREE.MeshStandardMaterial( {
+    //         color: new THREE.Color(0.02,0.02,0.02), 
+    //         roughness:1.0,
+    //         metalness:0.0,
+    // } ) );
+    // prevmeshart.position.set(posx+1.8, posy-1, posz+0.2);
+    // prevmeshart.name = "prevartpage";
+    // artpagegroup.add(prevmeshart);
+    // meshes.push(prevmeshart);
+    // materials[prevmeshart.uuid] = prevmeshart.material;
 
     var mesh = new THREE.Mesh( new THREE.CircleBufferGeometry(0.12, 32),
     new THREE.MeshStandardMaterial( {
@@ -1271,7 +1276,7 @@ function animate() {
     var delta = clock.getDelta();
     requestAnimationFrame( animate );
     console.log("Change below code with: ", meshes.length);
-    if(meshes.length==292){
+    if(meshes.length==288){
         canvas.display='block';
         slide.style.display='none';
         loading.style.display='none';
@@ -1492,24 +1497,28 @@ function onDocumentMouseMove( event ) {
                 linkhover.position.set(object.position.x, object.position.y+0.03, object.position.z);
                 document.body.style.cursor = "pointer"
             }
+            else if(object.name=="linktoartstation"){
+                linkhover.position.set(object.position.x, object.position.y+0.03, object.position.z);
+                document.body.style.cursor = "pointer"
+            }
             else if(object.name=="mailto"){
                 linkhover.position.set(object.position.x, object.position.y+0.03, object.position.z);
                 document.body.style.cursor = "pointer"
             }
         }
     }
-    else if(nowactive=="art"){
-        var intersects = raycaster.intersectObjects( artpagegroup.children );
-        if ( intersects.length > 0 ) {
-            var object = intersects[ 0 ].object;
-            if(object.name=="nextartpage"){
-                document.body.style.cursor = "pointer"
-            }
-            else if(object.name=="prevartpage"){
-                document.body.style.cursor = "pointer"
-            }
-        }   
-    }
+    // else if(nowactive=="art"){
+    //     var intersects = raycaster.intersectObjects( artpagegroup.children );
+    //     if ( intersects.length > 0 ) {
+    //         var object = intersects[ 0 ].object;
+    //         if(object.name=="nextartpage"){
+    //             document.body.style.cursor = "pointer"
+    //         }
+    //         else if(object.name=="prevartpage"){
+    //             document.body.style.cursor = "pointer"
+    //         }
+    //     }   
+    // }
 
     raycaster.setFromCamera( mouse, camera );
     var intersects = raycaster.intersectObjects( navgroup.children );
@@ -1535,12 +1544,12 @@ function onDocumentMouseMove( event ) {
                     home.position.z = navigatormesh.position.z+0.20;
                     pen.position.z = navigatormesh.position.z+0.04;
                     mail.position.z = navigatormesh.position.z+0.04;
-                    art.position.z = navigatormesh.position.z+0.04;
+                    //art.position.z = navigatormesh.position.z+0.04;
                     whiterectangle.position.y =  navigatormesh.position.y + 0.1;
                     penpages[currentpenpage].visible=false;
                     penpagegroup.visible=false;
                     mailpagegroup.visible=false;
-                    artpagegroup.visible=false;
+                    //artpagegroup.visible=false;
                     homepagegroup.visible=true;
                     screen.material = screenmaterial;
                     video.src = "./src/videos/home.mp4";
@@ -1556,11 +1565,11 @@ function onDocumentMouseMove( event ) {
                     home.position.z = navigatormesh.position.z+0.04;
                     pen.position.z = navigatormesh.position.z+0.20;
                     mail.position.z = navigatormesh.position.z+0.04;                    
-                    art.position.z = navigatormesh.position.z+0.04;
+                    //art.position.z = navigatormesh.position.z+0.04;
                     whiterectangle.position.y =  navigatormesh.position.y - 0.1;                    
                     homepagegroup.visible=false;
                     mailpagegroup.visible=false;
-                    artpagegroup.visible=false;
+                    //artpagegroup.visible=false;
                     penpagegroup.visible=true;
                     penpages[currentpenpage].visible=true;
                     if(currentpenpage==0) video.src = "./src/videos/Echost Teaser.mp4";
@@ -1573,16 +1582,16 @@ function onDocumentMouseMove( event ) {
                     sketchfabmodels.style.display="none";
                     document.body.style.cursor = "pointer"
                     nowactive = "mail";
-                    activemesh.position.y = navigatormesh.position.y + 0.2 - 0.6;
+                    activemesh.position.y = navigatormesh.position.y + 0.2 - 0.4;
                     home.position.z = navigatormesh.position.z+0.04;
                     pen.position.z = navigatormesh.position.z+0.04;
                     mail.position.z = navigatormesh.position.z+0.20;
-                    art.position.z = navigatormesh.position.z+0.04;
-                    whiterectangle.position.y =  navigatormesh.position.y - 0.5;
+                    //art.position.z = navigatormesh.position.z+0.04;
+                    whiterectangle.position.y =  navigatormesh.position.y - 0.3;
                     homepagegroup.visible=false;
                     penpages[currentpenpage].visible=false;
                     penpagegroup.visible=false;
-                    artpagegroup.visible=false;
+                    //artpagegroup.visible=false;
                     mailpagegroup.visible=true;
                     video.src = "./src/videos/resume.mp4";
                     video.load(); // must call after setting/changing source
@@ -1591,25 +1600,22 @@ function onDocumentMouseMove( event ) {
                     //var texture = loader.load('./src/images/resume.png');
                     //screen.material = new THREE.MeshBasicMaterial({map:texture, color:new THREE.Color(0.7,0.7,0.7)})
                 }
-                else if(object.name=="art" && nowactive!="art"){
-                    document.body.style.cursor = "pointer"
-                    nowactive = "art";
-                    sketchfabmodels.style.display="block";
-                    if(currentartpage==0){
-                        sketchfab1.style.display="block";
-                    }
-                    activemesh.position.y = navigatormesh.position.y + 0.2 - 0.4;
-                    home.position.z = navigatormesh.position.z+0.04;
-                    pen.position.z = navigatormesh.position.z+0.04;
-                    mail.position.z = navigatormesh.position.z+0.04;
-                    art.position.z = navigatormesh.position.z+0.20;
-                    whiterectangle.position.y =  navigatormesh.position.y - 0.3;
-                    homepagegroup.visible=false;
-                    penpages[currentpenpage].visible=false;
-                    penpagegroup.visible=false;
-                    mailpagegroup.visible=false;                    
-                    artpagegroup.visible=true;
-                }
+                // else if(object.name=="art" && nowactive!="art"){
+                //     document.body.style.cursor = "pointer"
+                //     nowactive = "art";
+                //     sketchfabmodels.style.display="block";
+                //     activemesh.position.y = navigatormesh.position.y + 0.2 - 0.4;
+                //     home.position.z = navigatormesh.position.z+0.04;
+                //     pen.position.z = navigatormesh.position.z+0.04;
+                //     mail.position.z = navigatormesh.position.z+0.04;
+                //     art.position.z = navigatormesh.position.z+0.20;
+                //     whiterectangle.position.y =  navigatormesh.position.y - 0.3;
+                //     homepagegroup.visible=false;
+                //     penpages[currentpenpage].visible=false;
+                //     penpagegroup.visible=false;
+                //     mailpagegroup.visible=false;                    
+                //     artpagegroup.visible=true;
+                // }
             }
     }
 
