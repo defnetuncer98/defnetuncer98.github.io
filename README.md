@@ -43,8 +43,10 @@ Then open [http://localhost:8123](http://localhost:8123). A server is required �
 browsers block ES-module imports from `file://` — and it must support **HTTP Range
 requests** or the videos will never load (`python -m http.server` does not; `serve.mjs` does).
 
-> ⚠️ `assets/trailer.mp4` is 89 MB. It streams fine, but compressing it (or swapping
-> the modal for a YouTube embed) would speed up the trailer on slow connections.
+All media is compressed for the web (ffmpeg: H.264 CRF 26–28 for video, WebP for the
+pitch drafts) — the whole v2 asset set is ~13 MB. Analytics are wired for
+[GoatCounter](https://www.goatcounter.com/) under the code `defnetuncer`; stats appear
+once that code is registered.
 
 ---
 

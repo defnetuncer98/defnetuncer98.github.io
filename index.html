@@ -7,8 +7,10 @@
 <meta name="description" content="Defne Tunçer — Senior Game Developer. Building with Unity since 2020 — 70+ shipped prototypes, 5 launched titles, and worlds made of cubes.">
 <meta property="og:title" content="Defne Tunçer — Game Developer">
 <meta property="og:description" content="Building with Unity since 2020 — 70+ shipped prototypes and worlds made of cubes.">
-<meta property="og:image" content="assets/mothvillage.png">
+<meta property="og:image" content="https://defnetuncer98.github.io/assets/mothvillage.jpg">
+<meta property="og:url" content="https://defnetuncer98.github.io/">
 <meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M16 3 28 10v12L16 29 4 22V10z' fill='%230a0f24'/%3E%3Cpath d='M16 3 28 10 16 17 4 10z' fill='%236ee7ff'/%3E%3Cpath d='M16 17v12L4 22V10z' fill='%232563a8'/%3E%3Cpath d='M16 17v12l12-7V10z' fill='%23164e78'/%3E%3C/svg%3E">
 <style>
   :root{
@@ -112,6 +114,10 @@
   .corner.tr{top:74px;right:14px;border-left:0;border-bottom:0}
   .corner.bl{bottom:14px;left:14px;border-right:0;border-top:0}
   .corner.br{bottom:14px;right:14px;border-left:0;border-top:0}
+  @media (max-width:640px){
+    .hero-hud{display:none}
+    .hero-ui{justify-content:flex-start;padding-top:92px}
+  }
 
   /* ---------- shared section chrome ---------- */
   section{position:relative;z-index:1;max-width:var(--max);margin:0 auto;padding:110px 24px 30px}
@@ -291,9 +297,9 @@
   .hobby-card{transition:transform .25s,box-shadow .25s}
   .hobby-card:hover{transform:translateY(-4px);box-shadow:0 14px 44px rgba(0,0,0,.5)}
   .hobby-media{display:block;position:relative}
-  .hobby-media img{width:100%;display:block;aspect-ratio:16/9;object-fit:cover;
+  .hobby-media img,.hobby-media video{width:100%;display:block;aspect-ratio:16/9;object-fit:cover;
     border-radius:6px 6px 0 0;filter:brightness(.92);transition:filter .3s}
-  .hobby-card:hover .hobby-media img{filter:brightness(1.06)}
+  .hobby-card:hover .hobby-media img,.hobby-card:hover .hobby-media video{filter:brightness(1.06)}
   .hobby-media .tag{position:absolute;right:12px;bottom:10px;font-family:var(--mono);font-size:10.5px;
     letter-spacing:.16em;text-transform:uppercase;color:var(--ink);background:rgba(6,9,26,.65);
     border:1px solid var(--line-soft);padding:3px 8px;border-radius:3px;backdrop-filter:blur(4px)}
@@ -504,7 +510,7 @@
         adventure through dimensions to find more. Will the Cube find what it seeks at the end of its
         journey — and will you be there to help?</p>
     <div class="feature-poster reveal" id="open-trailer" role="button" tabindex="0" aria-label="Play the A Cube Story trailer">
-      <img src="assets/mothvillage.png" alt="A Cube Story — the Moth Village at night: a glowing cube resting on dark stone pillars, surrounded by moths and firefly lights">
+      <img src="assets/mothvillage.jpg" alt="A Cube Story — the Moth Village at night: a glowing cube resting on dark stone pillars, surrounded by moths and firefly lights">
       <div class="poster-veil">
         <div class="play-btn"><svg width="26" height="26" viewBox="0 0 24 24" fill="#6ee7ff"><path d="M8 5v14l11-7z"/></svg></div>
       </div>
@@ -551,12 +557,12 @@
         <b>Blue Variable</b>, our studio-in-the-making, on our shared BLUE framework. Early drafts,
         straight from the pitch deck:</p>
       <div class="pf-strip reveal">
-        <div class="media-card"><img src="assets/pf_draft_01.png" alt="Purrfect Fit pitch draft — page 1" loading="lazy"><span class="tag">draft 01</span></div>
-        <div class="media-card"><img src="assets/pf_draft_02.png" alt="Purrfect Fit pitch draft — page 2" loading="lazy"><span class="tag">draft 02</span></div>
-        <div class="media-card"><img src="assets/pf_draft_03.png" alt="Purrfect Fit pitch draft — page 3" loading="lazy"><span class="tag">draft 03</span></div>
-        <div class="media-card"><img src="assets/pf_draft_04.png" alt="Purrfect Fit pitch draft — page 4" loading="lazy"><span class="tag">draft 04</span></div>
-        <div class="media-card"><img src="assets/pf_draft_05.png" alt="Purrfect Fit pitch draft — page 5" loading="lazy"><span class="tag">draft 05</span></div>
-        <div class="media-card"><img src="assets/pf_draft_06.png" alt="Purrfect Fit pitch draft — page 6" loading="lazy"><span class="tag">draft 06</span></div>
+        <div class="media-card"><img src="assets/pf_draft_01.webp" alt="Purrfect Fit pitch draft — page 1" loading="lazy"><span class="tag">draft 01</span></div>
+        <div class="media-card"><img src="assets/pf_draft_02.webp" alt="Purrfect Fit pitch draft — page 2" loading="lazy"><span class="tag">draft 02</span></div>
+        <div class="media-card"><img src="assets/pf_draft_03.webp" alt="Purrfect Fit pitch draft — page 3" loading="lazy"><span class="tag">draft 03</span></div>
+        <div class="media-card"><img src="assets/pf_draft_04.webp" alt="Purrfect Fit pitch draft — page 4" loading="lazy"><span class="tag">draft 04</span></div>
+        <div class="media-card"><img src="assets/pf_draft_05.webp" alt="Purrfect Fit pitch draft — page 5" loading="lazy"><span class="tag">draft 05</span></div>
+        <div class="media-card"><img src="assets/pf_draft_06.webp" alt="Purrfect Fit pitch draft — page 6" loading="lazy"><span class="tag">draft 06</span></div>
       </div>
       <div class="hero-actions reveal" style="margin-top:24px">
         <a class="btn primary" href="https://bluevariable.github.io/PurrfectFitDemo/" target="_blank" rel="noopener">play demo</a>
@@ -633,7 +639,7 @@
       </div>
       <div class="hobby-card panel reveal">
         <a class="hobby-media" href="https://sketchfab.com/defnetuncer98" target="_blank" rel="noopener" aria-label="Explore my models on Sketchfab">
-          <img src="assets/hobby_model.gif" alt="Trash.. or art? — one of my animated 3D dioramas" loading="lazy">
+          <video src="assets/hobby_model.mp4" autoplay muted loop playsinline aria-label="Trash.. or art? — one of my animated 3D dioramas"></video>
           <span class="tag">explore ↗</span>
         </a>
         <div class="hobby-body">
@@ -678,7 +684,7 @@
 <div id="trailer-modal" role="dialog" aria-modal="true" aria-label="A Cube Story trailer">
   <div class="modal-box">
     <button class="modal-close" id="close-trailer">close [esc]</button>
-    <video id="trailer-video" src="assets/trailer.mp4" poster="assets/mothvillage.png" controls preload="none"></video>
+    <video id="trailer-video" src="assets/trailer.mp4" poster="assets/mothvillage.jpg" controls preload="none"></video>
   </div>
 </div>
 
@@ -894,12 +900,13 @@ function frame(){
   const sc = Math.min(scrollY/Math.max(innerHeight,1), 1);
   const theta = CAM.theta + mouse.x*0.15 + Math.sin(t*0.07)*0.05;
   const phi = CAM.phi - mouse.y*0.06 + sc*0.12;
-  const rad = CAM.radius + sc*8;
-  // push the village right of center on wide screens (hero text sits left)
-  const shift = camera.aspect > 1.15 ? 3.4 : 0.6;
+  // portrait screens: pull back and look higher so the village sits below the hero text
+  const portrait = camera.aspect < 1.15;
+  const rad = CAM.radius + sc*8 + (portrait ? 9 : 0);
+  const shift = portrait ? 0.6 : 3.4;
   const look = new THREE.Vector3(
     camTarget.x - Math.sin(theta)*shift,
-    camTarget.y,
+    camTarget.y + (portrait ? 7 : 0),
     camTarget.z + Math.cos(theta)*shift
   );
   camera.position.set(
@@ -1132,5 +1139,6 @@ addEventListener('keydown', e => {
   if (mediaModal.classList.contains('open')) closeMedia();
 });
 </script>
+<script data-goatcounter="https://defnetuncer.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
 </body>
 </html>
