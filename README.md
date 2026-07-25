@@ -1,12 +1,62 @@
 # defnetuncer98.github.io 🖥️☕✨
 
-My personal portfolio — not a webpage with sections and scrollbars, but a fully **interactive 3D workspace** rendered in the browser with [Three.js](https://threejs.org/). Everything on the desk is clickable: flip through my projects, play some music, grab my resume.
+My personal portfolio, in two generations — both built with [Three.js](https://threejs.org/), by two very different kinds of author:
 
-**▶ Visit:** [defnetuncer98.github.io](https://defnetuncer98.github.io/)
+| | | |
+|---|---|---|
+| **v2** (current) | [defnetuncer98.github.io](https://defnetuncer98.github.io/) | 🤖 designed & built by **AI** (Claude), art-directed by the Moth Village from *A Cube Story* |
+| **v1** (2020) | [defnetuncer98.github.io/v1.html](https://defnetuncer98.github.io/v1.html) | 🧑‍🎨 **handmade by a human** — every model placement, bloom pass, and raycast tuned by hand |
 
-> 🦖 **Fun fact:** Hand-crafted in 2020, before AI coding assistants existed — every model placement, bloom pass, and raycast tuned by an actual human. 🙂
+---
 
-## What's on the Desk
+## v2 — The Moth Village 🌙
+
+A single-page portfolio whose hero is a live three.js scene inspired by the Moth Village
+render from [A Cube Story](https://github.com/BlueVariable/ACubeStory): a dark voxel
+amphitheater, a self-luminous cube, drifting fireflies and moths, amber window lights.
+The camera follows the mouse, and clicking the world sends a ripple through the pillars.
+
+Below the fold: A Cube Story with its trailer and in-engine captures, shipped titles
+(Color Bus Trip, Knit N Loop, Mayor Match…), the [Blue Variable](https://bluevariable.github.io/)
+studio corner, an open-source lab, and the full experience timeline.
+
+### Structure
+
+```
+.
+├── index.html            # The whole v2 site — HTML, CSS and JS in one file
+├── lib/three.module.js   # Three.js r160, vendored (works offline)
+├── assets/               # Curated media, all original A Cube Story work
+├── serve.mjs             # Dependency-free dev server with HTTP Range support
+├── view.cmd              # Windows: double-click to serve + open the site
+└── v1.html               # The 2020 portfolio (uses build/ and src/ below)
+```
+
+### Running locally
+
+```bash
+node serve.mjs 8123   # or double-click view.cmd on Windows
+```
+
+Then open [http://localhost:8123](http://localhost:8123). A server is required —
+browsers block ES-module imports from `file://` — and it must support **HTTP Range
+requests** or the videos will never load (`python -m http.server` does not; `serve.mjs` does).
+
+> ⚠️ `assets/trailer.mp4` is 89 MB. It streams fine, but compressing it (or swapping
+> the modal for a YouTube embed) would speed up the trailer on slow connections.
+
+---
+
+## v1 — The Desk 🦖
+
+Not a webpage with sections and scrollbars, but a fully **interactive 3D workspace**
+rendered in the browser. Everything on the desk is clickable: flip through my projects,
+play some music, grab my resume.
+
+> 🦖 **Fun fact:** Hand-crafted in 2020, before AI coding assistants existed — which is
+> exactly why it stays online next to its AI-built successor. 🙂
+
+### What's on the Desk
 
 - 🌀 **Animated hologram** — a glTF character animated with `THREE.AnimationMixer`, glowing via selective bloom
 - 📓 **Project notebook** — flip through pages of my projects, each playing a live video demo on a `VideoTexture`:
@@ -20,7 +70,7 @@ My personal portfolio — not a webpage with sections and scrollbars, but a full
 - ☕ **Coffee mug** — essential equipment
 - 🔗 **Clickable links** — GitHub, LinkedIn, ArtStation, Medium, mail, and my resume (PDF), all opened by clicking 3D objects in the scene
 
-## Under the Hood
+### Under the Hood
 
 | Technique | How it's used |
 |-----------|---------------|
@@ -31,37 +81,11 @@ My personal portfolio — not a webpage with sections and scrollbars, but a full
 | **Video textures** | Project demos are `<video>` elements streamed onto in-scene planes |
 | **3D typography** | Multiple JSON fonts (including custom icon fonts) rendered as text geometry |
 
-## Running Locally
+v1's engine lives in `app.js` (~1600 lines) with its assets under `src/` and
+`build/three.module.js` — untouched, exactly as shipped in 2020.
 
-No build tools needed — it's an ES-module app with Three.js included in the repo.
-
-```bash
-git clone https://github.com/defnetuncer98/defnetuncer98.github.io.git
-cd defnetuncer98.github.io
-
-# Any static server works (ES modules won't load from file://)
-python3 -m http.server 8000
-```
-
-Then open [http://localhost:8000](http://localhost:8000).
-
-## Project Structure
-
-```
-.
-├── index.html              # Entry point, hidden link buttons & loading screen
-├── app.js                  # The whole 3D experience (~1600 lines)
-├── build/three.module.js   # Three.js
-└── src/
-    ├── models/             # glTF/GLB assets (workspace, hologram, jet, coffee...)
-    ├── videos/             # Project demo clips used as textures
-    ├── fonts/              # JSON fonts for 3D text & icons
-    ├── sounds/             # Music player tracks
-    ├── images/             # Background, HDR environment map
-    ├── docs/               # Resume PDF
-    └── jsm/                # Three.js addons (loaders, postprocessing)
-```
+---
 
 ## Author
 
-**Defne Tunçer** — [Resume](https://defnetuncer98.github.io/src/docs/DEFNE%20TUNCER.pdf) · [GitHub](https://github.com/defnetuncer98) · [LinkedIn](https://linkedin.com/in/defnetuncer98) · [ArtStation](https://www.artstation.com/defnetuncer98) · [Medium](https://medium.com/@defnetuncer)
+**Defne Tunçer** — [Resume](https://defnetuncer98.github.io/src/docs/DEFNE%20TUNCER.pdf) · [GitHub](https://github.com/defnetuncer98) · [Blue Variable](https://github.com/BlueVariable) · [LinkedIn](https://linkedin.com/in/defnetuncer98) · [ArtStation](https://www.artstation.com/defnetuncer98) · [Medium](https://medium.com/@defnetuncer)
