@@ -660,10 +660,12 @@ for (let i = 0; i < winCount; i++){
 scene.add(windows);
 
 /* ---- the cube ---- */
-// unlit, self-luminous — scene lights must never shade the glowing cube.
+// unlit, self-luminous — neither scene lights nor fog may dim the glowing cube
+// (fog:false is critical: at ~25 units the FogExp2 otherwise darkens it ~50%,
+// making the glow sprite behind it brighter than the cube itself).
 // Subtle per-face cyan tints keep the isometric read without looking shadowed.
 // BoxGeometry group order: +x, -x, +y (top), -y, +z, -z
-const cubeFace = c => new THREE.MeshBasicMaterial({color:c});
+const cubeFace = c => new THREE.MeshBasicMaterial({color:c, fog:false});
 const cube = new THREE.Mesh(
   new THREE.BoxGeometry(1.7, 1.7, 1.7),
   [cubeFace(0xaee8fa), cubeFace(0x8fd8f2), cubeFace(0xdcf7ff),
