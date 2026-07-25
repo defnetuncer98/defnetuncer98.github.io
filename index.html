@@ -184,7 +184,7 @@
   .media-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
   @media (max-width:560px){.media-grid{grid-template-columns:1fr}}
   .media-card{position:relative;border-radius:6px;overflow:hidden;border:1px solid var(--line-soft);
-    background:#000;transition:border-color .25s}
+    background:#000;transition:border-color .25s;cursor:pointer}
   .media-card:hover{border-color:var(--cyan)}
   .media-card video,.media-card img{width:100%;display:block;aspect-ratio:16/9;object-fit:cover}
   .media-card .tag{position:absolute;left:12px;bottom:10px;font-family:var(--mono);font-size:10.5px;
@@ -192,11 +192,6 @@
     background:rgba(6,9,26,.65);border:1px solid var(--line-soft);
     padding:3px 8px;border-radius:3px;backdrop-filter:blur(4px)}
   .media-card.wide{grid-column:1/-1}
-  .ba{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line)}
-  .ba > div{position:relative;background:#000}
-  .ba video{width:100%;display:block;aspect-ratio:16/9;object-fit:cover}
-  .ba .tag{position:absolute;left:10px;bottom:8px}
-  .ba > div:last-child .tag{color:var(--amber);border-color:rgba(255,201,102,.35)}
 
   /* ---------- shipped ---------- */
   .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
@@ -290,12 +285,13 @@
   footer a{color:var(--amber);text-decoration:none;border-bottom:1px dotted rgba(255,201,102,.4)}
   footer a:hover{border-bottom-style:solid}
 
-  /* ---------- trailer modal ---------- */
-  #trailer-modal{position:fixed;inset:0;z-index:80;display:none;align-items:center;justify-content:center;
+  /* ---------- trailer + media modals ---------- */
+  #trailer-modal,#media-modal{position:fixed;inset:0;z-index:80;display:none;align-items:center;justify-content:center;
     background:rgba(3,5,14,.9);backdrop-filter:blur(10px);padding:4vmin}
-  #trailer-modal.open{display:flex}
+  #trailer-modal.open,#media-modal.open{display:flex}
   .modal-box{width:min(1100px,96vw);position:relative}
-  .modal-box video{width:100%;border:1px solid var(--line);border-radius:6px;display:block;
+  .modal-box video,.modal-box img{width:100%;max-height:86vh;object-fit:contain;
+    border:1px solid var(--line);border-radius:6px;display:block;background:#000;
     box-shadow:0 0 90px rgba(110,231,255,.18)}
   .modal-close{position:absolute;top:-44px;right:0;background:none;border:1px solid var(--line);
     color:var(--ink);font-family:var(--mono);font-size:12px;letter-spacing:.14em;
@@ -521,12 +517,10 @@
       <div class="media-grid reveal">
         <div class="media-card"><video src="assets/acs_village.mp4" muted loop playsinline preload="metadata"></video><span class="tag">moth village — flythrough</span></div>
         <div class="media-card"><video src="assets/acs_final.mp4" muted loop playsinline preload="metadata"></video><span class="tag">scene capture</span></div>
-        <div class="media-card wide">
-          <div class="ba">
-            <div><video src="assets/acs_before.mp4" muted loop playsinline preload="metadata"></video><span class="tag">lighting — before</span></div>
-            <div><video src="assets/acs_after.mp4" muted loop playsinline preload="metadata"></video><span class="tag">lighting — after</span></div>
-          </div>
-        </div>
+        <div class="media-card"><video src="assets/acs_scene01.mp4" muted loop playsinline preload="metadata"></video><span class="tag">scene 01</span></div>
+        <div class="media-card"><video src="assets/acs_mesh.mp4" muted loop playsinline preload="metadata"></video><span class="tag">mesh modification</span></div>
+        <div class="media-card"><video src="assets/acs_prologue1.mp4" muted loop playsinline preload="metadata"></video><span class="tag">prologue — i</span></div>
+        <div class="media-card"><video src="assets/acs_prologue2.mp4" muted loop playsinline preload="metadata"></video><span class="tag">prologue — ii</span></div>
         <div class="media-card"><video src="assets/acs_devlog.mp4" muted loop playsinline preload="metadata"></video><span class="tag">devlog cut</span></div>
         <div class="media-card"><img src="assets/a_cube_story.gif" alt="A Cube Story gameplay gif — the cube rolling through an isometric voxel scene" loading="lazy"><span class="tag">gameplay loop</span></div>
       </div>
@@ -590,10 +584,15 @@
         <p>"look at me! I'm made with ThreeJS 😁👀" — my first 3D portfolio, handmade by a human. This one was made by AI.</p>
         <div class="meta">three.js · glsl · 100% human</div>
       </a>
-      <a class="lab-card panel reveal" href="https://github.com/defnetuncer98/embedded-systems" target="_blank" rel="noopener">
-        <div class="name">embedded-systems</div>
-        <p>Bare-metal C on ARM Cortex-M (TM4C123) — interrupts, timers, and blinking things in Keil.</p>
-        <div class="meta">c · arm cortex-m</div>
+      <a class="lab-card panel reveal" href="https://github.com/Tomayto-Tomahto/demo" target="_blank" rel="noopener">
+        <div class="name">Tomayto-Tomahto</div>
+        <p>Mispronunciation detection for English learners with a Turkish accent — our senior design project, 94% F1.</p>
+        <div class="meta">machine learning · speech</div>
+      </a>
+      <a class="lab-card panel reveal" href="https://github.com/HUbbm409/rock-or-not" target="_blank" rel="noopener">
+        <div class="name">rock-or-not</div>
+        <p>Is it rock or not? Predicting music genres from audio features across a stack of ML methods.</p>
+        <div class="meta">machine learning · audio</div>
       </a>
     </div>
     </div>
@@ -622,6 +621,14 @@
   <div class="modal-box">
     <button class="modal-close" id="close-trailer">close [esc]</button>
     <video id="trailer-video" src="assets/trailer.mp4" poster="assets/mothvillage.png" controls preload="none"></video>
+  </div>
+</div>
+
+<!-- media lightbox -->
+<div id="media-modal" role="dialog" aria-modal="true" aria-label="Media viewer">
+  <div class="modal-box">
+    <button class="modal-close" id="close-media">close [esc]</button>
+    <div id="media-slot"></div>
   </div>
 </div>
 
@@ -1006,7 +1013,37 @@ const vio = new IntersectionObserver(es => es.forEach(e => {
   const v = e.target;
   if (e.isIntersecting){ v.play().catch(()=>{}); } else { v.pause(); }
 }), {threshold:0.35});
-document.querySelectorAll('.media-card video, .ba video').forEach(v => vio.observe(v));
+document.querySelectorAll('.media-card video').forEach(v => vio.observe(v));
+
+/* media lightbox — any media card opens large, like the trailer */
+const mediaModal = document.getElementById('media-modal');
+const mediaSlot = document.getElementById('media-slot');
+function closeMedia(){ mediaModal.classList.remove('open'); mediaSlot.innerHTML = ''; }
+document.querySelectorAll('.media-card').forEach(card => {
+  card.setAttribute('role', 'button');
+  card.setAttribute('tabindex', '0');
+  const open = () => {
+    const srcEl = card.querySelector('video, img');
+    if (!srcEl) return;
+    let el;
+    if (srcEl.tagName === 'VIDEO'){
+      el = document.createElement('video');
+      el.src = srcEl.getAttribute('src');
+      el.controls = true; el.autoplay = true; el.loop = true; el.playsInline = true;
+    } else {
+      el = document.createElement('img');
+      el.src = srcEl.getAttribute('src');
+      el.alt = srcEl.alt || '';
+    }
+    mediaSlot.innerHTML = '';
+    mediaSlot.appendChild(el);
+    mediaModal.classList.add('open');
+  };
+  card.addEventListener('click', open);
+  card.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); open(); } });
+});
+document.getElementById('close-media').addEventListener('click', closeMedia);
+mediaModal.addEventListener('click', e => { if (e.target === mediaModal) closeMedia(); });
 
 /* card tilt */
 if (matchMedia('(hover:hover) and (pointer:fine)').matches && !reduced){
@@ -1031,7 +1068,11 @@ openBtn.addEventListener('click', openTrailer);
 openBtn.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); openTrailer(); } });
 document.getElementById('close-trailer').addEventListener('click', closeTrailer);
 modal.addEventListener('click', e => { if (e.target === modal) closeTrailer(); });
-addEventListener('keydown', e => { if (e.key === 'Escape' && modal.classList.contains('open')) closeTrailer(); });
+addEventListener('keydown', e => {
+  if (e.key !== 'Escape') return;
+  if (modal.classList.contains('open')) closeTrailer();
+  if (mediaModal.classList.contains('open')) closeMedia();
+});
 </script>
 </body>
 </html>
