@@ -1,0 +1,116 @@
+﻿<!DOCTYPE html>
+<html>
+	<head>
+    <meta charset="utf-8">
+		<title>Defne Tunçer</title>
+                <link rel="shortcut icon" href="#">                
+		<style>
+        @font-face {
+            font-family: 'Titillium';
+            src: URL('./src/fonts/Titillium_Web/TitilliumWeb-Bold.ttf') format('truetype'),
+          }             
+
+        body {margin: 0; overflow:hidden; height:100%;
+              /*cursor: url('./src/images/cursor.png'), auto;*/
+            }
+        #loading {
+          position:absolute;
+          top:50%;
+          text-align:center;
+          border: 1px solid #ffffff;
+          width: 240px;
+          font-size: 400%;
+          color:white;
+          z-index: 100;
+          font-family: 'Titillium';
+          }   
+          .tech-slideshow {
+            height: 100%;
+            top:0;
+            left:0;
+            width: 100%;
+            margin: 0 auto;
+            position: absolute;
+            overflow: hidden;
+            transform: translate3d(0, 0, 0);
+          }
+
+          .tech-slideshow > div {
+            background: url('./src/images/background.png');
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 220%;
+            transform: translate3d(0, 0, 0);
+          }
+          .tech-slideshow .mover-1 {
+            animation: moveSlideshow 10s linear infinite;
+          }
+
+          @keyframes moveSlideshow {
+            100% { 
+              transform: translateX(-20%);  
+            }
+          }   
+		</style>
+	</head>
+	<body>
+            <iframe id="sketchfab-models" style="display:none;" title="A 3D model" width="640" height="480" src="https://sketchfab.com/models/bc2acf3031384aad9ba089ccbd290a80/embed?autostart=1&amp;ui_controls=1&amp;ui_infos=1&amp;ui_inspector=1&amp;ui_stop=1&amp;ui_watermark=1&amp;ui_watermark_link=1" frameborder="0" allow="autoplay; fullscreen; vr" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
+            <div id="slide" class="tech-slideshow"><div class="mover-1"></div></div>
+            <div id="container"></div>
+            <div style="align-items:center;display:flex;justify-content: center;"><p id="loading"></p></div>
+            <button id="linktoresume" style="display:none" onclick="window.open('./src/docs/DEFNE TUNCER.pdf','_blank')"></button>
+            <button id="mailto" style="display:none" onclick="window.open('mailto:defnetuncer98@gmail.com','_blank')"></button>
+            <button id="linktogithub" style="display:none" onclick="window.open('https://github.com/defnetuncer98','_blank')"></button>
+            <button id="linktolinkedin" style="display:none" onclick="window.open('https://linkedin.com/in/defnetuncer98','_blank')"></button>
+            <button id="linktogame" style="display:none" onclick="window.open('https://defnetuncer98.github.io/smellycat/','_blank')"></button>
+            <button id="linktoartstation" style="display:none" onclick="window.open('https://www.artstation.com/defnetuncer98','_blank')"></button>
+            <button id="linktosmelly" style="display:none" onclick="window.open('https://github.com/defnetuncer98/smellycat','_blank')"></button>
+            <button id="linktotomayto" style="display:none" onclick="window.open('https://github.com/Tomayto-Tomahto/demo','_blank')"></button>
+            <button id="linktorockornot" style="display:none" onclick="window.open('https://github.com/HUbbm409/rock-or-not','_blank')"></button>
+            <button id="linktoyoutube" style="display:none" onclick="window.open('https://www.youtube.com/watch?v=tlrknc6Zf6I','_blank')"></button>
+            <button id="linktoechost" style="display:none" onclick="window.open('https://www.youtube.com/watch?v=B2-HE7WCahc','_blank')"></button>
+            <button id="linktoyoutuberon" style="display:none" onclick="window.open('https://www.youtube.com/watch?v=JUi-dV562FM','_blank')"></button>
+            <button id="linktomedium" style="display:none" onclick="window.open('https://medium.com/@defnetuncer','_blank')"></button>
+            <button id="linktovizgooglefit" style="display:none" onclick="window.open('https://github.com/defnetuncer98/vizGoogleFit','_blank')"></button>
+            <button id="linktovizgooglefittryme" style="display:none" onclick="window.open('https://defnetuncer98.github.io/vizGoogleFit','_blank')"></button>
+            <button id="malle" style="display:none" onclick="window.open('https://github.com/HacettepeUniversityBBM384/mall-e','_blank')"></button>
+            <audio id="player" controls loop src='./src/sounds/St Francis - Josh Lippi & The Overtimers.mp3' style="display:none;" ></audio>
+            <script type="module" src="./app.js"></script>
+            <script type="x-shader/x-vertex" id="vertexshader">
+              varying vec2 vUv;
+        
+              void main() {
+        
+                vUv = uv;
+        
+                gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+        
+              }
+        
+            </script>
+        
+            <script type="x-shader/x-fragment" id="fragmentshader">
+        
+              uniform sampler2D baseTexture;
+              uniform sampler2D bloomTexture;
+        
+              varying vec2 vUv;
+        
+              vec4 getTexture( sampler2D texelToLinearTexture ) {
+        
+                return mapTexelToLinear( texture2D( texelToLinearTexture , vUv ) );
+        
+              }
+        
+              void main() {
+        
+                gl_FragColor = ( getTexture( baseTexture ) + vec4( 1.0 ) * getTexture( bloomTexture ) );
+        
+              }
+        
+            </script>
+        
+	</body>
+</html>
