@@ -285,6 +285,22 @@
   footer a{color:var(--amber);text-decoration:none;border-bottom:1px dotted rgba(255,201,102,.4)}
   footer a:hover{border-bottom-style:solid}
 
+  /* ---------- hobbies ---------- */
+  .hobby-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  @media (max-width:860px){.hobby-grid{grid-template-columns:1fr}}
+  .hobby-card{transition:transform .25s,box-shadow .25s}
+  .hobby-card:hover{transform:translateY(-4px);box-shadow:0 14px 44px rgba(0,0,0,.5)}
+  .hobby-media{display:block;position:relative}
+  .hobby-media img{width:100%;display:block;aspect-ratio:16/9;object-fit:cover;
+    border-radius:6px 6px 0 0;filter:brightness(.92);transition:filter .3s}
+  .hobby-card:hover .hobby-media img{filter:brightness(1.06)}
+  .hobby-media .tag{position:absolute;right:12px;bottom:10px;font-family:var(--mono);font-size:10.5px;
+    letter-spacing:.16em;text-transform:uppercase;color:var(--ink);background:rgba(6,9,26,.65);
+    border:1px solid var(--line-soft);padding:3px 8px;border-radius:3px;backdrop-filter:blur(4px)}
+  .hobby-body{padding:18px 20px 20px}
+  .hobby-body h3{font-size:18px;margin-bottom:6px}
+  .hobby-body p{color:var(--muted);font-size:14.5px;margin-bottom:14px;min-height:44px}
+
   /* ---------- trailer + media modals ---------- */
   #trailer-modal,#media-modal{position:fixed;inset:0;z-index:80;display:none;align-items:center;justify-content:center;
     background:rgba(3,5,14,.9);backdrop-filter:blur(10px);padding:4vmin}
@@ -312,6 +328,7 @@
       <a href="#experience">experience</a>
       <a href="#shipped">shipped</a>
       <a href="#projects">projects</a>
+      <a href="#hobbies">hobbies</a>
       <a href="#contact">contact</a>
       <a class="cta" href="https://defnetuncer98.github.io/src/docs/DEFNE%20TUNCER.pdf" target="_blank" rel="noopener">resume ↗</a>
     </div>
@@ -598,9 +615,50 @@
     </div>
   </section>
 
+  <!-- ============ HOBBIES ============ -->
+  <section id="hobbies">
+    <div class="sec-head reveal"><span class="sec-num">05</span><h2>Hobbies<span class="accent">.</span></h2><div class="sec-line"></div></div>
+    <p class="sec-sub reveal">Things I make when I'm not making games.</p>
+    <div class="hobby-grid">
+      <div class="hobby-card panel reveal">
+        <a class="hobby-media" href="https://www.youtube.com/watch?v=vs8yKRUkCVA" target="_blank" rel="noopener" aria-label="Watch my edit on YouTube">
+          <img src="assets/hobby_edit.jpg" alt="Still from one of my video edits">
+          <span class="tag">watch ↗</span>
+        </a>
+        <div class="hobby-body">
+          <h3>Video editing</h3>
+          <p>Cutting trailers and edits in DaVinci Resolve — pacing, color and sound.</p>
+          <div class="badges"><a class="badge" href="https://www.youtube.com/watch?v=vs8yKRUkCVA" target="_blank" rel="noopener">youtube ↗</a></div>
+        </div>
+      </div>
+      <div class="hobby-card panel reveal">
+        <a class="hobby-media" href="https://sketchfab.com/defnetuncer98" target="_blank" rel="noopener" aria-label="Explore my models on Sketchfab">
+          <img src="assets/hobby_model.jpg" alt="One of my 3D dioramas on Sketchfab">
+          <span class="tag">explore ↗</span>
+        </a>
+        <div class="hobby-body">
+          <h3>Modeling &amp; animation</h3>
+          <p>Blender dioramas and little animated worlds — from Octopus's Garden to The Totem.</p>
+          <div class="badges"><a class="badge" href="https://sketchfab.com/defnetuncer98" target="_blank" rel="noopener">sketchfab ↗</a><a class="badge" href="https://www.artstation.com/defnetuncer98" target="_blank" rel="noopener">artstation ↗</a></div>
+        </div>
+      </div>
+      <div class="hobby-card panel reveal">
+        <a class="hobby-media" href="https://steamcommunity.com/id/defnetuncer98/screenshots" target="_blank" rel="noopener" aria-label="Browse my virtual photography on Steam">
+          <img src="assets/hobby_photo.jpg" alt="Virtual photography — a silhouette under neon signage in Cyberpunk 2077">
+          <span class="tag">browse ↗</span>
+        </a>
+        <div class="hobby-body">
+          <h3>Video game photography</h3>
+          <p>Chasing light and composition inside other people's worlds.</p>
+          <div class="badges"><a class="badge" href="https://steamcommunity.com/id/defnetuncer98/screenshots" target="_blank" rel="noopener">steam ↗</a></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- ============ CONTACT ============ -->
   <section id="contact" class="contact">
-    <div class="sec-head reveal" style="justify-content:center"><span class="sec-num">05</span><h2>Contact <span class="accent">me</span></h2></div>
+    <div class="sec-head reveal" style="justify-content:center"><span class="sec-num">06</span><h2>Contact <span class="accent">me</span></h2></div>
     <p class="sec-sub reveal" style="margin:0 auto">Let's build the incredible thing together.</p>
     <div class="big reveal"><a href="mailto:defnetuncer98@gmail.com">defnetuncer98@gmail.com</a></div>
     <div class="contact-row reveal">
