@@ -4,7 +4,7 @@ My personal portfolio, in two generations — both built with [Three.js](https:/
 
 | | | |
 |---|---|---|
-| **v2** (current) | [defnetuncer98.github.io](https://defnetuncer98.github.io/) | 🤖 designed & built by **AI** (Claude), art-directed by the Moth Village from *A Cube Story* |
+| **v2** (current) | [defnetuncer98.github.io](https://defnetuncer98.github.io/) | 🤖 designed & built by **AI** (Claude) |
 | **v1** (2020) | [defnetuncer98.github.io/v1.html](https://defnetuncer98.github.io/v1.html) | 🧑‍🎨 **handmade by a human** — every model placement, bloom pass, and raycast tuned by hand |
 
 ---
