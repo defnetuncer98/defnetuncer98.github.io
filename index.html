@@ -122,6 +122,12 @@
   .sec-line{flex:1;height:1px;background:linear-gradient(90deg,var(--line),transparent)}
   .sec-sub{color:var(--muted);max-width:640px;margin-bottom:42px}
 
+  .sub-head{display:flex;align-items:baseline;gap:16px;margin:76px 0 14px}
+  .sub-head h3{font-size:clamp(20px,2.8vw,28px);letter-spacing:-.01em;font-weight:700}
+  .sub-head h3 .accent{color:var(--cyan)}
+  #acubestory > .sub-head{margin-top:4px}
+  #projects .studio{margin-top:64px}
+
   .reveal{opacity:0;transform:translateY(26px);transition:opacity .7s ease,transform .7s ease}
   .reveal.in{opacity:1;transform:none}
   @media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}}
@@ -261,7 +267,8 @@
 
   /* ---------- contact ---------- */
   .contact{text-align:center;padding-bottom:70px}
-  .contact .big{font-size:clamp(24px,4vw,44px);font-weight:700;margin:26px 0 8px}
+  .contact .big{font-family:var(--mono);font-size:clamp(16px,2.2vw,23px);letter-spacing:.04em;
+    font-weight:400;margin:26px 0 8px}
   .contact .big a{color:var(--ink);text-decoration:none;border-bottom:1px solid var(--line);
     transition:all .25s}
   .contact .big a:hover{color:var(--cyan);border-color:var(--cyan);text-shadow:0 0 30px rgba(110,231,255,.5)}
@@ -295,10 +302,9 @@
     <a class="logo" href="#top"><svg width="20" height="20" viewBox="0 0 32 32"><path d="M16 3 28 10v12L16 29 4 22V10z" fill="none" stroke="#6ee7ff" stroke-width="1.6"/><path d="M4 10l12 7 12-7M16 17v12" fill="none" stroke="#6ee7ff" stroke-width="1.2" opacity=".6"/></svg>defne<b>@</b>tuncer:~<span class="blink">_</span></a>
     <div class="nav-links">
       <a href="#about">about</a>
-      <a href="#acubestory">a_cube_story</a>
-      <a href="#shipped">shipped</a>
-      <a href="#lab">lab</a>
       <a href="#experience">experience</a>
+      <a href="#shipped">shipped</a>
+      <a href="#projects">projects</a>
       <a href="#contact">contact</a>
       <a class="cta" href="https://defnetuncer98.github.io/src/docs/DEFNE%20TUNCER.pdf" target="_blank" rel="noopener">resume ↗</a>
     </div>
@@ -342,8 +348,8 @@
         <p>I build <b>well-architected, optimized gameplay systems</b> and ship polished features with
           a great eye for animations and UI. I've built level editors and frameworks that let designers
           ship content without touching code, and AI-driven tools adopted across projects.</p>
-        <p>On the side I hold an <b>MSc in Computer Graphics</b> (GPA 3.98), build small PC games with
-          my fiancée under Blue Variable, and make small strange things with WebGL — like this page.</p>
+        <p>On the side I hold an <b>MSc in Computer Graphics</b> (GPA 3.98) and build small PC games
+          with my fiancée under Blue Variable.</p>
       </div>
       <div class="stats reveal">
         <div class="stat panel"><div class="num" data-since="2020" data-suffix="+">0</div><div class="lbl">years of Unity</div></div>
@@ -354,161 +360,9 @@
     </div>
   </section>
 
-  <!-- ============ A CUBE STORY ============ -->
-  <section id="acubestory">
-    <div class="sec-head reveal"><span class="sec-num">02</span><h2>A Cube <span class="accent">Story</span></h2><div class="sec-line"></div></div>
-    <p class="sec-sub reveal">A puzzle-platformer built with my fiancée under Blue Variable — it began as
-      our master's degree project and never stopped growing. Monument Valley was the inspiration.
-      Everything below is captured in-engine.</p>
-
-    <div class="feature-poster reveal" id="open-trailer" role="button" tabindex="0" aria-label="Play the A Cube Story trailer">
-      <img src="assets/mothvillage.png" alt="A Cube Story — the Moth Village at night: a glowing cube resting on dark stone pillars, surrounded by moths and firefly lights">
-      <div class="poster-veil">
-        <div class="play-btn"><svg width="26" height="26" viewBox="0 0 24 24" fill="#6ee7ff"><path d="M8 5v14l11-7z"/></svg></div>
-      </div>
-      <div class="poster-label">▸ play trailer — 01:37</div>
-      <div class="poster-corner">in development</div>
-    </div>
-
-    <div class="feature-body">
-      <div class="feature-text reveal">
-        <p>Built in <b>Unity URP</b> with custom toon shading, Cinemachine camera work and hand-crafted
-          scenes — day and night cycles, rain systems, and quiet little places like the Moth Village.</p>
-        <p>Everything is made in-house, from the Blender models to the final edit — chasing the kind
-          of clever tricks and illusions that made us fall in love with games like Monument Valley.</p>
-        <div class="chips">
-          <span class="chip">Unity · URP</span><span class="chip">Custom toon shader</span>
-          <span class="chip">Cinemachine</span><span class="chip">DOTween</span>
-          <span class="chip">Blender</span><span class="chip">DaVinci Resolve</span>
-        </div>
-        <div class="hero-actions" style="margin-top:24px">
-          <a class="btn" href="https://github.com/BlueVariable/ACubeStory/tree/development/develop_v0.6" target="_blank" rel="noopener">github</a>
-          <a class="btn" href="https://www.youtube.com/watch?v=Kr1QRHTFVMg" target="_blank" rel="noopener">youtube · 2022</a>
-        </div>
-      </div>
-      <div class="media-grid reveal">
-        <div class="media-card"><video src="assets/acs_village.mp4" muted loop playsinline preload="metadata"></video><span class="tag">moth village — flythrough</span></div>
-        <div class="media-card"><video src="assets/acs_final.mp4" muted loop playsinline preload="metadata"></video><span class="tag">scene capture</span></div>
-        <div class="media-card wide">
-          <div class="ba">
-            <div><video src="assets/acs_before.mp4" muted loop playsinline preload="metadata"></video><span class="tag">lighting — before</span></div>
-            <div><video src="assets/acs_after.mp4" muted loop playsinline preload="metadata"></video><span class="tag">lighting — after</span></div>
-          </div>
-        </div>
-        <div class="media-card"><video src="assets/acs_devlog.mp4" muted loop playsinline preload="metadata"></video><span class="tag">devlog cut</span></div>
-        <div class="media-card"><img src="assets/a_cube_story.gif" alt="A Cube Story gameplay gif — the cube rolling through an isometric voxel scene" loading="lazy"><span class="tag">gameplay loop</span></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ SHIPPED ============ -->
-  <section id="shipped">
-    <div class="sec-head reveal"><span class="sec-num">03</span><h2>Shipped <span class="accent">titles</span></h2><div class="sec-line"></div></div>
-    <p class="sec-sub reveal">Five launched casual titles with top publishers — plus a seventy-strong
-      graveyard of prototypes that taught me everything.</p>
-    <div class="cards">
-      <div class="card panel reveal">
-        <div class="card-top"><svg class="cube-ico" viewBox="0 0 32 32"><path d="M16 3 28 10v12L16 29 4 22V10z" fill="#0a0f24"/><path d="M16 3 28 10 16 17 4 10z" fill="#ffb84d"/><path d="M16 17v12L4 22V10z" fill="#c47a1e"/><path d="M16 17v12l12-7V10z" fill="#8a5410"/></svg></div>
-        <h3>Color Bus Trip</h3><div class="with">with Voodoo · lead developer</div>
-        <p>Led development end-to-end — A/B testing mechanics and monetization into a launch-ready title on a strict deadline.</p>
-        <div class="badges"><span class="badge">1M+ downloads</span><span class="badge">200K DAU</span></div>
-      </div>
-      <div class="card panel reveal">
-        <div class="card-top"><svg class="cube-ico" viewBox="0 0 32 32"><path d="M16 3 28 10v12L16 29 4 22V10z" fill="#0a0f24"/><path d="M16 3 28 10 16 17 4 10z" fill="#ff8fb5"/><path d="M16 17v12L4 22V10z" fill="#c2537e"/><path d="M16 17v12l12-7V10z" fill="#8a3457"/></svg></div>
-        <h3>Knit N Loop</h3><div class="with">with Voodoo · lead developer</div>
-        <p>Second launch-ready title from the same pipeline — mechanics, monetization and polish shipped against the clock.</p>
-        <div class="badges"><span class="badge">launched</span><span class="badge dim">hybrid-casual</span></div>
-      </div>
-      <div class="card panel reveal">
-        <div class="card-top"><svg class="cube-ico" viewBox="0 0 32 32"><path d="M16 3 28 10v12L16 29 4 22V10z" fill="#0a0f24"/><path d="M16 3 28 10 16 17 4 10z" fill="#7ee787"/><path d="M16 17v12L4 22V10z" fill="#3f9e4e"/><path d="M16 17v12l12-7V10z" fill="#276a33"/></svg></div>
-        <h3>Mayor Match</h3><div class="with">with Rollic · core developer</div>
-        <p>Match-3 mechanics, the level editor, live ops — events, teams, IAP — and an Addressables-based remote content pipeline.</p>
-        <div class="badges"><span class="badge">1M+ downloads</span><span class="badge">200K DAU</span></div>
-      </div>
-      <div class="card panel reveal">
-        <div class="card-top"><svg class="cube-ico" viewBox="0 0 32 32"><path d="M16 3 28 10v12L16 29 4 22V10z" fill="#0a0f24"/><path d="M16 3 28 10 16 17 4 10z" fill="#e0705a"/><path d="M16 17v12L4 22V10z" fill="#a34634"/><path d="M16 17v12l12-7V10z" fill="#6e2c1f"/></svg></div>
-        <h3>Wasteland Survival</h3><div class="with">tower defense</div>
-        <p>Shipped core gameplay systems for a tower-defense title — waves, targeting, and upgrade loops.</p>
-        <div class="badges"><span class="badge dim">core systems</span></div>
-      </div>
-      <div class="card panel reveal">
-        <div class="card-top"><svg class="cube-ico" viewBox="0 0 32 32"><path d="M16 3 28 10v12L16 29 4 22V10z" fill="#0a0f24"/><path d="M16 3 28 10 16 17 4 10z" fill="#b89bff"/><path d="M16 17v12L4 22V10z" fill="#7a5fc2"/><path d="M16 17v12l12-7V10z" fill="#4f3a85"/></svg></div>
-        <h3>Lootland</h3><div class="with">arcade shooter</div>
-        <p>Core gameplay systems for an arcade-shooter — movement, loot, and the numbers that make it feel good.</p>
-        <div class="badges"><span class="badge dim">core systems</span></div>
-      </div>
-      <div class="card panel reveal">
-        <div class="card-top"><svg class="cube-ico" viewBox="0 0 32 32"><path d="M16 3 28 10v12L16 29 4 22V10z" fill="none" stroke="#6ee7ff" stroke-width="1.4"/><path d="M4 10l12 7 12-7M16 17v12" fill="none" stroke="#6ee7ff" stroke-width="1" opacity=".6"/></svg></div>
-        <h3>70+ Prototypes</h3><div class="with">the hybrid-casual lab</div>
-        <p>Published hybrid-casual prototypes at a relentless cadence — every one a bet, a build, and a lesson.</p>
-        <div class="badges"><span class="badge">2020 → now</span></div>
-      </div>
-    </div>
-
-    <div class="studio reveal">
-      <svg width="54" height="54" viewBox="0 0 32 32"><path d="M16 3 28 10v12L16 29 4 22V10z" fill="#0a0f24" stroke="#6ee7ff" stroke-width="1"/><path d="M16 8l7 4v8l-7 4-7-4v-8z" fill="none" stroke="#ffc966" stroke-width="1"/></svg>
-      <div>
-        <h3>Blue Variable — <em>Purrfect Fit</em></h3>
-        <p>Where my fiancée and I build small PC games on our shared <b>BLUE framework</b> — our
-          studio-in-the-making. In active development: <b>Purrfect Fit</b>, a cozy puzzler mixing
-          Balatro-style mechanics with inventory management — about finding the perfect spot for every cat.</p>
-      </div>
-      <div class="studio-links">
-        <a class="btn primary" href="https://bluevariable.github.io/PurrfectFitDemo/" target="_blank" rel="noopener">play demo</a>
-        <a class="btn" href="https://canva.link/8kjw1hrhlgndogd" target="_blank" rel="noopener">game pitch</a>
-        <a class="btn" href="https://github.com/BlueVariable/PurrfectFit/tree/develop-0.0.1" target="_blank" rel="noopener">github</a>
-        <a class="btn" href="https://bluevariable.github.io/" target="_blank" rel="noopener">studio site</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============ LAB ============ -->
-  <section id="lab">
-    <div class="sec-head reveal"><span class="sec-num">04</span><h2>The <span class="accent">lab</span></h2><div class="sec-line"></div></div>
-    <p class="sec-sub reveal">Experiments, tools and open source — mostly WebGL, geometry, and things
-      that had no business being built but were fun anyway.</p>
-    <div class="lab-grid">
-      <a class="lab-card panel reveal" href="https://github.com/BlueVariable/BLUE/tree/develop-0.0.1" target="_blank" rel="noopener">
-        <div class="name">BLUE framework</div>
-        <p>The generic game systems my fiancée and I share across every Blue Variable project.</p>
-        <div class="meta">unity · c# · framework</div>
-      </a>
-      <a class="lab-card panel reveal" href="https://defnetuncer98.github.io/smellycat/" target="_blank" rel="noopener">
-        <div class="name">smellycat</div>
-        <p>A WebGL physics toy — one smelly cat, three.js and ammo.js, zero purpose, maximum joy.</p>
-        <div class="meta">three.js · ammo.js · webgl</div>
-      </a>
-      <a class="lab-card panel reveal" href="https://defnetuncer98.github.io/triangulateMe/" target="_blank" rel="noopener">
-        <div class="name">triangulateMe</div>
-        <p>A polygon triangulation playground — computational geometry you can poke at, live in the browser.</p>
-        <div class="meta">computational geometry · three.js</div>
-      </a>
-      <a class="lab-card panel reveal" href="https://github.com/defnetuncer98/Puzzle-Prototyper" target="_blank" rel="noopener">
-        <div class="name">Puzzle Prototyper</div>
-        <p>Turn puzzle ideas into playable prototypes instantly — an AI-assisted design sketchpad.</p>
-        <div class="meta">tools · game design</div>
-      </a>
-      <a class="lab-card panel reveal" href="https://github.com/defnetuncer98/Outlaws-Ledger" target="_blank" rel="noopener">
-        <div class="name">Outlaw's Ledger</div>
-        <p>An interactive, spoiler-safe quest tracker for slow, careful playthroughs.</p>
-        <div class="meta">web · tools</div>
-      </a>
-      <a class="lab-card panel reveal" href="https://defnetuncer98.github.io/v1.html" target="_blank" rel="noopener">
-        <div class="name">portfolio v1</div>
-        <p>"look at me! I'm made with ThreeJS 😁👀" — my first 3D portfolio, handmade by a human. This one was made by AI.</p>
-        <div class="meta">three.js · glsl · 100% human</div>
-      </a>
-      <a class="lab-card panel reveal" href="https://github.com/defnetuncer98/embedded-systems" target="_blank" rel="noopener">
-        <div class="name">embedded-systems</div>
-        <p>Bare-metal C on ARM Cortex-M (TM4C123) — interrupts, timers, and blinking things in Keil.</p>
-        <div class="meta">c · arm cortex-m</div>
-      </a>
-    </div>
-  </section>
-
   <!-- ============ EXPERIENCE ============ -->
   <section id="experience">
-    <div class="sec-head reveal"><span class="sec-num">05</span><h2>Experience<span class="accent">.</span></h2><div class="sec-line"></div></div>
+    <div class="sec-head reveal"><span class="sec-num">02</span><h2>Experience<span class="accent">.</span></h2><div class="sec-line"></div></div>
     <div class="exp-grid">
       <div class="timeline">
         <div class="t-item reveal">
@@ -569,11 +423,164 @@
     </div>
   </section>
 
+  <!-- ============ SHIPPED ============ -->
+  <section id="shipped">
+    <div class="sec-head reveal"><span class="sec-num">03</span><h2>Shipped <span class="accent">titles</span></h2><div class="sec-line"></div></div>
+    <p class="sec-sub reveal">Five launched casual titles with top publishers — plus a seventy-strong
+      graveyard of prototypes that taught me everything.</p>
+    <div class="cards">
+      <div class="card panel reveal">
+        <div class="card-top"><svg class="cube-ico" viewBox="0 0 32 32"><path d="M16 3 28 10v12L16 29 4 22V10z" fill="#0a0f24"/><path d="M16 3 28 10 16 17 4 10z" fill="#ffb84d"/><path d="M16 17v12L4 22V10z" fill="#c47a1e"/><path d="M16 17v12l12-7V10z" fill="#8a5410"/></svg></div>
+        <h3>Color Bus Trip</h3><div class="with">with Voodoo · lead developer</div>
+        <p>Led development end-to-end — A/B testing mechanics and monetization into a launch-ready title on a strict deadline.</p>
+        <div class="badges"><span class="badge">1M+ downloads</span><span class="badge">200K DAU</span></div>
+      </div>
+      <div class="card panel reveal">
+        <div class="card-top"><svg class="cube-ico" viewBox="0 0 32 32"><path d="M16 3 28 10v12L16 29 4 22V10z" fill="#0a0f24"/><path d="M16 3 28 10 16 17 4 10z" fill="#ff8fb5"/><path d="M16 17v12L4 22V10z" fill="#c2537e"/><path d="M16 17v12l12-7V10z" fill="#8a3457"/></svg></div>
+        <h3>Knit N Loop</h3><div class="with">with Voodoo · lead developer</div>
+        <p>Second launch-ready title from the same pipeline — mechanics, monetization and polish shipped against the clock.</p>
+        <div class="badges"><span class="badge">launched</span><span class="badge dim">hybrid-casual</span></div>
+      </div>
+      <div class="card panel reveal">
+        <div class="card-top"><svg class="cube-ico" viewBox="0 0 32 32"><path d="M16 3 28 10v12L16 29 4 22V10z" fill="#0a0f24"/><path d="M16 3 28 10 16 17 4 10z" fill="#7ee787"/><path d="M16 17v12L4 22V10z" fill="#3f9e4e"/><path d="M16 17v12l12-7V10z" fill="#276a33"/></svg></div>
+        <h3>Mayor Match</h3><div class="with">with Rollic · core developer</div>
+        <p>Match-3 mechanics, the level editor, live ops — events, teams, IAP — and an Addressables-based remote content pipeline.</p>
+        <div class="badges"><span class="badge">1M+ downloads</span><span class="badge">200K DAU</span></div>
+      </div>
+      <div class="card panel reveal">
+        <div class="card-top"><svg class="cube-ico" viewBox="0 0 32 32"><path d="M16 3 28 10v12L16 29 4 22V10z" fill="#0a0f24"/><path d="M16 3 28 10 16 17 4 10z" fill="#e0705a"/><path d="M16 17v12L4 22V10z" fill="#a34634"/><path d="M16 17v12l12-7V10z" fill="#6e2c1f"/></svg></div>
+        <h3>Wasteland Survival</h3><div class="with">tower defense</div>
+        <p>Shipped core gameplay systems for a tower-defense title — waves, targeting, and upgrade loops.</p>
+        <div class="badges"><span class="badge dim">core systems</span></div>
+      </div>
+      <div class="card panel reveal">
+        <div class="card-top"><svg class="cube-ico" viewBox="0 0 32 32"><path d="M16 3 28 10v12L16 29 4 22V10z" fill="#0a0f24"/><path d="M16 3 28 10 16 17 4 10z" fill="#b89bff"/><path d="M16 17v12L4 22V10z" fill="#7a5fc2"/><path d="M16 17v12l12-7V10z" fill="#4f3a85"/></svg></div>
+        <h3>Lootland</h3><div class="with">arcade shooter</div>
+        <p>Core gameplay systems for an arcade-shooter — movement, loot, and the numbers that make it feel good.</p>
+        <div class="badges"><span class="badge dim">core systems</span></div>
+      </div>
+      <div class="card panel reveal">
+        <div class="card-top"><svg class="cube-ico" viewBox="0 0 32 32"><path d="M16 3 28 10v12L16 29 4 22V10z" fill="none" stroke="#6ee7ff" stroke-width="1.4"/><path d="M4 10l12 7 12-7M16 17v12" fill="none" stroke="#6ee7ff" stroke-width="1" opacity=".6"/></svg></div>
+        <h3>70+ Prototypes</h3><div class="with">the hybrid-casual lab</div>
+        <p>Published hybrid-casual prototypes at a relentless cadence — every one a bet, a build, and a lesson.</p>
+        <div class="badges"><span class="badge">2020 → now</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PERSONAL PROJECTS ============ -->
+  <section id="projects">
+    <div class="sec-head reveal"><span class="sec-num">04</span><h2>Personal <span class="accent">projects</span></h2><div class="sec-line"></div></div>
+    <p class="sec-sub reveal">What my fiancée and I build after hours under Blue Variable.</p>
+
+    <div id="acubestory">
+      <div class="sub-head reveal"><h3>A Cube <span class="accent">Story</span></h3><div class="sec-line"></div></div>
+      <p class="sec-sub reveal">A puzzle-platformer that began as our master’s degree project and never
+        stopped growing. Monument Valley was the inspiration. Everything below is captured in-engine.</p>
+    <div class="feature-poster reveal" id="open-trailer" role="button" tabindex="0" aria-label="Play the A Cube Story trailer">
+      <img src="assets/mothvillage.png" alt="A Cube Story — the Moth Village at night: a glowing cube resting on dark stone pillars, surrounded by moths and firefly lights">
+      <div class="poster-veil">
+        <div class="play-btn"><svg width="26" height="26" viewBox="0 0 24 24" fill="#6ee7ff"><path d="M8 5v14l11-7z"/></svg></div>
+      </div>
+      <div class="poster-label">▸ play trailer — 01:37</div>
+      <div class="poster-corner">in development</div>
+    </div>
+
+    <div class="feature-body">
+      <div class="feature-text reveal">
+        <p>Built in <b>Unity URP</b> with custom toon shading, Cinemachine camera work and hand-crafted
+          scenes — day and night cycles, rain systems, and quiet little places like the Moth Village.</p>
+        <p>Everything is made in-house, from the Blender models to the final edit — chasing the kind
+          of clever tricks and illusions that made us fall in love with games like Monument Valley.</p>
+        <div class="chips">
+          <span class="chip">Unity · URP</span><span class="chip">Custom toon shader</span>
+          <span class="chip">Cinemachine</span><span class="chip">DOTween</span>
+          <span class="chip">Blender</span><span class="chip">DaVinci Resolve</span>
+        </div>
+        <div class="hero-actions" style="margin-top:24px">
+          <a class="btn" href="https://github.com/BlueVariable/ACubeStory/tree/development/develop_v0.6" target="_blank" rel="noopener">github</a>
+          <a class="btn" href="https://www.youtube.com/watch?v=Kr1QRHTFVMg" target="_blank" rel="noopener">youtube · 2022</a>
+        </div>
+      </div>
+      <div class="media-grid reveal">
+        <div class="media-card"><video src="assets/acs_village.mp4" muted loop playsinline preload="metadata"></video><span class="tag">moth village — flythrough</span></div>
+        <div class="media-card"><video src="assets/acs_final.mp4" muted loop playsinline preload="metadata"></video><span class="tag">scene capture</span></div>
+        <div class="media-card wide">
+          <div class="ba">
+            <div><video src="assets/acs_before.mp4" muted loop playsinline preload="metadata"></video><span class="tag">lighting — before</span></div>
+            <div><video src="assets/acs_after.mp4" muted loop playsinline preload="metadata"></video><span class="tag">lighting — after</span></div>
+          </div>
+        </div>
+        <div class="media-card"><video src="assets/acs_devlog.mp4" muted loop playsinline preload="metadata"></video><span class="tag">devlog cut</span></div>
+        <div class="media-card"><img src="assets/a_cube_story.gif" alt="A Cube Story gameplay gif — the cube rolling through an isometric voxel scene" loading="lazy"><span class="tag">gameplay loop</span></div>
+      </div>
+    </div>
+    </div>
+
+    <div class="studio reveal">
+      <svg width="54" height="54" viewBox="0 0 32 32"><path d="M16 3 28 10v12L16 29 4 22V10z" fill="#0a0f24" stroke="#6ee7ff" stroke-width="1"/><path d="M16 8l7 4v8l-7 4-7-4v-8z" fill="none" stroke="#ffc966" stroke-width="1"/></svg>
+      <div>
+        <h3>Blue Variable — <em>Purrfect Fit</em></h3>
+        <p>Where my fiancée and I build small PC games on our shared <b>BLUE framework</b> — our
+          studio-in-the-making. In active development: <b>Purrfect Fit</b>, a cozy puzzler mixing
+          Balatro-style mechanics with inventory management — about finding the perfect spot for every cat.</p>
+      </div>
+      <div class="studio-links">
+        <a class="btn primary" href="https://bluevariable.github.io/PurrfectFitDemo/" target="_blank" rel="noopener">play demo</a>
+        <a class="btn" href="https://canva.link/8kjw1hrhlgndogd" target="_blank" rel="noopener">game pitch</a>
+        <a class="btn" href="https://github.com/BlueVariable/PurrfectFit/tree/develop-0.0.1" target="_blank" rel="noopener">github</a>
+        <a class="btn" href="https://bluevariable.github.io/" target="_blank" rel="noopener">studio site</a>
+      </div>
+    </div>
+
+    <div id="lab">
+      <div class="sub-head reveal"><h3>The <span class="accent">lab</span></h3><div class="sec-line"></div></div>
+      <p class="sec-sub reveal">Experiments, tools and open source — mostly WebGL, geometry, and things
+        that had no business being built but were fun anyway.</p>
+      <div class="lab-grid">
+      <a class="lab-card panel reveal" href="https://github.com/BlueVariable/BLUE/tree/develop-0.0.1" target="_blank" rel="noopener">
+        <div class="name">BLUE framework</div>
+        <p>The generic game systems my fiancée and I share across every Blue Variable project.</p>
+        <div class="meta">unity · c# · framework</div>
+      </a>
+      <a class="lab-card panel reveal" href="https://defnetuncer98.github.io/smellycat/" target="_blank" rel="noopener">
+        <div class="name">smellycat</div>
+        <p>A WebGL physics toy — one smelly cat, three.js and ammo.js, zero purpose, maximum joy.</p>
+        <div class="meta">three.js · ammo.js · webgl</div>
+      </a>
+      <a class="lab-card panel reveal" href="https://defnetuncer98.github.io/triangulateMe/" target="_blank" rel="noopener">
+        <div class="name">triangulateMe</div>
+        <p>A polygon triangulation playground — computational geometry you can poke at, live in the browser.</p>
+        <div class="meta">computational geometry · three.js</div>
+      </a>
+      <a class="lab-card panel reveal" href="https://github.com/defnetuncer98/Puzzle-Prototyper" target="_blank" rel="noopener">
+        <div class="name">Puzzle Prototyper</div>
+        <p>Turn puzzle ideas into playable prototypes instantly — an AI-assisted design sketchpad.</p>
+        <div class="meta">tools · game design</div>
+      </a>
+      <a class="lab-card panel reveal" href="https://github.com/defnetuncer98/Outlaws-Ledger" target="_blank" rel="noopener">
+        <div class="name">Outlaw's Ledger</div>
+        <p>An interactive, spoiler-safe quest tracker for slow, careful playthroughs.</p>
+        <div class="meta">web · tools</div>
+      </a>
+      <a class="lab-card panel reveal" href="https://defnetuncer98.github.io/v1.html" target="_blank" rel="noopener">
+        <div class="name">portfolio v1</div>
+        <p>"look at me! I'm made with ThreeJS 😁👀" — my first 3D portfolio, handmade by a human. This one was made by AI.</p>
+        <div class="meta">three.js · glsl · 100% human</div>
+      </a>
+      <a class="lab-card panel reveal" href="https://github.com/defnetuncer98/embedded-systems" target="_blank" rel="noopener">
+        <div class="name">embedded-systems</div>
+        <p>Bare-metal C on ARM Cortex-M (TM4C123) — interrupts, timers, and blinking things in Keil.</p>
+        <div class="meta">c · arm cortex-m</div>
+      </a>
+    </div>
+    </div>
+  </section>
+
   <!-- ============ CONTACT ============ -->
   <section id="contact" class="contact">
-    <div class="sec-head reveal" style="justify-content:center"><span class="sec-num">06</span><h2>Press <span class="accent">start</span></h2></div>
-    <p class="sec-sub reveal" style="margin:0 auto">Got a world that needs building — or just want to talk
-      games, graphics and clever little systems?</p>
+    <div class="sec-head reveal" style="justify-content:center"><span class="sec-num">05</span><h2>Contact <span class="accent">me</span></h2></div>
+    <p class="sec-sub reveal" style="margin:0 auto">Let's build something incredible together.</p>
     <div class="big reveal"><a href="mailto:defnetuncer98@gmail.com">defnetuncer98@gmail.com</a></div>
     <div class="contact-row reveal">
       <a class="btn" href="https://github.com/defnetuncer98" target="_blank" rel="noopener">github</a>
@@ -585,7 +592,7 @@
   </section>
 </main>
 
-<footer>designed &amp; built with <b>three.js</b> by <b>AI</b> (Claude) — cubes included ·
+<footer>designed &amp; built with <b>three.js</b> by <b>AI</b> (Claude) ·
   <a href="https://defnetuncer98.github.io/v1.html" target="_blank" rel="noopener">portfolio v1</a> was handmade by a human · © <span id="yr">2026</span> defne tunçer</footer>
 
 <!-- trailer modal -->
