@@ -54,10 +54,12 @@ Push this folder as-is — no build step. Two notes:
 - `mothvillage.png` (7.9 MB) and the 4K clips could also be downscaled for
   faster first paint on slow connections.
 
-## Content to review
+## Content notes
 
-Copy was written from the resume, LinkedIn and GitHub profiles. Worth a
-personal pass: the A Cube Story blurb ("follows a small glowing cube through
-a sleeping world") is an editorial guess at the game's story, and role labels
-on the shipped-title cards ("lead developer" / "core developer") are inferred
-from the resume bullets.
+Copy was written from the resume, LinkedIn and GitHub profiles, then corrected
+against the ustwo cover letter (July 2026): A Cube Story is a puzzle-platformer
+co-developed with Defne's fiancée under Blue Variable, begun as their master's
+project, inspired by Monument Valley; Purrfect Fit mixes Balatro-style mechanics
+with inventory management; the shared BLUE framework is listed in the lab.
+Role labels on the shipped-title cards ("lead developer" / "core developer")
+are still inferred from resume bullets — worth a personal pass.
