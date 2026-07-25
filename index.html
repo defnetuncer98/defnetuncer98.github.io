@@ -215,6 +215,17 @@
     border:1px solid rgba(110,231,255,.25);background:rgba(110,231,255,.06);
     padding:4px 9px;border-radius:3px}
   .badge.dim{color:var(--muted);border-color:var(--line-soft);background:transparent}
+  a.badge{text-decoration:none;transition:all .2s}
+  a.badge:hover{border-color:var(--amber);color:var(--amber);box-shadow:0 0 12px rgba(255,201,102,.2)}
+
+  /* ---------- purrfect fit draft strip ---------- */
+  .pf-strip{display:grid;grid-auto-flow:column;grid-auto-columns:min(360px,74vw);gap:14px;
+    overflow-x:auto;padding-bottom:12px;scroll-snap-type:x mandatory;
+    scrollbar-width:thin;scrollbar-color:rgba(148,180,255,.25) transparent}
+  .pf-strip .media-card{scroll-snap-align:start}
+  .pf-strip::-webkit-scrollbar{height:6px}
+  .pf-strip::-webkit-scrollbar-track{background:transparent}
+  .pf-strip::-webkit-scrollbar-thumb{background:rgba(148,180,255,.25);border-radius:3px}
 
   /* ---------- studio strip ---------- */
   .studio{display:grid;grid-template-columns:auto 1fr auto;gap:28px;align-items:center;
@@ -433,19 +444,19 @@
         <div class="card-top"><svg class="cube-ico" viewBox="0 0 32 32"><path d="M16 3 28 10v12L16 29 4 22V10z" fill="#0a0f24"/><path d="M16 3 28 10 16 17 4 10z" fill="#ffb84d"/><path d="M16 17v12L4 22V10z" fill="#c47a1e"/><path d="M16 17v12l12-7V10z" fill="#8a5410"/></svg></div>
         <h3>Color Bus Trip</h3><div class="with">with Voodoo · lead developer</div>
         <p>Led development end-to-end — A/B testing mechanics and monetization into a launch-ready title on a strict deadline.</p>
-        <div class="badges"><span class="badge">1M+ downloads</span><span class="badge">200K DAU</span></div>
+        <div class="badges"><span class="badge">1M+ downloads</span><span class="badge">200K DAU</span><a class="badge" href="https://play.google.com/store/apps/details?id=com.Tinkerbox.ColorTrip" target="_blank" rel="noopener">google play ↗</a></div>
       </div>
       <div class="card panel reveal">
         <div class="card-top"><svg class="cube-ico" viewBox="0 0 32 32"><path d="M16 3 28 10v12L16 29 4 22V10z" fill="#0a0f24"/><path d="M16 3 28 10 16 17 4 10z" fill="#ff8fb5"/><path d="M16 17v12L4 22V10z" fill="#c2537e"/><path d="M16 17v12l12-7V10z" fill="#8a3457"/></svg></div>
         <h3>Knit N Loop</h3><div class="with">with Voodoo · lead developer</div>
         <p>Second launch-ready title from the same pipeline — mechanics, monetization and polish shipped against the clock.</p>
-        <div class="badges"><span class="badge">launched</span><span class="badge dim">hybrid-casual</span></div>
+        <div class="badges"><span class="badge">launched</span><a class="badge" href="https://play.google.com/store/apps/details?id=com.spektrumgames.knitandloop" target="_blank" rel="noopener">google play ↗</a></div>
       </div>
       <div class="card panel reveal">
         <div class="card-top"><svg class="cube-ico" viewBox="0 0 32 32"><path d="M16 3 28 10v12L16 29 4 22V10z" fill="#0a0f24"/><path d="M16 3 28 10 16 17 4 10z" fill="#7ee787"/><path d="M16 17v12L4 22V10z" fill="#3f9e4e"/><path d="M16 17v12l12-7V10z" fill="#276a33"/></svg></div>
         <h3>Mayor Match</h3><div class="with">with Rollic · core developer</div>
         <p>Match-3 mechanics, the level editor, live ops — events, teams, IAP — and an Addressables-based remote content pipeline.</p>
-        <div class="badges"><span class="badge">1M+ downloads</span><span class="badge">200K DAU</span></div>
+        <div class="badges"><span class="badge">1M+ downloads</span><span class="badge">200K DAU</span><a class="badge" href="https://play.google.com/store/apps/details?id=com.rollic.mayormatch" target="_blank" rel="noopener">google play ↗</a></div>
       </div>
       <div class="card panel reveal">
         <div class="card-top"><svg class="cube-ico" viewBox="0 0 32 32"><path d="M16 3 28 10v12L16 29 4 22V10z" fill="#0a0f24"/><path d="M16 3 28 10 16 17 4 10z" fill="#e0705a"/><path d="M16 17v12L4 22V10z" fill="#a34634"/><path d="M16 17v12l12-7V10z" fill="#6e2c1f"/></svg></div>
@@ -471,12 +482,14 @@
   <!-- ============ PERSONAL PROJECTS ============ -->
   <section id="projects">
     <div class="sec-head reveal"><span class="sec-num">04</span><h2>Personal <span class="accent">projects</span></h2><div class="sec-line"></div></div>
-    <p class="sec-sub reveal">What my fiancée and I build after hours under Blue Variable.</p>
+    <p class="sec-sub reveal">Outside of work, I play games — and build them.</p>
 
     <div id="acubestory">
       <div class="sub-head reveal"><h3>A Cube <span class="accent">Story</span></h3><div class="sec-line"></div></div>
-      <p class="sec-sub reveal">A puzzle-platformer that began as our master’s degree project and never
-        stopped growing. Monument Valley was the inspiration. Everything below is captured in-engine.</p>
+      <p class="sec-sub reveal">We know — being a cube all day sounds awesome. While it might be hard to
+        understand why anyone would want more than that, our story begins with a Cube who is ready for an
+        adventure through dimensions to find more. Will the Cube find what it seeks at the end of its
+        journey — and will you be there to help?</p>
     <div class="feature-poster reveal" id="open-trailer" role="button" tabindex="0" aria-label="Play the A Cube Story trailer">
       <img src="assets/mothvillage.png" alt="A Cube Story — the Moth Village at night: a glowing cube resting on dark stone pillars, surrounded by moths and firefly lights">
       <div class="poster-veil">
@@ -488,14 +501,17 @@
 
     <div class="feature-body">
       <div class="feature-text reveal">
-        <p>Built in <b>Unity URP</b> with custom toon shading, Cinemachine camera work and hand-crafted
-          scenes — day and night cycles, rain systems, and quiet little places like the Moth Village.</p>
+        <p>A puzzle-platformer that began as our master's degree project — built in <b>Unity URP</b>
+          with custom toon shading, Cinemachine camera work and hand-crafted scenes: day and night
+          cycles, rain systems, and quiet little places like the Moth Village.</p>
         <p>Everything is made in-house, from the Blender models to the final edit — chasing the kind
           of clever tricks and illusions that made us fall in love with games like Monument Valley.</p>
         <div class="chips">
-          <span class="chip">Unity · URP</span><span class="chip">Custom toon shader</span>
-          <span class="chip">Cinemachine</span><span class="chip">DOTween</span>
-          <span class="chip">Blender</span><span class="chip">DaVinci Resolve</span>
+          <span class="chip">Unity · URP</span><span class="chip">Custom shader</span>
+          <span class="chip">Cinemachine</span><span class="chip">Blender</span>
+          <span class="chip">Mesh modification</span><span class="chip">Animation</span>
+          <span class="chip">AI behaviour</span><span class="chip">FSM</span>
+          <span class="chip">Performance optimization</span>
         </div>
         <div class="hero-actions" style="margin-top:24px">
           <a class="btn" href="https://github.com/BlueVariable/ACubeStory/tree/development/develop_v0.6" target="_blank" rel="noopener">github</a>
@@ -517,17 +533,23 @@
     </div>
     </div>
 
-    <div class="studio reveal">
-      <svg width="54" height="54" viewBox="0 0 32 32"><path d="M16 3 28 10v12L16 29 4 22V10z" fill="#0a0f24" stroke="#6ee7ff" stroke-width="1"/><path d="M16 8l7 4v8l-7 4-7-4v-8z" fill="none" stroke="#ffc966" stroke-width="1"/></svg>
-      <div>
-        <h3>Blue Variable — <em>Purrfect Fit</em></h3>
-        <p>Where my fiancée and I build small PC games on our shared <b>BLUE framework</b> — our
-          studio-in-the-making. In active development: <b>Purrfect Fit</b>, a cozy puzzler mixing
-          Balatro-style mechanics with inventory management — about finding the perfect spot for every cat.</p>
+    <div id="purrfectfit">
+      <div class="sub-head reveal"><h3>Purrfect <span class="accent">Fit</span></h3><div class="sec-line"></div></div>
+      <p class="sec-sub reveal">A cozy puzzler mixing <b>Balatro-style mechanics</b> with inventory
+        management — about finding the perfect spot for every cat. In active development at
+        <b>Blue Variable</b>, our studio-in-the-making, on our shared BLUE framework. Early drafts,
+        straight from the pitch deck:</p>
+      <div class="pf-strip reveal">
+        <div class="media-card"><img src="assets/pf_draft_01.png" alt="Purrfect Fit pitch draft — page 1" loading="lazy"><span class="tag">draft 01</span></div>
+        <div class="media-card"><img src="assets/pf_draft_02.png" alt="Purrfect Fit pitch draft — page 2" loading="lazy"><span class="tag">draft 02</span></div>
+        <div class="media-card"><img src="assets/pf_draft_03.png" alt="Purrfect Fit pitch draft — page 3" loading="lazy"><span class="tag">draft 03</span></div>
+        <div class="media-card"><img src="assets/pf_draft_04.png" alt="Purrfect Fit pitch draft — page 4" loading="lazy"><span class="tag">draft 04</span></div>
+        <div class="media-card"><img src="assets/pf_draft_05.png" alt="Purrfect Fit pitch draft — page 5" loading="lazy"><span class="tag">draft 05</span></div>
+        <div class="media-card"><img src="assets/pf_draft_06.png" alt="Purrfect Fit pitch draft — page 6" loading="lazy"><span class="tag">draft 06</span></div>
       </div>
-      <div class="studio-links">
+      <div class="hero-actions reveal" style="margin-top:24px">
         <a class="btn primary" href="https://bluevariable.github.io/PurrfectFitDemo/" target="_blank" rel="noopener">play demo</a>
-        <a class="btn" href="https://canva.link/8kjw1hrhlgndogd" target="_blank" rel="noopener">game pitch</a>
+        <a class="btn" href="https://canva.link/8kjw1hrhlgndogd" target="_blank" rel="noopener">full pitch</a>
         <a class="btn" href="https://github.com/BlueVariable/PurrfectFit/tree/develop-0.0.1" target="_blank" rel="noopener">github</a>
         <a class="btn" href="https://bluevariable.github.io/" target="_blank" rel="noopener">studio site</a>
       </div>
@@ -580,7 +602,7 @@
   <!-- ============ CONTACT ============ -->
   <section id="contact" class="contact">
     <div class="sec-head reveal" style="justify-content:center"><span class="sec-num">05</span><h2>Contact <span class="accent">me</span></h2></div>
-    <p class="sec-sub reveal" style="margin:0 auto">Let's build something incredible together.</p>
+    <p class="sec-sub reveal" style="margin:0 auto">Let's build the incredible thing together.</p>
     <div class="big reveal"><a href="mailto:defnetuncer98@gmail.com">defnetuncer98@gmail.com</a></div>
     <div class="contact-row reveal">
       <a class="btn" href="https://github.com/defnetuncer98" target="_blank" rel="noopener">github</a>
