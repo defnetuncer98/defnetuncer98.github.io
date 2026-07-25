@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Defne Tunçer — Game Developer</title>
-<meta name="description" content="Defne Tunçer — Senior Game Developer. Six years of Unity, 70+ shipped prototypes, 5 launched titles, and worlds made of cubes.">
+<meta name="description" content="Defne Tunçer — Senior Game Developer. Building with Unity since 2020 — 70+ shipped prototypes, 5 launched titles, and worlds made of cubes.">
 <meta property="og:title" content="Defne Tunçer — Game Developer">
-<meta property="og:description" content="Six years of Unity, 70+ shipped prototypes, and worlds made of cubes.">
+<meta property="og:description" content="Building with Unity since 2020 — 70+ shipped prototypes and worlds made of cubes.">
 <meta property="og:image" content="assets/mothvillage.png">
 <meta property="og:type" content="website">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M16 3 28 10v12L16 29 4 22V10z' fill='%230a0f24'/%3E%3Cpath d='M16 3 28 10 16 17 4 10z' fill='%236ee7ff'/%3E%3Cpath d='M16 17v12L4 22V10z' fill='%232563a8'/%3E%3Cpath d='M16 17v12l12-7V10z' fill='%23164e78'/%3E%3C/svg%3E">
@@ -314,8 +314,8 @@
     <div class="hero-inner">
       <div class="hero-tag">Senior Game Developer · Ankara, Türkiye</div>
       <h1>DEFNE<br><span class="dim">TUNÇER</span></h1>
-      <p class="hero-sub"><b>Six years of Unity</b>, 70+ shipped prototypes, and a soft spot for
-        anything clever, meticulously crafted &amp; made of pixels. 👾☕🛸</p>
+      <p class="hero-sub"><b>Building with Unity since 2020</b> — 70+ shipped prototypes and a soft
+        spot for anything clever, meticulously crafted &amp; made of pixels. 👾☕🛸</p>
       <div class="type-line"><span id="type"></span><span class="type-caret"></span></div>
       <div class="hero-actions">
         <a class="btn primary" href="#acubestory">view work</a>
@@ -343,10 +343,10 @@
           a great eye for animations and UI. I've built level editors and frameworks that let designers
           ship content without touching code, and AI-driven tools adopted across projects.</p>
         <p>On the side I hold an <b>MSc in Computer Graphics</b> (GPA 3.98), build small PC games with
-          my fiancée at our studio Blue Variable, and make small strange things with WebGL — like this page.</p>
+          my fiancée under Blue Variable, and make small strange things with WebGL — like this page.</p>
       </div>
       <div class="stats reveal">
-        <div class="stat panel"><div class="num" data-count="6" data-suffix="+">0</div><div class="lbl">years of Unity</div></div>
+        <div class="stat panel"><div class="num" data-since="2020" data-suffix="+">0</div><div class="lbl">years of Unity</div></div>
         <div class="stat panel"><div class="num" data-count="70" data-suffix="+">0</div><div class="lbl">shipped prototypes</div></div>
         <div class="stat panel"><div class="num" data-count="1" data-suffix="M+&nbsp;×2">0</div><div class="lbl">downloads on launched titles</div></div>
         <div class="stat panel"><div class="num" data-count="200" data-suffix="K">0</div><div class="lbl">daily active users</div></div>
@@ -449,9 +449,9 @@
       <svg width="54" height="54" viewBox="0 0 32 32"><path d="M16 3 28 10v12L16 29 4 22V10z" fill="#0a0f24" stroke="#6ee7ff" stroke-width="1"/><path d="M16 8l7 4v8l-7 4-7-4v-8z" fill="none" stroke="#ffc966" stroke-width="1"/></svg>
       <div>
         <h3>Blue Variable — <em>Purrfect Fit</em></h3>
-        <p>The studio where my fiancée and I build small PC games on our shared <b>BLUE framework</b>.
-          In active development: <b>Purrfect Fit</b>, a cozy puzzler mixing Balatro-style mechanics with
-          inventory management — about finding the perfect spot for every cat.</p>
+        <p>Where my fiancée and I build small PC games on our shared <b>BLUE framework</b> — our
+          studio-in-the-making. In active development: <b>Purrfect Fit</b>, a cozy puzzler mixing
+          Balatro-style mechanics with inventory management — about finding the perfect spot for every cat.</p>
       </div>
       <div class="studio-links">
         <a class="btn primary" href="https://bluevariable.github.io/PurrfectFitDemo/" target="_blank" rel="noopener">play demo</a>
@@ -586,7 +586,7 @@
 </main>
 
 <footer>designed &amp; built with <b>three.js</b> by <b>AI</b> (Claude) — cubes included ·
-  <a href="https://defnetuncer98.github.io/v1.html" target="_blank" rel="noopener">portfolio v1</a> was handmade by a human · © 2026 defne tunçer</footer>
+  <a href="https://defnetuncer98.github.io/v1.html" target="_blank" rel="noopener">portfolio v1</a> was handmade by a human · © <span id="yr">2026</span> defne tunçer</footer>
 
 <!-- trailer modal -->
 <div id="trailer-modal" role="dialog" aria-modal="true" aria-label="A Cube Story trailer">
@@ -943,7 +943,10 @@ const io = new IntersectionObserver(es => es.forEach(e => {
 }), {threshold:0.12});
 document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 
-/* animated counters */
+/* animated counters — [data-since] stats compute themselves so the page never goes stale */
+document.querySelectorAll('[data-since]').forEach(el => {
+  el.dataset.count = Math.max(1, new Date().getFullYear() - +el.dataset.since);
+});
 const cio = new IntersectionObserver(es => es.forEach(e => {
   if (!e.isIntersecting) return;
   const el = e.target, end = +el.dataset.count, suf = el.dataset.suffix || '';
@@ -957,6 +960,9 @@ const cio = new IntersectionObserver(es => es.forEach(e => {
   })(t0);
 }), {threshold:0.5});
 document.querySelectorAll('[data-count]').forEach(el => cio.observe(el));
+
+/* footer year stays current on its own */
+document.getElementById('yr').textContent = new Date().getFullYear();
 
 /* nav scrollspy */
 const spyLinks = [...document.querySelectorAll('.nav-links a[href^="#"]')];

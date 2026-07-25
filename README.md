@@ -16,9 +16,10 @@ render from [A Cube Story](https://github.com/BlueVariable/ACubeStory): a dark v
 amphitheater, a self-luminous cube, drifting fireflies and moths, amber window lights.
 The camera follows the mouse, and clicking the world sends a ripple through the pillars.
 
-Below the fold: A Cube Story with its trailer and in-engine captures, shipped titles
-(Color Bus Trip, Knit N Loop, Mayor Match…), the [Blue Variable](https://bluevariable.github.io/)
-studio corner, an open-source lab, and the full experience timeline.
+Below the fold: A Cube Story (in development) with its trailer and in-engine captures,
+shipped titles (Color Bus Trip, Knit N Loop, Mayor Match…), the
+[Blue Variable](https://bluevariable.github.io/) corner, an open-source lab, and the
+full experience timeline.
 
 ### Structure
 
