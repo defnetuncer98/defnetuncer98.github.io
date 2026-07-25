@@ -1,116 +1,983 @@
 <!DOCTYPE html>
-<html>
-	<head>
-    <meta charset="utf-8">
-		<title>Defne Tunçer</title>
-                <link rel="shortcut icon" href="#">                
-		<style>
-        @font-face {
-            font-family: 'Titillium';
-            src: URL('./src/fonts/Titillium_Web/TitilliumWeb-Bold.ttf') format('truetype'),
-          }             
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Defne Tunçer — Game Developer</title>
+<meta name="description" content="Defne Tunçer — Senior Game Developer. Six years of Unity, 70+ shipped prototypes, 5 launched titles, and worlds made of cubes.">
+<meta property="og:title" content="Defne Tunçer — Game Developer">
+<meta property="og:description" content="Six years of Unity, 70+ shipped prototypes, and worlds made of cubes.">
+<meta property="og:image" content="assets/mothvillage.png">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M16 3 28 10v12L16 29 4 22V10z' fill='%230a0f24'/%3E%3Cpath d='M16 3 28 10 16 17 4 10z' fill='%236ee7ff'/%3E%3Cpath d='M16 17v12L4 22V10z' fill='%232563a8'/%3E%3Cpath d='M16 17v12l12-7V10z' fill='%23164e78'/%3E%3C/svg%3E">
+<style>
+  :root{
+    --bg:#06091a; --bg2:#0a0f24;
+    --panel:rgba(148,180,255,.045);
+    --line:rgba(148,180,255,.16);
+    --line-soft:rgba(148,180,255,.09);
+    --ink:#e9edff; --muted:#8f9ac4;
+    --cyan:#6ee7ff; --cyan-dim:#3aa8d8; --amber:#ffc966;
+    --mono:"Cascadia Code","JetBrains Mono",Consolas,"Courier New",monospace;
+    --sans:"Segoe UI",Inter,system-ui,-apple-system,sans-serif;
+    --max:1180px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+  body{
+    background:var(--bg); color:var(--ink); font-family:var(--sans);
+    line-height:1.6; overflow-x:hidden;
+  }
+  body::before{ /* faint blueprint grid over everything */
+    content:""; position:fixed; inset:0; pointer-events:none; z-index:0;
+    background:
+      linear-gradient(rgba(110,231,255,.022) 1px,transparent 1px),
+      linear-gradient(90deg,rgba(110,231,255,.022) 1px,transparent 1px);
+    background-size:44px 44px;
+  }
+  ::selection{background:rgba(110,231,255,.28)}
 
-        body {margin: 0; overflow:hidden; height:100%;
-              /*cursor: url('./src/images/cursor.png'), auto;*/
-            }
-        #loading {
-          position:absolute;
-          top:50%;
-          text-align:center;
-          border: 1px solid #ffffff;
-          width: 240px;
-          font-size: 400%;
-          color:white;
-          z-index: 100;
-          font-family: 'Titillium';
-          }   
-          .tech-slideshow {
-            height: 100%;
-            top:0;
-            left:0;
-            width: 100%;
-            margin: 0 auto;
-            position: absolute;
-            overflow: hidden;
-            transform: translate3d(0, 0, 0);
-          }
+  /* ---------- scroll progress ---------- */
+  #progress{position:fixed;top:0;left:0;height:2px;width:0;z-index:60;
+    background:linear-gradient(90deg,var(--cyan),var(--amber));
+    box-shadow:0 0 12px rgba(110,231,255,.7)}
 
-          .tech-slideshow > div {
-            background: url('./src/images/background.png');
-            position: absolute;
-            top: 0;
-            left: 0;
-            height: 100%;
-            width: 220%;
-            transform: translate3d(0, 0, 0);
-          }
-          .tech-slideshow .mover-1 {
-            animation: moveSlideshow 10s linear infinite;
-          }
+  /* ---------- cursor ring ---------- */
+  #cursor{position:fixed;width:34px;height:34px;border:1px solid rgba(110,231,255,.55);
+    border-radius:50%;pointer-events:none;z-index:70;transform:translate(-50%,-50%);
+    transition:width .18s,height .18s,border-color .18s;mix-blend-mode:screen;display:none}
+  #cursor.hot{width:52px;height:52px;border-color:var(--amber)}
+  @media (hover:hover) and (pointer:fine){#cursor{display:block}}
+  @media (prefers-reduced-motion:reduce){#cursor{display:none!important}}
 
-          @keyframes moveSlideshow {
-            100% { 
-              transform: translateX(-20%);  
-            }
-          }   
-		</style>
-	</head>
-	<body>
-            <iframe id="sketchfab-models" style="display:none;" title="A 3D model" width="640" height="480" src="https://sketchfab.com/models/bc2acf3031384aad9ba089ccbd290a80/embed?autostart=1&amp;ui_controls=1&amp;ui_infos=1&amp;ui_inspector=1&amp;ui_stop=1&amp;ui_watermark=1&amp;ui_watermark_link=1" frameborder="0" allow="autoplay; fullscreen; vr" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
-            <div id="slide" class="tech-slideshow"><div class="mover-1"></div></div>
-            <div id="container"></div>
-            <div style="align-items:center;display:flex;justify-content: center;"><p id="loading"></p></div>
-            <button id="linktoresume" style="display:none" onclick="window.open('./src/docs/DEFNE TUNCER.pdf','_blank')"></button>
-            <button id="mailto" style="display:none" onclick="window.open('mailto:defnetuncer98@gmail.com','_blank')"></button>
-            <button id="linktogithub" style="display:none" onclick="window.open('https://github.com/defnetuncer98','_blank')"></button>
-            <button id="linktolinkedin" style="display:none" onclick="window.open('https://linkedin.com/in/defnetuncer98','_blank')"></button>
-            <button id="linktogame" style="display:none" onclick="window.open('https://defnetuncer98.github.io/smellycat/','_blank')"></button>
-            <button id="linktoartstation" style="display:none" onclick="window.open('https://www.artstation.com/defnetuncer98','_blank')"></button>
-            <button id="linktosmelly" style="display:none" onclick="window.open('https://github.com/defnetuncer98/smellycat','_blank')"></button>
-            <button id="linktotomayto" style="display:none" onclick="window.open('https://github.com/Tomayto-Tomahto/demo','_blank')"></button>
-            <button id="linktorockornot" style="display:none" onclick="window.open('https://github.com/HUbbm409/rock-or-not','_blank')"></button>
-            <button id="linktoyoutube" style="display:none" onclick="window.open('https://www.youtube.com/watch?v=tlrknc6Zf6I','_blank')"></button>
-            <button id="linktoechost" style="display:none" onclick="window.open('https://www.youtube.com/watch?v=B2-HE7WCahc','_blank')"></button>
-            <button id="linktoyoutuberon" style="display:none" onclick="window.open('https://www.youtube.com/watch?v=JUi-dV562FM','_blank')"></button>
-            <button id="linktomedium" style="display:none" onclick="window.open('https://medium.com/@defnetuncer','_blank')"></button>
-            <button id="linktovizgooglefit" style="display:none" onclick="window.open('https://github.com/defnetuncer98/vizGoogleFit','_blank')"></button>
-            <button id="linktovizgooglefittryme" style="display:none" onclick="window.open('https://defnetuncer98.github.io/vizGoogleFit','_blank')"></button>
-            <button id="malle" style="display:none" onclick="window.open('https://github.com/HacettepeUniversityBBM384/mall-e','_blank')"></button>
-            <audio id="player" controls loop src='./src/sounds/St Francis - Josh Lippi & The Overtimers.mp3' style="display:none;" ></audio>
-            <script type="module" src="./app.js"></script>
-            <script type="x-shader/x-vertex" id="vertexshader">
-              varying vec2 vUv;
-        
-              void main() {
-        
-                vUv = uv;
-        
-                gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
-        
-              }
-        
-            </script>
-        
-            <script type="x-shader/x-fragment" id="fragmentshader">
-        
-              uniform sampler2D baseTexture;
-              uniform sampler2D bloomTexture;
-        
-              varying vec2 vUv;
-        
-              vec4 getTexture( sampler2D texelToLinearTexture ) {
-        
-                return mapTexelToLinear( texture2D( texelToLinearTexture , vUv ) );
-        
-              }
-        
-              void main() {
-        
-                gl_FragColor = ( getTexture( baseTexture ) + vec4( 1.0 ) * getTexture( bloomTexture ) );
-        
-              }
-        
-            </script>
-        
-	</body>
+  /* ---------- nav ---------- */
+  nav{position:fixed;top:0;left:0;right:0;z-index:50;
+    background:rgba(6,9,26,.72);backdrop-filter:blur(14px);
+    border-bottom:1px solid var(--line-soft)}
+  .nav-inner{max-width:var(--max);margin:0 auto;padding:0 24px;height:60px;
+    display:flex;align-items:center;justify-content:space-between}
+  .logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink);
+    font-family:var(--mono);font-size:15px;letter-spacing:.08em}
+  .logo b{color:var(--cyan)}
+  .logo .blink{animation:blink 1.2s steps(1) infinite}
+  @keyframes blink{50%{opacity:0}}
+  .nav-links{display:flex;gap:4px;align-items:center}
+  .nav-links a{color:var(--muted);text-decoration:none;font-size:13px;
+    font-family:var(--mono);letter-spacing:.06em;padding:7px 11px;border:1px solid transparent;
+    border-radius:3px;transition:color .2s,border-color .2s}
+  .nav-links a:hover,.nav-links a.active{color:var(--cyan);border-color:var(--line)}
+  .nav-links a.cta{color:var(--amber);border-color:rgba(255,201,102,.3)}
+  .nav-links a.cta:hover{border-color:var(--amber)}
+  @media (max-width:840px){.nav-links a:not(.cta){display:none}}
+
+  /* ---------- hero ---------- */
+  header{position:relative;height:100svh;min-height:640px;overflow:hidden}
+  #scene{position:absolute;inset:0;width:100%;height:100%;display:block}
+  .hero-fade{position:absolute;inset:0;pointer-events:none;
+    background:linear-gradient(180deg,rgba(6,9,26,.25) 0%,transparent 30%,transparent 62%,var(--bg) 100%)}
+  .hero-ui{position:absolute;inset:0;display:flex;flex-direction:column;
+    justify-content:center;pointer-events:none}
+  .hero-inner{max-width:var(--max);margin:0 auto;padding:0 24px;width:100%}
+  .hero-tag{font-family:var(--mono);font-size:13px;letter-spacing:.28em;color:var(--cyan);
+    text-transform:uppercase;margin-bottom:18px;display:flex;align-items:center;gap:12px}
+  .hero-tag::before{content:"";width:34px;height:1px;background:var(--cyan);box-shadow:0 0 8px var(--cyan)}
+  h1{font-size:clamp(46px,8.5vw,104px);line-height:.98;font-weight:700;letter-spacing:-.02em;
+    text-shadow:0 0 60px rgba(110,231,255,.25)}
+  h1 .dim{color:transparent;-webkit-text-stroke:1px rgba(233,237,255,.55)}
+  .hero-sub{margin-top:22px;max-width:560px;color:var(--muted);font-size:17px}
+  .hero-sub b{color:var(--ink);font-weight:600}
+  .type-line{font-family:var(--mono);font-size:14px;color:var(--amber);margin-top:16px;min-height:21px}
+  .type-line::before{content:"> ";color:var(--cyan)}
+  .type-caret{display:inline-block;width:8px;height:15px;background:var(--amber);
+    vertical-align:-2px;margin-left:2px;animation:blink 1s steps(1) infinite}
+  .hero-actions{margin-top:34px;display:flex;gap:12px;flex-wrap:wrap;pointer-events:auto}
+  .btn{font-family:var(--mono);font-size:13px;letter-spacing:.08em;text-decoration:none;
+    padding:12px 20px;border:1px solid var(--line);border-radius:3px;color:var(--ink);
+    background:rgba(10,15,36,.6);position:relative;transition:all .2s;cursor:pointer}
+  .btn:hover{border-color:var(--cyan);color:var(--cyan);box-shadow:0 0 22px rgba(110,231,255,.22);transform:translateY(-2px)}
+  .btn.primary{border-color:rgba(110,231,255,.5);color:var(--cyan)}
+  .btn.amber{border-color:rgba(255,201,102,.4);color:var(--amber)}
+  .btn.amber:hover{border-color:var(--amber);box-shadow:0 0 22px rgba(255,201,102,.25)}
+  .hero-hud{position:absolute;left:24px;bottom:22px;font-family:var(--mono);font-size:11px;
+    letter-spacing:.12em;color:rgba(143,154,196,.75);text-transform:uppercase}
+  .hero-hud span{color:var(--cyan)}
+  .hero-scroll{position:absolute;right:28px;bottom:22px;font-family:var(--mono);font-size:11px;
+    letter-spacing:.3em;color:var(--muted);writing-mode:vertical-rl;display:flex;align-items:center;gap:10px}
+  .hero-scroll::after{content:"";width:1px;height:44px;background:linear-gradient(var(--cyan),transparent);
+    animation:drip 1.8s ease-in-out infinite}
+  @keyframes drip{0%{transform:scaleY(0);transform-origin:top}55%{transform:scaleY(1);transform-origin:top}100%{transform:scaleY(1);opacity:0}}
+  .corner{position:absolute;width:26px;height:26px;border:1px solid rgba(110,231,255,.35);z-index:5;pointer-events:none}
+  .corner.tl{top:74px;left:14px;border-right:0;border-bottom:0}
+  .corner.tr{top:74px;right:14px;border-left:0;border-bottom:0}
+  .corner.bl{bottom:14px;left:14px;border-right:0;border-top:0}
+  .corner.br{bottom:14px;right:14px;border-left:0;border-top:0}
+
+  /* ---------- shared section chrome ---------- */
+  section{position:relative;z-index:1;max-width:var(--max);margin:0 auto;padding:110px 24px 30px}
+  .sec-head{display:flex;align-items:baseline;gap:16px;margin-bottom:14px}
+  .sec-num{font-family:var(--mono);font-size:13px;color:var(--amber);letter-spacing:.1em}
+  h2{font-size:clamp(26px,3.6vw,40px);letter-spacing:-.01em;font-weight:700}
+  h2 .accent{color:var(--cyan)}
+  .sec-line{flex:1;height:1px;background:linear-gradient(90deg,var(--line),transparent)}
+  .sec-sub{color:var(--muted);max-width:640px;margin-bottom:42px}
+
+  .reveal{opacity:0;transform:translateY(26px);transition:opacity .7s ease,transform .7s ease}
+  .reveal.in{opacity:1;transform:none}
+  @media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}}
+
+  .panel{background:var(--panel);border:1px solid var(--line-soft);border-radius:6px;position:relative}
+  .panel::before,.panel::after{content:"";position:absolute;width:14px;height:14px;
+    border:1px solid rgba(110,231,255,.4);transition:all .25s;pointer-events:none}
+  .panel::before{top:-1px;left:-1px;border-right:0;border-bottom:0;border-radius:6px 0 0 0}
+  .panel::after{bottom:-1px;right:-1px;border-left:0;border-top:0;border-radius:0 0 6px 0}
+  .panel:hover::before,.panel:hover::after{width:26px;height:26px;border-color:var(--cyan)}
+
+  /* ---------- about / stats ---------- */
+  .about-grid{display:grid;grid-template-columns:1.4fr 1fr;gap:44px;align-items:start}
+  @media (max-width:900px){.about-grid{grid-template-columns:1fr}}
+  .about-copy p{color:var(--muted);margin-bottom:18px;font-size:16.5px}
+  .about-copy p b{color:var(--ink);font-weight:600}
+  .stats{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+  .stat{padding:22px 20px;text-align:left}
+  .stat .num{font-family:var(--mono);font-size:34px;color:var(--cyan);font-weight:600;
+    text-shadow:0 0 24px rgba(110,231,255,.4)}
+  .stat .num small{font-size:20px}
+  .stat .lbl{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--muted);
+    text-transform:uppercase;margin-top:6px}
+  .stat:nth-child(2) .num,.stat:nth-child(3) .num{color:var(--amber);text-shadow:0 0 24px rgba(255,201,102,.35)}
+
+  /* ---------- featured: a cube story ---------- */
+  .feature-poster{display:block;position:relative;border-radius:6px;overflow:hidden;
+    border:1px solid var(--line);cursor:pointer;background:#000}
+  .feature-poster img{width:100%;display:block;aspect-ratio:21/9;object-fit:cover;
+    transition:transform .8s ease,filter .8s ease;filter:brightness(.92)}
+  .feature-poster:hover img{transform:scale(1.03);filter:brightness(1.05)}
+  .poster-veil{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    background:radial-gradient(ellipse at center,transparent 30%,rgba(6,9,26,.55) 100%)}
+  .play-btn{width:86px;height:86px;border-radius:50%;border:1px solid rgba(110,231,255,.6);
+    background:rgba(6,9,26,.55);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;
+    transition:all .3s;box-shadow:0 0 40px rgba(110,231,255,.25)}
+  .feature-poster:hover .play-btn{transform:scale(1.12);border-color:var(--cyan);box-shadow:0 0 60px rgba(110,231,255,.5)}
+  .play-btn svg{margin-left:5px}
+  .poster-label{position:absolute;left:20px;bottom:16px;font-family:var(--mono);font-size:12px;
+    letter-spacing:.2em;color:var(--cyan);text-transform:uppercase;text-shadow:0 0 12px rgba(0,0,0,.9)}
+  .poster-corner{position:absolute;right:20px;top:16px;font-family:var(--mono);font-size:11px;
+    letter-spacing:.14em;color:rgba(233,237,255,.8);text-transform:uppercase;
+    border:1px solid rgba(233,237,255,.3);padding:5px 10px;border-radius:3px;
+    background:rgba(6,9,26,.5);backdrop-filter:blur(4px)}
+
+  .feature-body{display:grid;grid-template-columns:1fr 1.5fr;gap:36px;margin-top:36px;align-items:start}
+  @media (max-width:900px){.feature-body{grid-template-columns:1fr}}
+  .feature-text p{color:var(--muted);margin-bottom:16px}
+  .feature-text p b{color:var(--ink)}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+  .chip{font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;color:var(--cyan-dim);
+    border:1px solid var(--line-soft);padding:5px 11px;border-radius:99px;transition:all .2s}
+  .chip:hover{color:var(--cyan);border-color:var(--cyan);box-shadow:0 0 14px rgba(110,231,255,.2)}
+  .media-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media (max-width:560px){.media-grid{grid-template-columns:1fr}}
+  .media-card{position:relative;border-radius:6px;overflow:hidden;border:1px solid var(--line-soft);
+    background:#000;transition:border-color .25s}
+  .media-card:hover{border-color:var(--cyan)}
+  .media-card video,.media-card img{width:100%;display:block;aspect-ratio:16/9;object-fit:cover}
+  .media-card .tag{position:absolute;left:12px;bottom:10px;font-family:var(--mono);font-size:10.5px;
+    letter-spacing:.16em;text-transform:uppercase;color:var(--ink);
+    background:rgba(6,9,26,.65);border:1px solid var(--line-soft);
+    padding:3px 8px;border-radius:3px;backdrop-filter:blur(4px)}
+  .media-card.wide{grid-column:1/-1}
+  .ba{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line)}
+  .ba > div{position:relative;background:#000}
+  .ba video{width:100%;display:block;aspect-ratio:16/9;object-fit:cover}
+  .ba .tag{position:absolute;left:10px;bottom:8px}
+  .ba > div:last-child .tag{color:var(--amber);border-color:rgba(255,201,102,.35)}
+
+  /* ---------- shipped ---------- */
+  .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  @media (max-width:980px){.cards{grid-template-columns:repeat(2,1fr)}}
+  @media (max-width:600px){.cards{grid-template-columns:1fr}}
+  .card{padding:26px 24px;transition:transform .25s ease,box-shadow .25s ease;will-change:transform}
+  .card:hover{box-shadow:0 14px 44px rgba(0,0,0,.5),0 0 0 1px var(--line)}
+  .card-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+  .cube-ico{width:44px;height:44px;flex:none;filter:drop-shadow(0 4px 14px rgba(0,0,0,.5))}
+  .card h3{font-size:19px;margin-bottom:2px}
+  .card .with{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--amber);
+    text-transform:uppercase;margin-bottom:12px}
+  .card p{color:var(--muted);font-size:14.5px;margin-bottom:16px}
+  .badges{display:flex;gap:8px;flex-wrap:wrap}
+  .badge{font-family:var(--mono);font-size:11px;letter-spacing:.05em;color:var(--cyan);
+    border:1px solid rgba(110,231,255,.25);background:rgba(110,231,255,.06);
+    padding:4px 9px;border-radius:3px}
+  .badge.dim{color:var(--muted);border-color:var(--line-soft);background:transparent}
+
+  /* ---------- studio strip ---------- */
+  .studio{display:grid;grid-template-columns:auto 1fr auto;gap:28px;align-items:center;
+    padding:30px 32px;margin-top:18px;
+    background:linear-gradient(100deg,rgba(110,231,255,.06),rgba(255,201,102,.05));
+    border:1px solid var(--line-soft);border-radius:6px}
+  @media (max-width:820px){.studio{grid-template-columns:1fr;text-align:left}}
+  .studio h3{font-size:22px}
+  .studio h3 em{color:var(--cyan);font-style:normal}
+  .studio p{color:var(--muted);font-size:15px;margin-top:6px}
+  .studio-links{display:flex;gap:10px;flex-wrap:wrap}
+
+  /* ---------- lab ---------- */
+  .lab-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  @media (max-width:980px){.lab-grid{grid-template-columns:repeat(2,1fr)}}
+  @media (max-width:600px){.lab-grid{grid-template-columns:1fr}}
+  .lab-card{padding:22px;display:block;text-decoration:none;color:inherit;
+    transition:transform .25s,box-shadow .25s}
+  .lab-card:hover{transform:translateY(-4px);box-shadow:0 14px 44px rgba(0,0,0,.5)}
+  .lab-card .name{font-family:var(--mono);font-size:15px;color:var(--cyan);margin-bottom:8px;
+    display:flex;align-items:center;justify-content:space-between}
+  .lab-card .name::after{content:"↗";color:var(--muted);font-size:13px;transition:all .2s}
+  .lab-card:hover .name::after{color:var(--amber);transform:translate(3px,-3px)}
+  .lab-card p{color:var(--muted);font-size:13.5px;min-height:42px}
+  .lab-card .meta{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;color:rgba(143,154,196,.7);
+    text-transform:uppercase;margin-top:14px}
+
+  /* ---------- experience ---------- */
+  .timeline{position:relative;padding-left:34px}
+  .timeline::before{content:"";position:absolute;left:8px;top:6px;bottom:6px;width:1px;
+    background:linear-gradient(var(--cyan),var(--line),transparent)}
+  .t-item{position:relative;padding-bottom:40px}
+  .t-item::before{content:"";position:absolute;left:-30px;top:7px;width:9px;height:9px;
+    background:var(--bg);border:1px solid var(--cyan);transform:rotate(45deg);
+    box-shadow:0 0 12px rgba(110,231,255,.6)}
+  .t-when{font-family:var(--mono);font-size:12px;color:var(--amber);letter-spacing:.14em;margin-bottom:4px}
+  .t-item h3{font-size:19px}
+  .t-item .where{color:var(--cyan);font-size:14.5px;margin-bottom:10px}
+  .t-item p,.t-item li{color:var(--muted);font-size:14.5px}
+  .t-item ul{margin:8px 0 0 18px;display:grid;gap:6px}
+  .t-item li::marker{color:var(--cyan)}
+  .exp-grid{display:grid;grid-template-columns:1.5fr 1fr;gap:48px}
+  @media (max-width:900px){.exp-grid{grid-template-columns:1fr}}
+  .edu-card{padding:22px 24px;margin-bottom:16px}
+  .edu-card .t-when{margin-bottom:2px}
+  .edu-card h3{font-size:17px}
+  .edu-card .where{color:var(--muted);font-size:14px}
+  .edu-card .gpa{font-family:var(--mono);font-size:12px;color:var(--cyan);margin-top:8px}
+  .skills{display:flex;flex-wrap:wrap;gap:9px;margin-top:22px}
+
+  /* ---------- contact ---------- */
+  .contact{text-align:center;padding-bottom:70px}
+  .contact .big{font-size:clamp(24px,4vw,44px);font-weight:700;margin:26px 0 8px}
+  .contact .big a{color:var(--ink);text-decoration:none;border-bottom:1px solid var(--line);
+    transition:all .25s}
+  .contact .big a:hover{color:var(--cyan);border-color:var(--cyan);text-shadow:0 0 30px rgba(110,231,255,.5)}
+  .contact-row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:30px}
+  footer{border-top:1px solid var(--line-soft);padding:26px 24px;text-align:center;
+    font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;color:rgba(143,154,196,.65)}
+  footer b{color:var(--cyan);font-weight:400}
+
+  /* ---------- trailer modal ---------- */
+  #trailer-modal{position:fixed;inset:0;z-index:80;display:none;align-items:center;justify-content:center;
+    background:rgba(3,5,14,.9);backdrop-filter:blur(10px);padding:4vmin}
+  #trailer-modal.open{display:flex}
+  .modal-box{width:min(1100px,96vw);position:relative}
+  .modal-box video{width:100%;border:1px solid var(--line);border-radius:6px;display:block;
+    box-shadow:0 0 90px rgba(110,231,255,.18)}
+  .modal-close{position:absolute;top:-44px;right:0;background:none;border:1px solid var(--line);
+    color:var(--ink);font-family:var(--mono);font-size:12px;letter-spacing:.14em;
+    padding:8px 14px;border-radius:3px;cursor:pointer;transition:all .2s}
+  .modal-close:hover{border-color:var(--amber);color:var(--amber)}
+</style>
+</head>
+<body>
+
+<div id="progress"></div>
+<div id="cursor"></div>
+
+<nav>
+  <div class="nav-inner">
+    <a class="logo" href="#top"><svg width="20" height="20" viewBox="0 0 32 32"><path d="M16 3 28 10v12L16 29 4 22V10z" fill="none" stroke="#6ee7ff" stroke-width="1.6"/><path d="M4 10l12 7 12-7M16 17v12" fill="none" stroke="#6ee7ff" stroke-width="1.2" opacity=".6"/></svg>defne<b>@</b>tuncer:~<span class="blink">_</span></a>
+    <div class="nav-links">
+      <a href="#about">about</a>
+      <a href="#acubestory">a_cube_story</a>
+      <a href="#shipped">shipped</a>
+      <a href="#lab">lab</a>
+      <a href="#experience">experience</a>
+      <a href="#contact">contact</a>
+      <a class="cta" href="https://defnetuncer98.github.io/src/docs/DEFNE%20TUNCER.pdf" target="_blank" rel="noopener">resume ↗</a>
+    </div>
+  </div>
+</nav>
+
+<header id="top">
+  <canvas id="scene" aria-hidden="true"></canvas>
+  <div class="hero-fade"></div>
+  <div class="corner tl"></div><div class="corner tr"></div>
+  <div class="corner bl"></div><div class="corner br"></div>
+  <div class="hero-ui">
+    <div class="hero-inner">
+      <div class="hero-tag">Senior Game Developer · Ankara, Türkiye</div>
+      <h1>DEFNE<br><span class="dim">TUNÇER</span></h1>
+      <p class="hero-sub"><b>Six years of Unity</b>, 70+ shipped prototypes, and a soft spot for
+        anything clever, meticulously crafted &amp; made of pixels. 👾☕🛸</p>
+      <div class="type-line"><span id="type"></span><span class="type-caret"></span></div>
+      <div class="hero-actions">
+        <a class="btn primary" href="#acubestory">view work</a>
+        <a class="btn" href="https://github.com/defnetuncer98" target="_blank" rel="noopener">github</a>
+        <a class="btn" href="https://linkedin.com/in/defnetuncer98" target="_blank" rel="noopener">linkedin</a>
+        <a class="btn" href="https://www.artstation.com/defnetuncer98" target="_blank" rel="noopener">artstation</a>
+        <a class="btn amber" href="mailto:defnetuncer98@gmail.com">say hi</a>
+      </div>
+    </div>
+  </div>
+  <div class="hero-hud">scene: <span>moth_village</span> · runtime: <span>three.js</span> · <span id="fps">60</span>fps — click the world to wake it</div>
+  <div class="hero-scroll">scroll</div>
+</header>
+
+<main>
+  <!-- ============ ABOUT ============ -->
+  <section id="about">
+    <div class="sec-head reveal"><span class="sec-num">01</span><h2>About<span class="accent">.</span></h2><div class="sec-line"></div></div>
+    <div class="about-grid">
+      <div class="about-copy reveal">
+        <p>I'm a <b>Senior Game Developer at MildMania</b>, building mobile games in Unity since 2020 —
+          from hybrid-casual prototypes shipped at a weekly cadence to launched titles with
+          millions of downloads and live-ops running at 200K DAU.</p>
+        <p>I build <b>well-architected, optimized gameplay systems</b> and ship polished features with
+          a great eye for animations and UI. I've built level editors and frameworks that let designers
+          ship content without touching code, and AI-driven tools adopted across projects.</p>
+        <p>On the side I hold an <b>MSc in Computer Graphics</b> (GPA 3.98), co-run a two-person indie
+          studio, and make small strange things with WebGL — like this page.</p>
+      </div>
+      <div class="stats reveal">
+        <div class="stat panel"><div class="num" data-count="6" data-suffix="+">0</div><div class="lbl">years of Unity</div></div>
+        <div class="stat panel"><div class="num" data-count="70" data-suffix="+">0</div><div class="lbl">shipped prototypes</div></div>
+        <div class="stat panel"><div class="num" data-count="1" data-suffix="M+&nbsp;×2">0</div><div class="lbl">downloads on launched titles</div></div>
+        <div class="stat panel"><div class="num" data-count="200" data-suffix="K">0</div><div class="lbl">daily active users</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ A CUBE STORY ============ -->
+  <section id="acubestory">
+    <div class="sec-head reveal"><span class="sec-num">02</span><h2>A Cube <span class="accent">Story</span></h2><div class="sec-line"></div></div>
+    <p class="sec-sub reveal">My personal project — an atmospheric voxel adventure that follows a small
+      glowing cube through a sleeping world. Everything below is captured in-engine.</p>
+
+    <div class="feature-poster reveal" id="open-trailer" role="button" tabindex="0" aria-label="Play the A Cube Story trailer">
+      <img src="assets/mothvillage.png" alt="A Cube Story — the Moth Village at night: a glowing cube resting on dark stone pillars, surrounded by moths and firefly lights">
+      <div class="poster-veil">
+        <div class="play-btn"><svg width="26" height="26" viewBox="0 0 24 24" fill="#6ee7ff"><path d="M8 5v14l11-7z"/></svg></div>
+      </div>
+      <div class="poster-label">▸ play trailer — 01:37</div>
+      <div class="poster-corner">in development</div>
+    </div>
+
+    <div class="feature-body">
+      <div class="feature-text reveal">
+        <p>Built in <b>Unity URP</b> with custom toon shading, Cinemachine camera work and hand-crafted
+          scenes — day and night cycles, rain systems, and quiet little places like the Moth Village.</p>
+        <p>Every model, shader, animation and cut was made by me, from Blender to the final edit.</p>
+        <div class="chips">
+          <span class="chip">Unity · URP</span><span class="chip">Custom toon shader</span>
+          <span class="chip">Cinemachine</span><span class="chip">DOTween</span>
+          <span class="chip">Blender</span><span class="chip">DaVinci Resolve</span>
+        </div>
+      </div>
+      <div class="media-grid reveal">
+        <div class="media-card"><video src="assets/acs_village.mp4" muted loop playsinline preload="metadata"></video><span class="tag">moth village — flythrough</span></div>
+        <div class="media-card"><video src="assets/acs_final.mp4" muted loop playsinline preload="metadata"></video><span class="tag">scene capture</span></div>
+        <div class="media-card wide">
+          <div class="ba">
+            <div><video src="assets/acs_before.mp4" muted loop playsinline preload="metadata"></video><span class="tag">lighting — before</span></div>
+            <div><video src="assets/acs_after.mp4" muted loop playsinline preload="metadata"></video><span class="tag">lighting — after</span></div>
+          </div>
+        </div>
+        <div class="media-card"><video src="assets/acs_devlog.mp4" muted loop playsinline preload="metadata"></video><span class="tag">devlog cut</span></div>
+        <div class="media-card"><img src="assets/a_cube_story.gif" alt="A Cube Story gameplay gif — the cube rolling through an isometric voxel scene" loading="lazy"><span class="tag">gameplay loop</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SHIPPED ============ -->
+  <section id="shipped">
+    <div class="sec-head reveal"><span class="sec-num">03</span><h2>Shipped <span class="accent">titles</span></h2><div class="sec-line"></div></div>
+    <p class="sec-sub reveal">Five launched casual titles with top publishers — plus a seventy-strong
+      graveyard of prototypes that taught me everything.</p>
+    <div class="cards">
+      <div class="card panel reveal">
+        <div class="card-top"><svg class="cube-ico" viewBox="0 0 32 32"><path d="M16 3 28 10v12L16 29 4 22V10z" fill="#0a0f24"/><path d="M16 3 28 10 16 17 4 10z" fill="#ffb84d"/><path d="M16 17v12L4 22V10z" fill="#c47a1e"/><path d="M16 17v12l12-7V10z" fill="#8a5410"/></svg></div>
+        <h3>Color Bus Trip</h3><div class="with">with Voodoo · lead developer</div>
+        <p>Led development end-to-end — A/B testing mechanics and monetization into a launch-ready title on a strict deadline.</p>
+        <div class="badges"><span class="badge">1M+ downloads</span><span class="badge">200K DAU</span></div>
+      </div>
+      <div class="card panel reveal">
+        <div class="card-top"><svg class="cube-ico" viewBox="0 0 32 32"><path d="M16 3 28 10v12L16 29 4 22V10z" fill="#0a0f24"/><path d="M16 3 28 10 16 17 4 10z" fill="#ff8fb5"/><path d="M16 17v12L4 22V10z" fill="#c2537e"/><path d="M16 17v12l12-7V10z" fill="#8a3457"/></svg></div>
+        <h3>Knit N Loop</h3><div class="with">with Voodoo · lead developer</div>
+        <p>Second launch-ready title from the same pipeline — mechanics, monetization and polish shipped against the clock.</p>
+        <div class="badges"><span class="badge">launched</span><span class="badge dim">hybrid-casual</span></div>
+      </div>
+      <div class="card panel reveal">
+        <div class="card-top"><svg class="cube-ico" viewBox="0 0 32 32"><path d="M16 3 28 10v12L16 29 4 22V10z" fill="#0a0f24"/><path d="M16 3 28 10 16 17 4 10z" fill="#7ee787"/><path d="M16 17v12L4 22V10z" fill="#3f9e4e"/><path d="M16 17v12l12-7V10z" fill="#276a33"/></svg></div>
+        <h3>Mayor Match</h3><div class="with">with Rollic · core developer</div>
+        <p>Match-3 mechanics, the level editor, live ops — events, teams, IAP — and an Addressables-based remote content pipeline.</p>
+        <div class="badges"><span class="badge">1M+ downloads</span><span class="badge">200K DAU</span></div>
+      </div>
+      <div class="card panel reveal">
+        <div class="card-top"><svg class="cube-ico" viewBox="0 0 32 32"><path d="M16 3 28 10v12L16 29 4 22V10z" fill="#0a0f24"/><path d="M16 3 28 10 16 17 4 10z" fill="#e0705a"/><path d="M16 17v12L4 22V10z" fill="#a34634"/><path d="M16 17v12l12-7V10z" fill="#6e2c1f"/></svg></div>
+        <h3>Wasteland Survival</h3><div class="with">tower defense</div>
+        <p>Shipped core gameplay systems for a tower-defense title — waves, targeting, and upgrade loops.</p>
+        <div class="badges"><span class="badge dim">core systems</span></div>
+      </div>
+      <div class="card panel reveal">
+        <div class="card-top"><svg class="cube-ico" viewBox="0 0 32 32"><path d="M16 3 28 10v12L16 29 4 22V10z" fill="#0a0f24"/><path d="M16 3 28 10 16 17 4 10z" fill="#b89bff"/><path d="M16 17v12L4 22V10z" fill="#7a5fc2"/><path d="M16 17v12l12-7V10z" fill="#4f3a85"/></svg></div>
+        <h3>Lootland</h3><div class="with">arcade shooter</div>
+        <p>Core gameplay systems for an arcade-shooter — movement, loot, and the numbers that make it feel good.</p>
+        <div class="badges"><span class="badge dim">core systems</span></div>
+      </div>
+      <div class="card panel reveal">
+        <div class="card-top"><svg class="cube-ico" viewBox="0 0 32 32"><path d="M16 3 28 10v12L16 29 4 22V10z" fill="none" stroke="#6ee7ff" stroke-width="1.4"/><path d="M4 10l12 7 12-7M16 17v12" fill="none" stroke="#6ee7ff" stroke-width="1" opacity=".6"/></svg></div>
+        <h3>70+ Prototypes</h3><div class="with">the hybrid-casual lab</div>
+        <p>Published hybrid-casual prototypes at a relentless cadence — every one a bet, a build, and a lesson.</p>
+        <div class="badges"><span class="badge">2020 → now</span></div>
+      </div>
+    </div>
+
+    <div class="studio reveal">
+      <svg width="54" height="54" viewBox="0 0 32 32"><path d="M16 3 28 10v12L16 29 4 22V10z" fill="#0a0f24" stroke="#6ee7ff" stroke-width="1"/><path d="M16 8l7 4v8l-7 4-7-4v-8z" fill="none" stroke="#ffc966" stroke-width="1"/></svg>
+      <div>
+        <h3>Blue Variable — <em>Purrfect Fit</em></h3>
+        <p>My two-person indie studio. Small team, cozy games. First up: <b>Purrfect Fit</b>, a cozy puzzle
+          game about finding the perfect spot for every cat — coming 2027.</p>
+      </div>
+      <div class="studio-links">
+        <a class="btn primary" href="https://bluevariable.github.io/PurrfectFitDemo/" target="_blank" rel="noopener">play demo</a>
+        <a class="btn" href="https://bluevariable.github.io/" target="_blank" rel="noopener">studio site</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ LAB ============ -->
+  <section id="lab">
+    <div class="sec-head reveal"><span class="sec-num">04</span><h2>The <span class="accent">lab</span></h2><div class="sec-line"></div></div>
+    <p class="sec-sub reveal">Experiments, tools and open source — mostly WebGL, geometry, and things
+      that had no business being built but were fun anyway.</p>
+    <div class="lab-grid">
+      <a class="lab-card panel reveal" href="https://defnetuncer98.github.io/smellycat/" target="_blank" rel="noopener">
+        <div class="name">smellycat</div>
+        <p>A WebGL physics toy — one smelly cat, three.js and ammo.js, zero purpose, maximum joy.</p>
+        <div class="meta">three.js · ammo.js · webgl</div>
+      </a>
+      <a class="lab-card panel reveal" href="https://defnetuncer98.github.io/triangulateMe/" target="_blank" rel="noopener">
+        <div class="name">triangulateMe</div>
+        <p>A polygon triangulation playground — computational geometry you can poke at, live in the browser.</p>
+        <div class="meta">computational geometry · three.js</div>
+      </a>
+      <a class="lab-card panel reveal" href="https://github.com/defnetuncer98/Puzzle-Prototyper" target="_blank" rel="noopener">
+        <div class="name">Puzzle Prototyper</div>
+        <p>Turn puzzle ideas into playable prototypes instantly — an AI-assisted design sketchpad.</p>
+        <div class="meta">tools · game design</div>
+      </a>
+      <a class="lab-card panel reveal" href="https://github.com/defnetuncer98/Outlaws-Ledger" target="_blank" rel="noopener">
+        <div class="name">Outlaw's Ledger</div>
+        <p>An interactive, spoiler-safe quest tracker for slow, careful playthroughs.</p>
+        <div class="meta">web · tools</div>
+      </a>
+      <a class="lab-card panel reveal" href="https://defnetuncer98.github.io/" target="_blank" rel="noopener">
+        <div class="name">portfolio v1</div>
+        <p>"look at me! I'm made with ThreeJS 😁👀" — my first 3D portfolio, model, sounds and all.</p>
+        <div class="meta">three.js · glsl</div>
+      </a>
+      <a class="lab-card panel reveal" href="https://github.com/defnetuncer98/embedded-systems" target="_blank" rel="noopener">
+        <div class="name">embedded-systems</div>
+        <p>Bare-metal C on ARM Cortex-M (TM4C123) — interrupts, timers, and blinking things in Keil.</p>
+        <div class="meta">c · arm cortex-m</div>
+      </a>
+    </div>
+  </section>
+
+  <!-- ============ EXPERIENCE ============ -->
+  <section id="experience">
+    <div class="sec-head reveal"><span class="sec-num">05</span><h2>Experience<span class="accent">.</span></h2><div class="sec-line"></div></div>
+    <div class="exp-grid">
+      <div class="timeline">
+        <div class="t-item reveal">
+          <div class="t-when">2020 — PRESENT</div>
+          <h3>Senior Game Developer</h3>
+          <div class="where">MildMania · Ankara</div>
+          <ul>
+            <li>Led development of multiple mobile casual titles in Unity, closely with designers and artists.</li>
+            <li>70+ published hybrid-casual prototypes and 5 launched casual titles.</li>
+            <li>Built reusable game &amp; level-editor frameworks and AI-driven tools adopted across projects.</li>
+            <li>Mentored junior developers through reviews, pairing and onboarding.</li>
+          </ul>
+        </div>
+        <div class="t-item reveal">
+          <div class="t-when">2019</div>
+          <h3>HCI Lab Research Intern</h3>
+          <div class="where">University of Maryland · USA</div>
+          <p>Built a personal fitness data-viz web app on the Google Fit REST API — visualizations in D3.js
+            and Tableau. Advisor: Eun Kyoung Choe.</p>
+        </div>
+        <div class="t-item reveal">
+          <div class="t-when">2019</div>
+          <h3>Google Student Retreat</h3>
+          <div class="where">Google · London</div>
+          <p>Invited as one of the top 25 KickStart competitors among 450 students across EMEA.</p>
+        </div>
+        <div class="t-item reveal">
+          <div class="t-when">2018</div>
+          <h3>Software Engineer Intern</h3>
+          <div class="where">TÜBİTAK BİLGEM YTE · Ankara</div>
+          <p>Cross-platform mobile chat app in C# with Xamarin, Firebase and Google REST APIs.</p>
+        </div>
+      </div>
+      <div>
+        <div class="edu-card panel reveal">
+          <div class="t-when">2020 — 2024</div>
+          <h3>MSc Computer Graphics</h3>
+          <div class="where">Hacettepe University</div>
+          <div class="gpa">GPA 3.98 / 4.00</div>
+        </div>
+        <div class="edu-card panel reveal">
+          <div class="t-when">2016 — 2020</div>
+          <h3>BSc Computer Science</h3>
+          <div class="where">Hacettepe University</div>
+          <div class="gpa">GPA 3.68 / 4.00</div>
+        </div>
+        <div class="reveal">
+          <div class="skills">
+            <span class="chip">Unity / C#</span><span class="chip">Shaders / GLSL</span>
+            <span class="chip">C++ / Java / Python</span><span class="chip">Algorithms &amp; DS</span>
+            <span class="chip">OOP / SOLID / Patterns</span><span class="chip">Blender / Maya</span>
+            <span class="chip">three.js / WebGL</span><span class="chip">D3.js</span>
+            <span class="chip">DaVinci Resolve</span><span class="chip">Git / Rider</span>
+            <span class="chip">Competitive Programming</span><span class="chip">Graphic Design</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CONTACT ============ -->
+  <section id="contact" class="contact">
+    <div class="sec-head reveal" style="justify-content:center"><span class="sec-num">06</span><h2>Press <span class="accent">start</span></h2></div>
+    <p class="sec-sub reveal" style="margin:0 auto">Got a world that needs building — or just want to talk
+      games, graphics and clever little systems?</p>
+    <div class="big reveal"><a href="mailto:defnetuncer98@gmail.com">defnetuncer98@gmail.com</a></div>
+    <div class="contact-row reveal">
+      <a class="btn" href="https://github.com/defnetuncer98" target="_blank" rel="noopener">github</a>
+      <a class="btn" href="https://github.com/BlueVariable" target="_blank" rel="noopener">blue variable</a>
+      <a class="btn" href="https://linkedin.com/in/defnetuncer98" target="_blank" rel="noopener">linkedin</a>
+      <a class="btn" href="https://www.artstation.com/defnetuncer98" target="_blank" rel="noopener">artstation</a>
+      <a class="btn amber" href="https://defnetuncer98.github.io/src/docs/DEFNE%20TUNCER.pdf" target="_blank" rel="noopener">resume ↗</a>
+    </div>
+  </section>
+</main>
+
+<footer>designed &amp; built with <b>three.js</b> — cubes included · © 2026 defne tunçer</footer>
+
+<!-- trailer modal -->
+<div id="trailer-modal" role="dialog" aria-modal="true" aria-label="A Cube Story trailer">
+  <div class="modal-box">
+    <button class="modal-close" id="close-trailer">close [esc]</button>
+    <video id="trailer-video" src="assets/trailer.mp4" poster="assets/mothvillage.png" controls preload="none"></video>
+  </div>
+</div>
+
+<script type="importmap">{"imports":{"three":"./lib/three.module.js"}}</script>
+<script type="module">
+import * as THREE from 'three';
+
+const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ================= THREE SCENE — the moth village ================= */
+const canvas = document.getElementById('scene');
+const renderer = new THREE.WebGLRenderer({canvas, antialias:true});
+renderer.setClearColor(0x06091a, 1);
+renderer.setPixelRatio(Math.min(devicePixelRatio, 1.75));
+
+const scene = new THREE.Scene();
+scene.fog = new THREE.FogExp2(0x06091a, 0.026);
+
+const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 220);
+const camTarget = new THREE.Vector3(0, 1.8, 0);
+const CAM = {radius:25, theta:Math.PI/4, phi:1.02};
+
+scene.add(new THREE.AmbientLight(0x2a3878, 1.1));
+const moon = new THREE.DirectionalLight(0x6080ff, 0.55);
+moon.position.set(10, 22, 6);
+scene.add(moon);
+const cubeLight = new THREE.PointLight(0x7fdcff, 30, 30, 1.6);
+scene.add(cubeLight);
+
+/* ---- pillar field (instanced) ---- */
+const pillarGeo = new THREE.BoxGeometry(1, 1, 1);
+pillarGeo.translate(0, 0.5, 0);
+const pillarMat = new THREE.MeshStandardMaterial({color:0xffffff, roughness:0.95, metalness:0});
+const pillars = [];
+const STEP = 1.16, R = 12;
+for (let gx = -R; gx <= R; gx++){
+  for (let gz = -R; gz <= R; gz++){
+    const x = gx*STEP + (Math.random()-0.5)*0.22;
+    const z = gz*STEP + (Math.random()-0.5)*0.22;
+    const r = Math.hypot(x, z);
+    if (r > 13.4) continue;
+    if (Math.random() < 0.16) continue;
+    // open the amphitheater toward the camera: low in the camera-facing arc,
+    // tall backdrop behind the cube
+    const ang = Math.atan2(z, x);
+    let d = Math.abs(ang - CAM.theta);
+    if (d > Math.PI) d = Math.PI*2 - d;
+    const open = 0.14 + 0.86*Math.pow(Math.min(d/1.45, 1), 1.7);
+    let h;
+    if (r < 3.2)      h = 0.45 + Math.random()*0.3;                 // the plaza
+    else if (r < 4.6) h = 0.7 + Math.random()*0.9;                  // low ring
+    else              h = (0.8 + Math.pow((r-3)/10, 1.5)*(5 + Math.random()*10)) * open;
+    if (r > 6 && d > 1.1 && Math.random() < 0.07) h += 4 + Math.random()*5; // back spikes
+    h = Math.min(h, 13);
+    pillars.push({x, z, h, phase:Math.random()*Math.PI*2, bump:0});
+  }
+}
+const field = new THREE.InstancedMesh(pillarGeo, pillarMat, pillars.length);
+const dummy = new THREE.Object3D();
+const shade = new THREE.Color();
+pillars.forEach((p, i) => {
+  const t = Math.min(p.h/14, 1);
+  shade.setHSL(0.64 + Math.random()*0.03, 0.42, 0.10 + t*0.05 + Math.random()*0.02);
+  field.setColorAt(i, shade);
+});
+field.instanceColor.needsUpdate = true;
+scene.add(field);
+
+/* amber window-lights on some tall pillars */
+const winGeo = new THREE.BoxGeometry(0.16, 0.26, 0.16);
+const winMat = new THREE.MeshBasicMaterial({color:0xffb84d});
+const talls = pillars.filter(p => p.h > 6);
+const winCount = Math.min(16, talls.length);
+const windows = new THREE.InstancedMesh(winGeo, winMat, winCount);
+for (let i = 0; i < winCount; i++){
+  const p = talls[Math.floor(Math.random()*talls.length)];
+  dummy.position.set(p.x + 0.51*(Math.random()<0.5?-1:1)*Math.random(), p.h*(0.5+Math.random()*0.45), p.z + 0.51);
+  dummy.rotation.set(0,0,0); dummy.scale.set(1,1,1);
+  dummy.updateMatrix();
+  windows.setMatrixAt(i, dummy.matrix);
+}
+scene.add(windows);
+
+/* ---- the cube ---- */
+// unlit, self-luminous — scene lights must never shade the glowing cube.
+// Subtle per-face cyan tints keep the isometric read without looking shadowed.
+// BoxGeometry group order: +x, -x, +y (top), -y, +z, -z
+const cubeFace = c => new THREE.MeshBasicMaterial({color:c});
+const cube = new THREE.Mesh(
+  new THREE.BoxGeometry(1.7, 1.7, 1.7),
+  [cubeFace(0xaee8fa), cubeFace(0x8fd8f2), cubeFace(0xdcf7ff),
+   cubeFace(0x7fccec), cubeFace(0x9fe0f6), cubeFace(0xaee8fa)]
+);
+scene.add(cube);
+
+function glowTexture(){
+  const c = document.createElement('canvas'); c.width = c.height = 128;
+  const g = c.getContext('2d');
+  const grad = g.createRadialGradient(64,64,0, 64,64,64);
+  grad.addColorStop(0, 'rgba(255,255,255,1)');
+  grad.addColorStop(0.25, 'rgba(140,225,255,0.55)');
+  grad.addColorStop(1, 'rgba(140,225,255,0)');
+  g.fillStyle = grad; g.fillRect(0,0,128,128);
+  return new THREE.CanvasTexture(c);
+}
+const glowTex = glowTexture();
+const glow = new THREE.Sprite(new THREE.SpriteMaterial({map:glowTex, blending:THREE.AdditiveBlending, transparent:true, opacity:0.5, depthWrite:false}));
+glow.scale.setScalar(6.5);
+scene.add(glow);
+const halo = new THREE.Sprite(new THREE.SpriteMaterial({map:glowTex, blending:THREE.AdditiveBlending, transparent:true, opacity:0.16, depthWrite:false}));
+halo.scale.setScalar(16);
+scene.add(halo);
+
+/* ---- fireflies ---- */
+const FLIES = 130;
+const flyGeo = new THREE.BufferGeometry();
+const flyPos = new Float32Array(FLIES*3);
+const flyBase = [];
+for (let i = 0; i < FLIES; i++){
+  const a = Math.random()*Math.PI*2, rr = 3 + Math.random()*10;
+  flyBase.push({x:Math.cos(a)*rr, y:0.6 + Math.random()*7, z:Math.sin(a)*rr, ph:Math.random()*Math.PI*2, sp:0.4+Math.random()*0.8});
+  flyPos[i*3] = flyBase[i].x; flyPos[i*3+1] = flyBase[i].y; flyPos[i*3+2] = flyBase[i].z;
+}
+flyGeo.setAttribute('position', new THREE.BufferAttribute(flyPos, 3));
+const flies = new THREE.Points(flyGeo, new THREE.PointsMaterial({
+  color:0xffc26b, size:0.16, sizeAttenuation:true, transparent:true, opacity:0.9,
+  blending:THREE.AdditiveBlending, depthWrite:false, map:glowTex
+}));
+scene.add(flies);
+
+/* ---- moths ---- */
+const moths = [];
+for (let i = 0; i < 3; i++){
+  const m = new THREE.Sprite(new THREE.SpriteMaterial({map:glowTex, color:0xcfe6ff, blending:THREE.AdditiveBlending, transparent:true, opacity:0.9, depthWrite:false}));
+  m.userData = {a:0.5+i*0.23, b:0.8+i*0.31, ph:i*2.1};
+  scene.add(m); moths.push(m);
+}
+
+/* ---- click ripples ---- */
+const ripples = [];
+for (let i = 0; i < 3; i++){
+  const ring = new THREE.Mesh(
+    new THREE.RingGeometry(0.92, 1, 64),
+    new THREE.MeshBasicMaterial({color:0x6ee7ff, transparent:true, opacity:0, blending:THREE.AdditiveBlending, side:THREE.DoubleSide, depthWrite:false})
+  );
+  ring.rotation.x = -Math.PI/2;
+  ring.visible = false;
+  scene.add(ring); ripples.push(ring);
+}
+let rippleIdx = 0;
+const raycaster = new THREE.Raycaster();
+const groundPlane = new THREE.Plane(new THREE.Vector3(0,1,0), 0);
+const hitPoint = new THREE.Vector3();
+
+canvas.addEventListener('pointerdown', e => {
+  if (reduced) return;
+  const rect = canvas.getBoundingClientRect();
+  const nx = ((e.clientX-rect.left)/rect.width)*2 - 1;
+  const ny = -((e.clientY-rect.top)/rect.height)*2 + 1;
+  raycaster.setFromCamera({x:nx, y:ny}, camera);
+  if (!raycaster.ray.intersectPlane(groundPlane, hitPoint)) return;
+  const ring = ripples[rippleIdx++ % ripples.length];
+  ring.position.set(hitPoint.x, 0.35, hitPoint.z);
+  ring.scale.setScalar(0.2);
+  ring.material.opacity = 0.9;
+  ring.visible = true;
+  cubePulse = 1;
+  for (const p of pillars){
+    const d = Math.hypot(p.x-hitPoint.x, p.z-hitPoint.z);
+    p.bump += Math.max(0, 1.6*Math.exp(-d*0.45));
+  }
+});
+
+/* ---- mouse parallax ---- */
+const mouse = {x:0, y:0};
+addEventListener('pointermove', e => {
+  mouse.x = (e.clientX/innerWidth)*2 - 1;
+  mouse.y = (e.clientY/innerHeight)*2 - 1;
+}, {passive:true});
+
+/* ---- render loop ---- */
+let cubePulse = 0;
+let heroVisible = true;
+const clock = new THREE.Clock();
+let fpsAcc = 0, fpsN = 0, fpsEl = document.getElementById('fps');
+
+function resize(){
+  const w = canvas.clientWidth, h = canvas.clientHeight;
+  if (canvas.width !== Math.floor(w*renderer.getPixelRatio()) || canvas.height !== Math.floor(h*renderer.getPixelRatio())){
+    renderer.setSize(w, h, false);
+    camera.aspect = w/h;
+    camera.updateProjectionMatrix();
+  }
+}
+
+function frame(){
+  const t = clock.getElapsedTime();
+  const dt = Math.min(clock.getDelta ? 0.016 : 0.016, 0.05); // fixed-ish step for decay
+
+  resize();
+
+  // camera drift + parallax + scroll pullback
+  const sc = Math.min(scrollY/Math.max(innerHeight,1), 1);
+  const theta = CAM.theta + mouse.x*0.15 + Math.sin(t*0.07)*0.05;
+  const phi = CAM.phi - mouse.y*0.06 + sc*0.12;
+  const rad = CAM.radius + sc*8;
+  // push the village right of center on wide screens (hero text sits left)
+  const shift = camera.aspect > 1.15 ? 3.4 : 0.6;
+  const look = new THREE.Vector3(
+    camTarget.x - Math.sin(theta)*shift,
+    camTarget.y,
+    camTarget.z + Math.cos(theta)*shift
+  );
+  camera.position.set(
+    look.x + rad*Math.sin(phi)*Math.cos(theta),
+    look.y + rad*Math.cos(phi),
+    look.z + rad*Math.sin(phi)*Math.sin(theta)
+  );
+  camera.lookAt(look);
+
+  // pillars breathe + bump decay
+  for (let i = 0; i < pillars.length; i++){
+    const p = pillars[i];
+    p.bump *= 0.92;
+    dummy.position.set(p.x, 0, p.z);
+    dummy.rotation.set(0,0,0);
+    dummy.scale.set(1, p.h*(1 + 0.018*Math.sin(t*0.6 + p.phase)) + p.bump, 1);
+    dummy.updateMatrix();
+    field.setMatrixAt(i, dummy.matrix);
+  }
+  field.instanceMatrix.needsUpdate = true;
+
+  // cube float + pulse
+  cubePulse *= 0.94;
+  const cy = 2.7 + Math.sin(t*0.8)*0.28;
+  cube.position.set(0, cy, 0);
+  cube.rotation.y = t*0.25;
+  cube.rotation.x = Math.sin(t*0.18)*0.12;
+  cubeLight.position.set(0, cy, 0);
+  cubeLight.intensity = 30 + cubePulse*50;
+  glow.position.copy(cube.position);
+  glow.material.opacity = 0.5 + cubePulse*0.4;
+  glow.scale.setScalar(6.5 + cubePulse*5 + Math.sin(t*1.7)*0.35);
+  halo.position.copy(cube.position);
+
+  // fireflies drift
+  const pos = flyGeo.attributes.position.array;
+  for (let i = 0; i < FLIES; i++){
+    const b = flyBase[i];
+    pos[i*3]   = b.x + Math.sin(t*b.sp + b.ph)*0.6;
+    pos[i*3+1] = b.y + Math.sin(t*b.sp*0.7 + b.ph*2)*0.5;
+    pos[i*3+2] = b.z + Math.cos(t*b.sp*0.9 + b.ph)*0.6;
+  }
+  flyGeo.attributes.position.needsUpdate = true;
+
+  // moths flutter around the cube
+  for (const m of moths){
+    const u = m.userData;
+    m.position.set(
+      Math.sin(t*u.a + u.ph)*2.6,
+      cy + 0.4 + Math.sin(t*u.b + u.ph*2)*1.2,
+      Math.cos(t*u.a*0.9 + u.ph)*2.6
+    );
+    m.scale.setScalar(0.32 + Math.abs(Math.sin(t*7 + u.ph))*0.14);
+  }
+
+  // ripples expand
+  for (const ring of ripples){
+    if (!ring.visible) continue;
+    ring.scale.addScalar(0.32);
+    ring.material.opacity *= 0.945;
+    if (ring.material.opacity < 0.02){ ring.visible = false; ring.material.opacity = 0; }
+  }
+
+  renderer.render(scene, camera);
+
+  // fps readout (updated ~1s)
+  fpsAcc += 1;
+  if (t - fpsN >= 1){ if (fpsEl) fpsEl.textContent = Math.min(240, Math.round(fpsAcc/(t-fpsN))); fpsAcc = 0; fpsN = t; }
+
+  if (heroVisible && !reduced) requestAnimationFrame(frame);
+}
+
+if (reduced){
+  resize();
+  // one settled static frame
+  camera.position.set(camTarget.x + 26*Math.sin(1.06)*Math.cos(Math.PI/4), camTarget.y + 26*Math.cos(1.06), camTarget.z + 26*Math.sin(1.06)*Math.sin(Math.PI/4));
+  camera.lookAt(camTarget);
+  cube.position.set(0, 2.7, 0); cubeLight.position.set(0, 2.7, 0);
+  glow.position.copy(cube.position); halo.position.copy(cube.position);
+  renderer.render(scene, camera);
+} else {
+  const heroIO = new IntersectionObserver(entries => {
+    const was = heroVisible;
+    heroVisible = entries[0].isIntersecting;
+    if (heroVisible && !was) requestAnimationFrame(frame);
+  }, {threshold:0.02});
+  heroIO.observe(document.querySelector('header'));
+  requestAnimationFrame(frame);
+}
+addEventListener('resize', () => { resize(); if (reduced) renderer.render(scene, camera); });
+
+/* ================= UI ================= */
+
+/* scroll progress */
+const progress = document.getElementById('progress');
+addEventListener('scroll', () => {
+  const max = document.documentElement.scrollHeight - innerHeight;
+  progress.style.width = (max > 0 ? (scrollY/max)*100 : 0) + '%';
+}, {passive:true});
+
+/* cursor ring */
+const cursor = document.getElementById('cursor');
+if (cursor && !reduced){
+  let cx = -100, cy = -100, tx = -100, ty = -100;
+  addEventListener('pointermove', e => { tx = e.clientX; ty = e.clientY; }, {passive:true});
+  (function loop(){
+    cx += (tx-cx)*0.2; cy += (ty-cy)*0.2;
+    cursor.style.left = cx+'px'; cursor.style.top = cy+'px';
+    requestAnimationFrame(loop);
+  })();
+  document.querySelectorAll('a,button,.feature-poster,.media-card').forEach(el => {
+    el.addEventListener('pointerenter', () => cursor.classList.add('hot'));
+    el.addEventListener('pointerleave', () => cursor.classList.remove('hot'));
+  });
+}
+
+/* typewriter */
+const typeEl = document.getElementById('type');
+const lines = ['unity & c#','custom shaders','voxel worlds','match-3 engines & level editors','webgl toys','cozy indie games'];
+if (reduced){ typeEl.textContent = lines[0]; }
+else {
+  let li = 0, ci = 0, del = false;
+  (function type(){
+    const s = lines[li];
+    typeEl.textContent = s.slice(0, ci);
+    if (!del){ ci++; if (ci > s.length){ del = true; return setTimeout(type, 1600); } }
+    else { ci--; if (ci === 0){ del = false; li = (li+1)%lines.length; } }
+    setTimeout(type, del ? 34 : 62);
+  })();
+}
+
+/* reveal on scroll */
+const io = new IntersectionObserver(es => es.forEach(e => {
+  if (e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+}), {threshold:0.12});
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+/* animated counters */
+const cio = new IntersectionObserver(es => es.forEach(e => {
+  if (!e.isIntersecting) return;
+  const el = e.target, end = +el.dataset.count, suf = el.dataset.suffix || '';
+  cio.unobserve(el);
+  if (reduced){ el.innerHTML = end + '<small>'+suf+'</small>'; return; }
+  const t0 = performance.now();
+  (function tick(now){
+    const k = Math.min((now-t0)/1200, 1), ease = 1-Math.pow(1-k, 3);
+    el.innerHTML = Math.round(end*ease) + '<small>'+suf+'</small>';
+    if (k < 1) requestAnimationFrame(tick);
+  })(t0);
+}), {threshold:0.5});
+document.querySelectorAll('[data-count]').forEach(el => cio.observe(el));
+
+/* nav scrollspy */
+const spyLinks = [...document.querySelectorAll('.nav-links a[href^="#"]')];
+const spy = new IntersectionObserver(es => es.forEach(e => {
+  if (!e.isIntersecting) return;
+  spyLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#'+e.target.id));
+}), {rootMargin:'-40% 0px -55% 0px'});
+document.querySelectorAll('main section').forEach(s => spy.observe(s));
+
+/* videos: play when visible */
+const vio = new IntersectionObserver(es => es.forEach(e => {
+  const v = e.target;
+  if (e.isIntersecting){ v.play().catch(()=>{}); } else { v.pause(); }
+}), {threshold:0.35});
+document.querySelectorAll('.media-card video, .ba video').forEach(v => vio.observe(v));
+
+/* card tilt */
+if (matchMedia('(hover:hover) and (pointer:fine)').matches && !reduced){
+  document.querySelectorAll('.card, .lab-card').forEach(card => {
+    card.addEventListener('pointermove', e => {
+      const r = card.getBoundingClientRect();
+      const px = (e.clientX-r.left)/r.width - 0.5;
+      const py = (e.clientY-r.top)/r.height - 0.5;
+      card.style.transform = `perspective(700px) rotateY(${px*7}deg) rotateX(${-py*7}deg) translateY(-3px)`;
+    });
+    card.addEventListener('pointerleave', () => { card.style.transform = ''; });
+  });
+}
+
+/* trailer modal */
+const modal = document.getElementById('trailer-modal');
+const trailerVideo = document.getElementById('trailer-video');
+const openBtn = document.getElementById('open-trailer');
+function openTrailer(){ modal.classList.add('open'); trailerVideo.play().catch(()=>{}); }
+function closeTrailer(){ modal.classList.remove('open'); trailerVideo.pause(); }
+openBtn.addEventListener('click', openTrailer);
+openBtn.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' '){ e.preventDefault(); openTrailer(); } });
+document.getElementById('close-trailer').addEventListener('click', closeTrailer);
+modal.addEventListener('click', e => { if (e.target === modal) closeTrailer(); });
+addEventListener('keydown', e => { if (e.key === 'Escape' && modal.classList.contains('open')) closeTrailer(); });
+</script>
+</body>
 </html>
