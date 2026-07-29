@@ -14,6 +14,7 @@ const types = {
   '.mjs': 'text/javascript; charset=utf-8',
   '.css': 'text/css; charset=utf-8',
   '.png': 'image/png', '.jpg': 'image/jpeg', '.gif': 'image/gif',
+  '.webp': 'image/webp',
   '.svg': 'image/svg+xml', '.mp4': 'video/mp4', '.webm': 'video/webm',
   '.json': 'application/json', '.pdf': 'application/pdf',
   '.woff2': 'font/woff2', '.ico': 'image/x-icon',
